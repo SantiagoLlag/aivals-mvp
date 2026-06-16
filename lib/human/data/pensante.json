@@ -1,0 +1,422 @@
+{
+ "styles": {
+  "A": "Análisis",
+  "V": "Visión",
+  "I": "Intuición",
+  "L": "Lógica"
+ },
+ "weights": {
+  "I": 2,
+  "II": 3,
+  "III": 5
+ },
+ "cutoffs": {
+  "BAJO": [
+   0,
+   44
+  ],
+  "MEDIO": [
+   45,
+   69
+  ],
+  "ALTO": [
+   70,
+   100
+  ]
+ },
+ "cerebroTotalThreshold": 80,
+ "groupI": {
+  "title": "Intereses personales",
+  "scale": [
+   5,
+   4,
+   2,
+   1
+  ],
+  "rankNoRepeat": true,
+  "questions": [
+   {
+    "title": "MIS PASATIEMPOS:",
+    "options": [
+     {
+      "id": "DO",
+      "text": "ARTISTICOS",
+      "style": "V"
+     },
+     {
+      "id": "DP",
+      "text": "SOCIALES",
+      "style": "I"
+     },
+     {
+      "id": "DQ",
+      "text": "CIENTIFICOS",
+      "style": "A"
+     },
+     {
+      "id": "DR",
+      "text": "DEPORTIVOS",
+      "style": "L"
+     }
+    ]
+   },
+   {
+    "title": "MATERIAS QUE ME GUSTARIA ESTUDIAR:",
+    "options": [
+     {
+      "id": "DS",
+      "text": "MATEMATICAS",
+      "style": "A"
+     },
+     {
+      "id": "DT",
+      "text": "MUSICA",
+      "style": "I"
+     },
+     {
+      "id": "DU",
+      "text": "FILOSOFIA",
+      "style": "V"
+     },
+     {
+      "id": "DV",
+      "text": "IDIOMAS",
+      "style": "L"
+     }
+    ]
+   },
+   {
+    "title": "GENTE CON LA QUE ME GUSTARIA ESTAR:",
+    "options": [
+     {
+      "id": "DW",
+      "text": "ALEGRES",
+      "style": "I"
+     },
+     {
+      "id": "DX",
+      "text": "ORGANIZADORES",
+      "style": "L"
+     },
+     {
+      "id": "DY",
+      "text": "SOÑADORES",
+      "style": "V"
+     },
+     {
+      "id": "DZ",
+      "text": "PRACTICAS",
+      "style": "A"
+     }
+    ]
+   },
+   {
+    "title": "LOS MAESTROS DE LOS QUE MAS APRENDI USABAN:",
+    "options": [
+     {
+      "id": "EA",
+      "text": "FORMULAS",
+      "style": "A"
+     },
+     {
+      "id": "EB",
+      "text": "PROCEDIMIENTOS",
+      "style": "L"
+     },
+     {
+      "id": "EC",
+      "text": "IMAGENES",
+      "style": "V"
+     },
+     {
+      "id": "ED",
+      "text": "SENTIMIENTOS",
+      "style": "I"
+     }
+    ]
+   },
+   {
+    "title": "LOS LIDERES QUE MAS RESPETO SON:",
+    "options": [
+     {
+      "id": "EE",
+      "text": "IMAGINATIVOS",
+      "style": "V"
+     },
+     {
+      "id": "EF",
+      "text": "INSPIRADORES",
+      "style": "I"
+     },
+     {
+      "id": "EG",
+      "text": "CUESTIONADORES",
+      "style": "A"
+     },
+     {
+      "id": "EH",
+      "text": "DISCIPLINADOS",
+      "style": "L"
+     }
+    ]
+   }
+  ]
+ },
+ "groupII": {
+  "title": "Descripción personal",
+  "scale": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "questions": [
+   {
+    "id": "EI",
+    "text": "CREATIVO",
+    "style": "V"
+   },
+   {
+    "id": "EN",
+    "text": "EMOCIONAL",
+    "style": "I"
+   },
+   {
+    "id": "ES",
+    "text": "TECNICO",
+    "style": "L"
+   },
+   {
+    "id": "EX",
+    "text": "COMUNICATIVO",
+    "style": "I"
+   },
+   {
+    "id": "EJ",
+    "text": "ORGANIZADO",
+    "style": "L"
+   },
+   {
+    "id": "EO",
+    "text": "CONSERVADOR",
+    "style": "L"
+   },
+   {
+    "id": "ET",
+    "text": "CONTROLADO",
+    "style": "L"
+   },
+   {
+    "id": "EY",
+    "text": "CUANTITATIVO",
+    "style": "A"
+   },
+   {
+    "id": "EK",
+    "text": "ANALITICO",
+    "style": "A"
+   },
+   {
+    "id": "EP",
+    "text": "INTUITIVO",
+    "style": "V"
+   },
+   {
+    "id": "EU",
+    "text": "CIENTIFICO",
+    "style": "A"
+   },
+   {
+    "id": "EZ",
+    "text": "VISIONARIO",
+    "style": "V"
+   },
+   {
+    "id": "EL",
+    "text": "MUSICAL",
+    "style": "I"
+   },
+   {
+    "id": "EQ",
+    "text": "DETALLISTA",
+    "style": "L"
+   },
+   {
+    "id": "EV",
+    "text": "RACIONAL",
+    "style": "A"
+   },
+   {
+    "id": "FA",
+    "text": "COMPRENSIVO",
+    "style": "I"
+   },
+   {
+    "id": "EM",
+    "text": "MATEMATICO",
+    "style": "A"
+   },
+   {
+    "id": "ER",
+    "text": "ORIGINAL",
+    "style": "V"
+   },
+   {
+    "id": "EW",
+    "text": "CONCEPTUAL",
+    "style": "V"
+   },
+   {
+    "id": "FB",
+    "text": "AFECTUOSO",
+    "style": "I"
+   }
+  ]
+ },
+ "groupIII": {
+  "title": "Preferencias personales",
+  "scale": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "questions": [
+   {
+    "id": "FC",
+    "text": "JUZGAR EN HECHOS MAS QUE EN SENTIMIENTOS",
+    "style": "A"
+   },
+   {
+    "id": "FM",
+    "text": "FILOSOFAR SOBRE TEMAS",
+    "style": "V"
+   },
+   {
+    "id": "FD",
+    "text": "SER CONFIABLE Y QUE PUEDAN DEPENDER DE MI",
+    "style": "L"
+   },
+   {
+    "id": "FN",
+    "text": "SER BIEN ORGANIZADO Y SISTEMATICO",
+    "style": "L"
+   },
+   {
+    "id": "FE",
+    "text": "PENSAR EN GRANDE EN EL FUTURO",
+    "style": "V"
+   },
+   {
+    "id": "FO",
+    "text": "ADAPTARME A OTRA GENTE",
+    "style": "I"
+   },
+   {
+    "id": "FF",
+    "text": "EVALUAR SITUACIONES COMPLEJAS",
+    "style": "A"
+   },
+   {
+    "id": "FP",
+    "text": "SEGUIR METODOS PROBADOS Y APROBADOS",
+    "style": "L"
+   },
+   {
+    "id": "FG",
+    "text": "USAR DIAGRAMAS PARA EXPLICAR O ENSEÑAR",
+    "style": "I"
+   },
+   {
+    "id": "FQ",
+    "text": "DESARROLLAR NUEVOS ENFOQUES A PROBLEMAS",
+    "style": "A"
+   },
+   {
+    "id": "FH",
+    "text": "TRABAJAR EN EQUIPO O TRABAJO EN EQUIPO",
+    "style": "I"
+   },
+   {
+    "id": "FR",
+    "text": "EXPLORAR TEORIAS O IDEAS POCO COMUNES",
+    "style": "V"
+   },
+   {
+    "id": "FI",
+    "text": "ORDENAR LO CAOTICO",
+    "style": "L"
+   },
+   {
+    "id": "FS",
+    "text": "COMPARTIR SENTIMIENTOS CON OTROS",
+    "style": "I"
+   },
+   {
+    "id": "FJ",
+    "text": "DISEÑAR PRODUCTOS O PROGRAMAS ORIGINALES",
+    "style": "V"
+   },
+   {
+    "id": "FT",
+    "text": "RESOLVER ESQUEMAS COMPLICADOS",
+    "style": "A"
+   },
+   {
+    "id": "FK",
+    "text": "ANALIZAR RESULTADOS CIENTIFICAMENTE",
+    "style": "A"
+   },
+   {
+    "id": "FU",
+    "text": "DIVERTIRME CON LA GENTE",
+    "style": "I"
+   },
+   {
+    "id": "FL",
+    "text": "ESTAR INTRIGADO CON IDEAS INTREPIDAS O ATREVIDAS",
+    "style": "V"
+   },
+   {
+    "id": "FV",
+    "text": "PLANEAR EL TRABAJO Y TRABAJAR EL PLAN",
+    "style": "L"
+   }
+  ]
+ },
+ "descriptions": {
+  "quadrants": {
+   "A": {
+    "ALTO": "Este estilo de pensamiento se basa en información técnica y en los hechos. Su toma de decisiones se basa en la razón sin emotividad y en los hechos relevantes. Aprenden mediante la disección de conceptos y la informacón, examinando minuciosamente cada elemento. Son lógicos, analíticos y objetivos. Muestran estrucutra al hablar, pueden ser etiquetados como intelectuales. Los números, las pruebas, las matemáticas etc.. son cosas sumamente valoradas por ellos. No se sienten obligados por los procedimientos aceptados, cuando su investigación indica un método diferente.",
+    "BAJO": "Es una persona con baja preferencia por el pensamiento analítico. Mas que analizar a profundidad los problemas, prefiere decidir basada en su intuición y en lo que le dicta la primera impresión. Mostrará dificultad para solucionar problemas que demanden una analisis profundo.",
+    "MEDIO": "Es una persona objetiva, racional en sus enfoques, buscará basarse en datos, hechos y números para tomar decisiones, sin llegar a analizar a profundidad los problemas. Evitará usar los sentimientos y su intuición para decidir."
+   },
+   "V": {
+    "ALTO": "Son soñadores, de mente abierta es decir buscan visualizar la información de manera panorámica. Tienden a sintetizar la información para crear nuevos conceptos. Estas personas son arriesgadas y buscan experimentar con ideas y relaciones hasta lograr el resultado que esperan. Llegan al estado de lo correcto de manera intuitiva y a menudo no pueden explicar como llegaron. Aprenden de manera visual, pictorica y experimental, generalmente no analizan y por lo tanto su análisis es superficial y no llegan al detalle. Su habla puede carecer de sintaxis y brincar de un pensamiento a otro o de inspiración a inspiración.",
+    "BAJO": "Esta persona es capaz de trabajar enfocada en actividades muy específicas. Con orientación a hacer que las cosas sucedan por medio de un involucramiento personal, es un hacedor. Sin embargo podrá mostrar dificultad para observar situaciones de manera panoramica y con visión de largo plazo.",
+    "MEDIO": "Cuenta con capacidad para observar las situaciones y problemas desde una perspectiva panorámica, aunque generalmente sus enfoques no serán de largo plazo. Sin embargo podrá entender y captar el enfoque visionario de largo plazo, pero su tendencia natural será dar resultados en el corto y mediano plazo."
+   },
+   "I": {
+    "ALTO": "Estas personas son intuitivas, emotivas y centradas en los sentimientos. Para ellos los sentimientos son hechos y son lo más importante. Llegan a conclusiones de manera instintiva e intuitivamente, sin seguir una logica o razonamiento. Por lo regular ocuapan posiciones que tengan mucho involucramiento con la gente. Sus conversaciones entan orientadas emocionalmente y son perceptivas. Cuentan con un sentido intiutivo de la armonía, evitan conflictos que puedan afectar la retroinformación que necesitan los demás. Aprenden por observación, aceptan la información como se presentan. Buscan sintonizar con su ambiente.",
+    "BAJO": "Persona directa y fría, que basa su coversación en datos, hechos y números. Es objetiva y racional en sus puntos de vista. Puede tener cierta dificultad para detectar y entender de manera natural sentimientos y necesidades de las personas con las que trata y se relaciona, por lo que en la mayoría de sus decisiones, el factor humano no tiene gran relevancia.",
+    "MEDIO": "Es una persona sensible e intuitiva, con capacidad para detectar y entender sentimientos de las personas con las que se relaciona y tomarlos en cuenta en sus decisiones. Sin embargo, buscará mantener objetividad en sus juicios, evitando tomar decisiones de manera emocional o intuitiva."
+   },
+   "L": {
+    "ALTO": "Son personas agiles para dar forma y traer orden a su ambiente, así como para administrar de manera conservadora. Abordan los problemas como recetario y las soluciones con frecuencia se basan en su instinto y se apoyan en la lógica. Se caracterizan por ser conservadores, los hechos, las cifras y el detalle son importantes para este tipo de personas. En general piensan como capataz, son exactos y precisos recolectando datos, prescribiendo métodos. Estas personas tiene un sexto sentido de lo correcto. Los procesos y procedimientos son su base de trabajo, mas que los sentimientos y la gente. Por lo regular destacan en la implementación y desarrollo de planes de operación, establecen reglas firmes y duras y siguen las plíticas y estructuras de tipo legistativo.",
+    "BAJO": "Esta persona esta enfocada a pensar en base a ideas que aparecen en su mente, de forma desordenada, por lo que no muestra un pensamiento ordenado. Mira las situaciones de manera superficial sin entrar al detalle. Muestra difucultad para dar un seguimiento detallado y estricito a actividades que contienen un proceso de pensamiento permanente.",
+    "MEDIO": "Esta persona tiene un pensamiento que sigue un orden y procedimiento para llegar a conclusiones. Le gusta seguir métodos y experiencias que en el pasado ha probado y le han funcionado de manera exitosa. Enfrenta los problemas de manera realista sin perder de vista los detalles importantes. Le agrada seguir reglas y procedimientos de trabajo, aunque eventualmente puede llegar a tomar decisones de riesgo."
+   }
+  },
+  "axes": {
+   "conceptual": "Tiene una marcada inclinación por el pensamiento teórico e intelectual. Es decir que tendrá preferencia por información que involucre probabilidades, hechos, datos, conceptos y estrategias. Pero también respeta fuertemente las teorías y las ideas, ya que le gusta experimentar con ellas y con el origen de la información. Se puede mover en el mundo de las ideas, pero puede presentar cierta dificultad para manejarse bajo esquemas estructurados, de control, planeado al detalle e interpersonal.",
+   "especifico": "Clara inclinación por el orden, la seguridad y los sistemas, sobretodo si su pensamiento lógico es el que domina. Así mismo tiene inclinación por el aspecto interpersonal. Su toma de decisiones se basa en su experiencia, en las reglas y en los sentimientos, siempre con un gran sentido práctico y enfocado a la acción. Con facilidad para aterrizar los asuntos e implementar proyectos, haciendo que las cosas sucedan, así mismo buscará manejar las estructuras y la gente.",
+   "izquierdo": "Con alta preferencia para manejar datos, hechos y tareas. Sus procesos de pensamiento están basados en la lógica. Cuentan con facilidad para analizar información combinando la cuantificación y la programación basados en políticas y procedimientos ya establecidos. Su toma de decisiones esta basada en la lógica por lo que la información que no esté respaldada o esté basada en emociones y sentimientos, no tendrán validez. Se caracterizan por ser pensadores organizados y disciplinados, efectivos en la administración de sistemas y en las áreas técnicas o científicas.",
+   "derecho": "Estas personas tienden a depender de los procesos de pensamiento visuales, espaciales, intuitivos, conceptuales y sensibles. Fluye la creatividad, de mente abierta, experimentales, lo cual les ayuda a planear a largo plazo y a ver los asuntos de manera panorámica. Disfrutan de las experiencias interpersonales, que tengan que ver con emociones, espirituales y musicales. Las funciones analiticas de pensamiento lógico para ellos son limitantes ya que prefieren explorar y experimentar. Estas personas tienden a soñar y generar ideas.",
+   "balanceCE": "Esta persona cuenta con capacidad para captar los problemas y situaciones desde una perspectica panorámica, logrará sintetizar grandes cantidades de información generando ideas y conceptos novedosos. Podrá implementar sus ideas y proyectos en forma ordenada y estricta, apegado a reglas pero tambien podra ser intutivo con la gente.",
+   "balanceID": "Tiene la capacidad para pensar basado en datos exactos, hechos y tareas, así omo también tiene flexibilidad para pensar en base a imágenes, sentimientos y estratégias."
+  },
+  "cerebroTotal": "Estas personas tiene la capacidad para utilizar los cuatro cuadrantes del cerebro con la misma facilidad. Su preferencia depende de la situación que enfrenten en ese momento, sin embargo pueden analizar conceptos con la misma facilidad, con la que organizan y sintonizan con los sentimientos de las personas. Pueden soñar una visión y concretarla a fin de que rinda frutos. Son percibidos como ingeniosos y crativos."
+ }
+}

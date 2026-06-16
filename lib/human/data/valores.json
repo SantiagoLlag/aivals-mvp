@@ -1,0 +1,389 @@
+{
+ "values": {
+  "T": "Teórico",
+  "E": "Económico",
+  "A": "Estético",
+  "S": "Social",
+  "P": "Político",
+  "R": "Regulatorio"
+ },
+ "cutoff": 49,
+ "series": [
+  {
+   "n": 1,
+   "concepts": [
+    {
+     "id": "BG",
+     "text": "LIDERAZGO",
+     "value": "P"
+    },
+    {
+     "id": "BH",
+     "text": "JUSTICIA",
+     "value": "R"
+    },
+    {
+     "id": "BI",
+     "text": "CULTURA",
+     "value": "A"
+    },
+    {
+     "id": "BJ",
+     "text": "DINERO",
+     "value": "E"
+    },
+    {
+     "id": "BK",
+     "text": "SERVICIO",
+     "value": "S"
+    },
+    {
+     "id": "BL",
+     "text": "CONOCIMIENTOS",
+     "value": "T"
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "concepts": [
+    {
+     "id": "BM",
+     "text": "DIRIGIR PERSONAS Y SITUACIONES",
+     "value": "P"
+    },
+    {
+     "id": "BN",
+     "text": "CONTINUAR ESTUDIANDO",
+     "value": "T"
+    },
+    {
+     "id": "BO",
+     "text": "CRISTALIZAR SUEÑOS",
+     "value": "R"
+    },
+    {
+     "id": "BP",
+     "text": "AYUDAR A OTROS",
+     "value": "S"
+    },
+    {
+     "id": "BQ",
+     "text": "INCREMENTAR RIQUEZAS",
+     "value": "E"
+    },
+    {
+     "id": "BR",
+     "text": "PARTICIPAR EN EL ARTE",
+     "value": "A"
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "concepts": [
+    {
+     "id": "BS",
+     "text": "CARITATIVOS",
+     "value": "S"
+    },
+    {
+     "id": "BT",
+     "text": "ESTUDIOS",
+     "value": "T"
+    },
+    {
+     "id": "BU",
+     "text": "POLITICA",
+     "value": "P"
+    },
+    {
+     "id": "BV",
+     "text": "INVERSIONES",
+     "value": "E"
+    },
+    {
+     "id": "BW",
+     "text": "MUSEOS",
+     "value": "A"
+    },
+    {
+     "id": "BX",
+     "text": "MEDITACION",
+     "value": "R"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "concepts": [
+    {
+     "id": "BY",
+     "text": "ARTISTICAS",
+     "value": "A"
+    },
+    {
+     "id": "BZ",
+     "text": "CIENTIFICAS",
+     "value": "T"
+    },
+    {
+     "id": "CA",
+     "text": "NEGOCIO PROPIO (EMPRESARIALES)",
+     "value": "E"
+    },
+    {
+     "id": "CB",
+     "text": "POLITICA (STATUS)",
+     "value": "P"
+    },
+    {
+     "id": "CC",
+     "text": "JUSTICIA",
+     "value": "R"
+    },
+    {
+     "id": "CD",
+     "text": "SERVICIO",
+     "value": "S"
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "concepts": [
+    {
+     "id": "CE",
+     "text": "CRECIMIENTO ESPIRITUAL",
+     "value": "R"
+    },
+    {
+     "id": "CF",
+     "text": "RELACIONES INTERPERSONALES",
+     "value": "S"
+    },
+    {
+     "id": "CG",
+     "text": "HABILIDADES DE LIDERAZGO",
+     "value": "P"
+    },
+    {
+     "id": "CH",
+     "text": "FINANZAS PERSONALES",
+     "value": "E"
+    },
+    {
+     "id": "CI",
+     "text": "CONTINUACION DE ESTUDIOS",
+     "value": "T"
+    },
+    {
+     "id": "CJ",
+     "text": "DESARROLLO HABILIDADES ARTISTICAS",
+     "value": "A"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "concepts": [
+    {
+     "id": "CK",
+     "text": "CIENCIAS FISICAS",
+     "value": "T"
+    },
+    {
+     "id": "CL",
+     "text": "CIENCIAS POLITICAS",
+     "value": "P"
+    },
+    {
+     "id": "CM",
+     "text": "TEOLOGIA",
+     "value": "R"
+    },
+    {
+     "id": "CN",
+     "text": "ARTES (ESTETICA)",
+     "value": "A"
+    },
+    {
+     "id": "CO",
+     "text": "FINANZAS (CIENCIAS ECONOMICAS)",
+     "value": "E"
+    },
+    {
+     "id": "CP",
+     "text": "SOCIOLOGIA (CIENCIAS SOCIALES)",
+     "value": "S"
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "concepts": [
+    {
+     "id": "CQ",
+     "text": "PODEROSO (INFLUENCIA)",
+     "value": "P"
+    },
+    {
+     "id": "CR",
+     "text": "BONDADOSO (SAMARITANO)",
+     "value": "S"
+    },
+    {
+     "id": "CS",
+     "text": "CAPITALISTA (EMPRESARIO)",
+     "value": "E"
+    },
+    {
+     "id": "CT",
+     "text": "MEDIADOR (DIPLOMATICO)",
+     "value": "R"
+    },
+    {
+     "id": "CU",
+     "text": "ARTISTA (ARTESANO)",
+     "value": "A"
+    },
+    {
+     "id": "CV",
+     "text": "INTELECTUAL (INVESTIGADOR)",
+     "value": "T"
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "concepts": [
+    {
+     "id": "CW",
+     "text": "FILANTROPO",
+     "value": "S"
+    },
+    {
+     "id": "CX",
+     "text": "EMPRESARIO (PATRON)",
+     "value": "E"
+    },
+    {
+     "id": "CY",
+     "text": "LIDER POLITICO (GOBERNANTE)",
+     "value": "P"
+    },
+    {
+     "id": "CZ",
+     "text": "PATROCINADOR DE ARTE",
+     "value": "A"
+    },
+    {
+     "id": "DA",
+     "text": "LIDER INTELECTUAL",
+     "value": "T"
+    },
+    {
+     "id": "DB",
+     "text": "CONSEJERO ESPIRITUAL",
+     "value": "R"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "concepts": [
+    {
+     "id": "DC",
+     "text": "HUMANITARIAS",
+     "value": "S"
+    },
+    {
+     "id": "DD",
+     "text": "ECONOMICAS",
+     "value": "E"
+    },
+    {
+     "id": "DE",
+     "text": "CIENTIFICAS",
+     "value": "T"
+    },
+    {
+     "id": "DF",
+     "text": "SER UN LIDER (POLITICAS)",
+     "value": "P"
+    },
+    {
+     "id": "DG",
+     "text": "SER UN ERUDITO (CREATIVAS)",
+     "value": "A"
+    },
+    {
+     "id": "DH",
+     "text": "REFORMADOR SOCIAL (ETICAS)",
+     "value": "R"
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "concepts": [
+    {
+     "id": "DI",
+     "text": "ENSEÑANZA (LECTURA)",
+     "value": "T"
+    },
+    {
+     "id": "DJ",
+     "text": "DRAMA (TEATRO)",
+     "value": "A"
+    },
+    {
+     "id": "DK",
+     "text": "TRABAJO SOCIAL COMUNITARIO",
+     "value": "S"
+    },
+    {
+     "id": "DL",
+     "text": "NEGOCIOS (VENTAS)",
+     "value": "E"
+    },
+    {
+     "id": "DM",
+     "text": "DEPORTES",
+     "value": "P"
+    },
+    {
+     "id": "DN",
+     "text": "RELIGION",
+     "value": "R"
+    }
+   ]
+  }
+ ],
+ "descriptions": {
+  "T": {
+   "ALTO": "el interés dominante de estas personas es la búsqueda de la verdad. Muestra interés por procesos de razonamiento lógicos y sucesivos. Los de calificación alta tienden a intelectualizar, acomodar e interrelacionar todo dentro de un sistema lógico. Más que aceptar las cosas por su valor son críticos y buscan los hechos. Tratan con pruebas de investigación de organizar y sistematizar el conocimiento, disfrutan del análisis, la investigación y el mundo de las ideas. Son personas estudiosas y curiosas.",
+   "BAJO": "esta persona siente que el investigar y el interés por mantenerse fuertemente actualizado en su campo, no es relevante en este momento para sobresalir en supuesto."
+  },
+  "E": {
+   "ALTO": "se caracterizan por un interés común en la ventaja económica, les gusta ser juzgados por su habilidad para generar utilidades, reducir costos o resolver problemas. Son prácticos y tienden a dar valor monetario a las cosas. Busca utilidades e inversiones potenciales. Tienen deseos de obtener una ganancia material personal y en términos de negocio, sienten un gran aprecio por los resultados positivos en el centro de utilidades. Respetan los logros económicos de otros.",
+   "BAJO": "tiende a hacer caso omiso de las cosas materiales, prefiriendo el servicio personal y las relaciones con gente. En términos de aplicación profesional las habilidades de esta persona favorece más a ayudar a la gente que a venderle a los demás para tener ganancias materiales. En administración de negocios, puede tender a ser impráctico, careciendo de preocupación por los costos o las ganancias."
+  },
+  "A": {
+   "ALTO": "busca en la belleza artística y o la creatividad en áreas de expresión cultural. Tienden a ser perfeccionista en cuanto a diseño, color y detalles. Exigen libertad para crear su propia obra. Su aguda sensibilidad a la belleza puede acompañarse de su intolerancia a lo feo. Pueden tener éxito en ventas porque sirven a quienes tienen intereses similares. En la administración tienden a fomentar las relaciones armoniosas.",
+   "BAJO": "tiende a no preocuparse demasiado por la belleza o el gusto. Es una persona práctica y pragmática, que le gusta juzgar los objetos, las cosas o los programas en función de su utilidad o rendimientos financieros. Esta persona puede hacer caso omiso de las cualidades de la forma, diseño, estilo o “clase”, por lo que algunos lo pueden considerar como una persona de enfoques fríos y faltos de sofisticación."
+  },
+  "S": {
+   "ALTO": "implica un sentimiento altruista por la gente, ya sean extraños o conocidos. Buscan desinteresadamente mejorar el bienestar de los demás y servirles. Se esfuerzan por ayudarle a personas que están en desventaja o se sienten maltratadas. Su simpatía los mueve a la acción por un sentido de justicia social. Sus juicios son subjetivos, con frecuencia su indignación social provoca conflictos con los individuos de valor económico.",
+   "BAJO": "en las circunstancias actuales, esta persona tiende a no preocuparse por los asuntos que involucran el bienestar de la gente. Acompañado de un alto valor económico, esta persona exhibe un sentido muy práctico y con datos sentido de negocio en todas sus acciones. Esta persona piensa que cada uno tiene lo que merece y no muestra mucha compasión por los demás."
+  },
+  "P": {
+   "ALTO": "buscan posición y poder individual, muestran interés por estar arriba de otros en jerarquía y estructura organizacional. Gozan siendo influyentes y les excita el reconocimiento personal. El que califica alto como político está fuertemente motivado para ganar posición, reconocimiento y control. Disfruta de ejercer poder.",
+   "BAJO": "para esta persona, el ejercicio del poder tiende a no valer el precio que se paga por adquirirlo. Está particularmente consciente de los riesgos que implica la búsqueda del poder y los evita. Para esta persona, lo que cuenta en la vida es el obtener logros tangibles, medibles por sobre el estatus. Esta persona busca que los resultados sean los que hablen por él en su trayectoria política."
+  },
+  "R": {
+   "ALTO": "las personas con un alto regulatorio se identifican con una fuerza reconocida del bien y tienden a gobernar sus vidas por un código de conducta que ofrezca la aprobación o aceptación de la autoridad superior. El bien y el mal son importantes para ellos. Tienden a hacer juicios morales de acuerdo con esto. Quieren estar bien, tienden a ser cooperadores y controlados Y a observar las normas establecidas.",
+   "BAJO": "esta persona tiende a ser independiente e individualista, queriendo tomar decisiones sin seguir costumbres o algún patrón establecido de normas. Es una persona que interpreta las normas establecidas según sus propias necesidades y racionaliza para justificar sus acciones. Puede carecer de interés por la disciplina para sentirse en el lado estructurado del mundo corporativo."
+  }
+ }
+}

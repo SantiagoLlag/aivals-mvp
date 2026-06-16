@@ -1,0 +1,1767 @@
+{
+ "factors": {
+  "D": "Dominancia",
+  "I": "Influencia",
+  "S": "Estabilidad",
+  "C": "Cumplimiento"
+ },
+ "series": [
+  {
+   "n": 1,
+   "words": [
+    {
+     "pos": 1,
+     "text": "PERSUASIVO",
+     "factorMas": "I",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "GENTIL",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 3,
+     "text": "HUMILDE",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "ORIGINAL",
+     "factorMas": null,
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "words": [
+    {
+     "pos": 1,
+     "text": "AGRESIVO",
+     "factorMas": "D",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "ALMA DE LA FIESTA",
+     "factorMas": "I",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 3,
+     "text": "COMODINO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "TEMEROSO",
+     "factorMas": null,
+     "factorMenos": "C"
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "words": [
+    {
+     "pos": 1,
+     "text": "AGRADABLE",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 2,
+     "text": "TEMEROSO DIOS",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 3,
+     "text": "TENAZ",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "ATRACTIVO",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "words": [
+    {
+     "pos": 1,
+     "text": "CAUTELOSO",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 2,
+     "text": "DETERMINADO",
+     "factorMas": "D",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "CONVINCENTE",
+     "factorMas": "I",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 4,
+     "text": "BONACHON",
+     "factorMas": "S",
+     "factorMenos": null
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "words": [
+    {
+     "pos": 1,
+     "text": "DOCIL",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 2,
+     "text": "ATREVIDO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 3,
+     "text": "LEAL",
+     "factorMas": "S",
+     "factorMenos": null
+    },
+    {
+     "pos": 4,
+     "text": "ENCANTADOR",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "words": [
+    {
+     "pos": 1,
+     "text": "DISPUESTO",
+     "factorMas": "S",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "DESEOSO",
+     "factorMas": null,
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "CONSECUENTE",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "ENTUSIASTA",
+     "factorMas": null,
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "words": [
+    {
+     "pos": 1,
+     "text": "FUERZA DE VOLUNTAD",
+     "factorMas": null,
+     "factorMenos": "D"
+    },
+    {
+     "pos": 2,
+     "text": "MENTE ABIERTA",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "COMPLACIENTE",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "ANIMOSO",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "words": [
+    {
+     "pos": 1,
+     "text": "CONFIADO",
+     "factorMas": "I",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "SIMPATIZADOR",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 3,
+     "text": "TOLERANTE",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "AFIRMATIVO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "words": [
+    {
+     "pos": 1,
+     "text": "ECUANIME",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 2,
+     "text": "PRECISO",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 3,
+     "text": "NERVIOSO",
+     "factorMas": null,
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "JOVIAL",
+     "factorMas": null,
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "words": [
+    {
+     "pos": 1,
+     "text": "DISCIPLINADO",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "GENEROSO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 3,
+     "text": "ANIMOSO",
+     "factorMas": null,
+     "factorMenos": "I"
+    },
+    {
+     "pos": 4,
+     "text": "PERSISTENTE",
+     "factorMas": "D",
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "words": [
+    {
+     "pos": 1,
+     "text": "COMPETITIVO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 2,
+     "text": "ALEGRE",
+     "factorMas": null,
+     "factorMenos": "I"
+    },
+    {
+     "pos": 3,
+     "text": "CONSIDERADO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "ARMONIOSO",
+     "factorMas": null,
+     "factorMenos": "C"
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "words": [
+    {
+     "pos": 1,
+     "text": "ADMIRABLE",
+     "factorMas": "I",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "BONDADOSO",
+     "factorMas": "S",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "RESIGNADO",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "CARACTER FIRME",
+     "factorMas": "D",
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "words": [
+    {
+     "pos": 1,
+     "text": "OBEDIENTE",
+     "factorMas": "S",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "QUISQUILLOSO",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 3,
+     "text": "INCONQUISTABLE",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "JUGUETON",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "words": [
+    {
+     "pos": 1,
+     "text": "RESPETUOSO",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "EMPRENDEDOR",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 3,
+     "text": "OPTIMISTA",
+     "factorMas": "I",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 4,
+     "text": "SERVICIAL",
+     "factorMas": "S",
+     "factorMenos": "S"
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "words": [
+    {
+     "pos": 1,
+     "text": "VALIENTE",
+     "factorMas": "D",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "INSPIRADOR",
+     "factorMas": "I",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "SUMISO",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "TIMIDO",
+     "factorMas": null,
+     "factorMenos": "C"
+    }
+   ]
+  },
+  {
+   "n": 16,
+   "words": [
+    {
+     "pos": 1,
+     "text": "ADAPTABLE",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "DISPUTADOR",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 3,
+     "text": "INDIFERENTE",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "SANGRE LIVIANA",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "words": [
+    {
+     "pos": 1,
+     "text": "AMIGUERO",
+     "factorMas": "I",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 2,
+     "text": "PACIENTE",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 3,
+     "text": "CONFIANZA EN SI MISMO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "MESURADO P/HABLAR",
+     "factorMas": "C",
+     "factorMenos": null
+    }
+   ]
+  },
+  {
+   "n": 18,
+   "words": [
+    {
+     "pos": 1,
+     "text": "CONFORME",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 2,
+     "text": "CONFIABLE",
+     "factorMas": "S",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 3,
+     "text": "PACIFICO",
+     "factorMas": "C",
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "POSITIVO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 19,
+   "words": [
+    {
+     "pos": 1,
+     "text": "AVENTURERO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 2,
+     "text": "RECEPTIVO",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "CORDIAL",
+     "factorMas": null,
+     "factorMenos": "I"
+    },
+    {
+     "pos": 4,
+     "text": "MODERADO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    }
+   ]
+  },
+  {
+   "n": 20,
+   "words": [
+    {
+     "pos": 1,
+     "text": "INDULGENTE",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 2,
+     "text": "ESTETA",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 3,
+     "text": "VIGOROSO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "SOCIABLE",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 21,
+   "words": [
+    {
+     "pos": 1,
+     "text": "PARLANCHIN",
+     "factorMas": "I",
+     "factorMenos": "I"
+    },
+    {
+     "pos": 2,
+     "text": "CONTROLADO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 3,
+     "text": "CONVENCIONAL",
+     "factorMas": null,
+     "factorMenos": "C"
+    },
+    {
+     "pos": 4,
+     "text": "DECISIVO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "words": [
+    {
+     "pos": 1,
+     "text": "COHIBIDO",
+     "factorMas": null,
+     "factorMenos": "S"
+    },
+    {
+     "pos": 2,
+     "text": "EXACTO",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 3,
+     "text": "FRANCO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 4,
+     "text": "BUEN COMPAÑERO",
+     "factorMas": "I",
+     "factorMenos": "I"
+    }
+   ]
+  },
+  {
+   "n": 23,
+   "words": [
+    {
+     "pos": 1,
+     "text": "DIPLOMATICO",
+     "factorMas": "C",
+     "factorMenos": null
+    },
+    {
+     "pos": 2,
+     "text": "AUDAZ",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 3,
+     "text": "REFINADO",
+     "factorMas": null,
+     "factorMenos": "I"
+    },
+    {
+     "pos": 4,
+     "text": "SATISFECHO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    }
+   ]
+  },
+  {
+   "n": 24,
+   "words": [
+    {
+     "pos": 1,
+     "text": "INQUIETO",
+     "factorMas": "D",
+     "factorMenos": "D"
+    },
+    {
+     "pos": 2,
+     "text": "POPULAR",
+     "factorMas": null,
+     "factorMenos": "I"
+    },
+    {
+     "pos": 3,
+     "text": "BUEN VECINO",
+     "factorMas": "S",
+     "factorMenos": "S"
+    },
+    {
+     "pos": 4,
+     "text": "DEVOTO",
+     "factorMas": "C",
+     "factorMenos": "C"
+    }
+   ]
+  }
+ ],
+ "baremos": {
+  "observado": {
+   "D": [
+    [
+     -18,
+     2.5
+    ],
+    [
+     -15,
+     5
+    ],
+    [
+     -14,
+     7.5
+    ],
+    [
+     -13,
+     12
+    ],
+    [
+     -12,
+     15
+    ],
+    [
+     -11,
+     17
+    ],
+    [
+     -10,
+     22
+    ],
+    [
+     -9,
+     24
+    ],
+    [
+     -8,
+     26
+    ],
+    [
+     -7,
+     28
+    ],
+    [
+     -6,
+     33
+    ],
+    [
+     -5,
+     35
+    ],
+    [
+     -4,
+     37
+    ],
+    [
+     -3,
+     41
+    ],
+    [
+     -2,
+     45
+    ],
+    [
+     -1,
+     47
+    ],
+    [
+     0,
+     48
+    ],
+    [
+     1,
+     52
+    ],
+    [
+     2,
+     56
+    ],
+    [
+     3,
+     58
+    ],
+    [
+     4,
+     60
+    ],
+    [
+     5,
+     62
+    ],
+    [
+     6,
+     65
+    ],
+    [
+     7,
+     68.5
+    ],
+    [
+     8,
+     72
+    ],
+    [
+     9,
+     75
+    ],
+    [
+     10,
+     78
+    ],
+    [
+     11,
+     80
+    ],
+    [
+     12,
+     82
+    ],
+    [
+     13,
+     85
+    ],
+    [
+     14,
+     87.5
+    ],
+    [
+     15,
+     92
+    ],
+    [
+     16,
+     95
+    ],
+    [
+     17,
+     96
+    ],
+    [
+     20,
+     98
+    ]
+   ],
+   "I": [
+    [
+     -11,
+     3
+    ],
+    [
+     -10,
+     6
+    ],
+    [
+     -9,
+     10
+    ],
+    [
+     -8,
+     13
+    ],
+    [
+     -7,
+     17.5
+    ],
+    [
+     -6,
+     23
+    ],
+    [
+     -5,
+     27
+    ],
+    [
+     -4,
+     32.5
+    ],
+    [
+     -3,
+     37
+    ],
+    [
+     -2,
+     41
+    ],
+    [
+     -1,
+     47
+    ],
+    [
+     0,
+     52.5
+    ],
+    [
+     1,
+     57.5
+    ],
+    [
+     2,
+     62.5
+    ],
+    [
+     3,
+     67.5
+    ],
+    [
+     4,
+     74
+    ],
+    [
+     5,
+     78
+    ],
+    [
+     6,
+     85
+    ],
+    [
+     7,
+     88
+    ],
+    [
+     8,
+     92
+    ],
+    [
+     9,
+     96
+    ],
+    [
+     13,
+     98
+    ]
+   ],
+   "S": [
+    [
+     -15,
+     2
+    ],
+    [
+     -13,
+     4
+    ],
+    [
+     -12,
+     6
+    ],
+    [
+     -11,
+     9.5
+    ],
+    [
+     -10,
+     13
+    ],
+    [
+     -9,
+     18
+    ],
+    [
+     -8,
+     23
+    ],
+    [
+     -7,
+     27
+    ],
+    [
+     -6,
+     32
+    ],
+    [
+     -5,
+     35
+    ],
+    [
+     -4,
+     37.5
+    ],
+    [
+     -3,
+     41
+    ],
+    [
+     -2,
+     44.5
+    ],
+    [
+     -1,
+     48.5
+    ],
+    [
+     0,
+     53.5
+    ],
+    [
+     1,
+     57
+    ],
+    [
+     2,
+     62.5
+    ],
+    [
+     3,
+     66
+    ],
+    [
+     4,
+     70
+    ],
+    [
+     5,
+     73
+    ],
+    [
+     6,
+     77
+    ],
+    [
+     7,
+     80
+    ],
+    [
+     8,
+     83
+    ],
+    [
+     9,
+     77.5
+    ],
+    [
+     10,
+     92
+    ],
+    [
+     13,
+     95
+    ],
+    [
+     17,
+     98
+    ]
+   ],
+   "C": [
+    [
+     -16,
+     2
+    ],
+    [
+     -14,
+     4
+    ],
+    [
+     -12,
+     6
+    ],
+    [
+     -11,
+     10
+    ],
+    [
+     -10,
+     13.5
+    ],
+    [
+     -9,
+     17
+    ],
+    [
+     -8,
+     21.5
+    ],
+    [
+     -7,
+     26
+    ],
+    [
+     -6,
+     32.5
+    ],
+    [
+     -5,
+     35
+    ],
+    [
+     -4,
+     42
+    ],
+    [
+     -3,
+     46
+    ],
+    [
+     -2,
+     52.5
+    ],
+    [
+     -1,
+     55.5
+    ],
+    [
+     0,
+     60
+    ],
+    [
+     1,
+     67
+    ],
+    [
+     2,
+     73.5
+    ],
+    [
+     3,
+     78
+    ],
+    [
+     4,
+     83
+    ],
+    [
+     5,
+     88
+    ],
+    [
+     6,
+     91
+    ],
+    [
+     7,
+     95
+    ],
+    [
+     8,
+     96
+    ],
+    [
+     11,
+     97
+    ],
+    [
+     13,
+     98
+    ]
+   ]
+  },
+  "proyectado": {
+   "D": [
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     15
+    ],
+    [
+     2,
+     23
+    ],
+    [
+     3,
+     32
+    ],
+    [
+     4,
+     38.5
+    ],
+    [
+     5,
+     44.5
+    ],
+    [
+     6,
+     47.5
+    ],
+    [
+     7,
+     53
+    ],
+    [
+     8,
+     60
+    ],
+    [
+     9,
+     64
+    ],
+    [
+     10,
+     73
+    ],
+    [
+     11,
+     75
+    ],
+    [
+     12,
+     77.5
+    ],
+    [
+     13,
+     82
+    ],
+    [
+     14,
+     85
+    ],
+    [
+     15,
+     90
+    ],
+    [
+     16,
+     95
+    ],
+    [
+     18,
+     98
+    ]
+   ],
+   "I": [
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     23
+    ],
+    [
+     2,
+     36
+    ],
+    [
+     3,
+     43.5
+    ],
+    [
+     4,
+     53
+    ],
+    [
+     5,
+     62.5
+    ],
+    [
+     6,
+     69
+    ],
+    [
+     7,
+     77
+    ],
+    [
+     8,
+     85
+    ],
+    [
+     9,
+     88
+    ],
+    [
+     10,
+     94
+    ],
+    [
+     11,
+     96
+    ],
+    [
+     14,
+     98
+    ]
+   ],
+   "S": [
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     24
+    ],
+    [
+     2,
+     31
+    ],
+    [
+     3,
+     37.5
+    ],
+    [
+     4,
+     44.5
+    ],
+    [
+     5,
+     53
+    ],
+    [
+     6,
+     58
+    ],
+    [
+     7,
+     64
+    ],
+    [
+     8,
+     71
+    ],
+    [
+     9,
+     75.5
+    ],
+    [
+     10,
+     83
+    ],
+    [
+     11,
+     87
+    ],
+    [
+     12,
+     94
+    ],
+    [
+     13,
+     96
+    ],
+    [
+     16,
+     98
+    ]
+   ],
+   "C": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     17.5
+    ],
+    [
+     2,
+     31
+    ],
+    [
+     3,
+     40
+    ],
+    [
+     4,
+     52.5
+    ],
+    [
+     5,
+     62.5
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     81
+    ],
+    [
+     8,
+     86
+    ],
+    [
+     9,
+     95
+    ],
+    [
+     10,
+     96
+    ],
+    [
+     11,
+     97
+    ],
+    [
+     14,
+     98
+    ]
+   ]
+  },
+  "bajoPresion": {
+   "D": [
+    [
+     0,
+     98
+    ],
+    [
+     1,
+     85
+    ],
+    [
+     2,
+     74
+    ],
+    [
+     3,
+     66
+    ],
+    [
+     4,
+     59
+    ],
+    [
+     5,
+     53.5
+    ],
+    [
+     6,
+     48
+    ],
+    [
+     7,
+     44
+    ],
+    [
+     8,
+     40
+    ],
+    [
+     9,
+     35
+    ],
+    [
+     10,
+     30
+    ],
+    [
+     11,
+     27
+    ],
+    [
+     12,
+     22
+    ],
+    [
+     13,
+     17.5
+    ],
+    [
+     14,
+     13.5
+    ]
+   ],
+   "I": [
+    [
+     0,
+     98
+    ],
+    [
+     1,
+     85
+    ],
+    [
+     2,
+     73
+    ],
+    [
+     3,
+     64
+    ],
+    [
+     4,
+     54
+    ],
+    [
+     5,
+     47
+    ],
+    [
+     6,
+     37
+    ],
+    [
+     7,
+     30
+    ],
+    [
+     8,
+     22.5
+    ],
+    [
+     9,
+     17
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     7.5
+    ],
+    [
+     12,
+     5
+    ],
+    [
+     13,
+     4
+    ],
+    [
+     16,
+     2
+    ]
+   ],
+   "S": [
+    [
+     0,
+     98
+    ],
+    [
+     1,
+     94
+    ],
+    [
+     2,
+     83.5
+    ],
+    [
+     3,
+     74.5
+    ],
+    [
+     4,
+     66
+    ],
+    [
+     5,
+     58.5
+    ],
+    [
+     6,
+     54
+    ],
+    [
+     7,
+     43.5
+    ],
+    [
+     8,
+     37.5
+    ],
+    [
+     9,
+     30
+    ],
+    [
+     10,
+     23.5
+    ],
+    [
+     11,
+     16
+    ],
+    [
+     12,
+     10
+    ],
+    [
+     13,
+     5
+    ],
+    [
+     16,
+     2
+    ]
+   ],
+   "C": [
+    [
+     0,
+     98
+    ],
+    [
+     1,
+     94
+    ],
+    [
+     2,
+     87
+    ],
+    [
+     3,
+     79
+    ],
+    [
+     4,
+     72
+    ],
+    [
+     5,
+     63
+    ],
+    [
+     6,
+     54
+    ],
+    [
+     7,
+     48
+    ],
+    [
+     8,
+     39.5
+    ],
+    [
+     9,
+     33.5
+    ],
+    [
+     10,
+     26
+    ],
+    [
+     11,
+     16
+    ],
+    [
+     12,
+     10
+    ],
+    [
+     13,
+     6
+    ],
+    [
+     15,
+     3
+    ]
+   ]
+  }
+ },
+ "combos": {
+  "order": [
+   "D/I",
+   "D/S",
+   "D/C",
+   "I/D",
+   "I/S",
+   "I/C",
+   "S/D",
+   "S/I",
+   "S/C",
+   "C/D",
+   "C/I",
+   "C/S"
+  ],
+  "sameAxis": [
+   "D/S",
+   "D/C",
+   "S/D",
+   "C/D"
+  ],
+  "rules": {
+   "NO_INTERPRETABLE_cross": "d<10",
+   "NO_INTERPRETABLE_sameAxis": "d<0",
+   "IGUALDAD_sameAxis": "0<=d<10",
+   "INTENSO": "d>=40 y p>50",
+   "ALTO": "p>50 y n>50 y d>9",
+   "MEDIO": "d<40 y p>50",
+   "BAJO": "default",
+   "priority": [
+    "NO_INTERPRETABLE",
+    "IGUALDAD",
+    "INTENSO",
+    "ALTO",
+    "MEDIO",
+    "BAJO"
+   ]
+  },
+  "texts": {
+   "D/I": {
+    "ALTO": "D/I ALTO. - Se orienta a obtener resultados objetivos y metas relacionadas sobre cosas, números o ideas a través de la gente. Se siente retado por problemas, obstáculos y dificultades que se interponen a la obtención de metas altas donde se requiere del esfuerzo y mérito personal. Se orienta a tomar en cuenta a la gente para alinearla con sus metas y proyectos y se relaciona con ellas de manera que pueda encontrar su lado adecuado para que se sientan a gusto en el desarrollo de los proyectos.",
+    "BAJO": "D/I BAJO. - Tiende a ser lógico en sus enfoques, prefiriendo tratar con cosas, números o ideas más que con sentimientos de la gente. No responderá de manera agresiva a metas que supongan un gran empuje personal, pero colaborará de una manera objetiva. Tenderá a ser una persona reservada en su trato.",
+    "INTENSO": "D/I INTENSO. - Es lógico, crítico e incisivo con una fuerte orientación a las metas. Le gustan los retos intelectuales donde se requiere de análisis y originalidad, y donde su participación personal y empuje sean notorios. Su trato es llano, directo y crítico.",
+    "MEDIO": "D/I MEDIO. -Prefiere dar resultados y trabajar con cosas, números o ideas que trabajar con gente y satisfacer sus sentimientos. Se siente retado por problemas y dificultades, pero no se caracteriza por ser muy competitivo, siendo capaz de ceder en sus puntos de vista"
+   },
+   "D/S": {
+    "ALTO": "D/S ALTO. - Responde a retos. Es un iniciador de acciones. Selecciona con detenimiento que actividades requieren de mayor profundización y atención y cuales deben llevarse a cabo a mayor velocidad. Tiende a coordinar diversos asuntos a la vez, pero con profundidad. Establece orden en los asuntos en que interviene.",
+    "BAJO": "D/S BAJO. -Demuestra movilidad y versatilidad en sus enfoques. Trabaja con gran variedad de asuntos, aunque los atiende de manera superficial. Prefiere los asuntos que demandan velocidad y superficialidad sobre los asuntos de demandan mayor profundidad y lentitud. Es adaptable a las presiones del exterior, prefiriendo adaptar su empuje personal a lo que se le demande.",
+    "IGUALDAD": "D=S. - Es una persona de alto empuje, competitiva y determinada en la búsqueda de resultados. Canaliza su alto empuje a través de una constancia, consistencia y enfoque a trabajar con pocas actividades, por lo que se muestra muy seguro, firme e incluso terco en sus puntos de vista.",
+    "INTENSO": "D/S INTENSO. -Responde a retos y metas altas de manera rápida. Muestra movilidad, velocidad y flexibilidad en sus enfoques. Intenta y corrige si es necesario con tal de aproximarse a las metas fijadas.  Es un iniciador versátil que responde rápidamente a la competencia. Se orienta a manejar muchos asuntos a la vez alineándolos en lo básico a los resultados esperados y coordinándolos, aunque de manera superficial. Muestra un gran sentido de urgencia en iniciar y terminar actividades buscando llegar a la meta antes que los demás.",
+    "MEDIO": "D/S MEDIO. -Responde a retos y metas de manera flexible y adaptable. Muestra cierta movilidad y velocidad en sus enfoques. Se orienta a manejar varios asuntos a la vez, aunque de manera superficial. Tiende a coordinar varios asuntos a la vez para orientarlos al mismo fin."
+   },
+   "D/C": {
+    "ALTO": "D/C ALTO. - Actúa de una manera directa y positiva ante la oposición. Es una persona fuerte que toma una posición y lucha por mantenerla, sin embargo, al establecer su posición toma en cuenta reglas o procedimientos, normas de calidad que hay que observar, siempre y cuando no sean demasiado estructuradas.",
+    "BAJO": "D/C BAJO. - Es una persona que actúa bajo sus propias reglas. Tiende a ignorar reglas, procedimientos y niveles jerárquicos para actuar de acuerdo a lo que a él le cuadre. No pone demasiada resistencia a la oposición, pero terminan haciendo las cosas a su manera. Está dispuesto a tomar riesgos en su actuación pero sin ser demasiado fuerte para mostrar su poder.",
+    "IGUALDAD": "D=C. - Busca la igualdad entre la fuerza para lograr resultados y la calidad de los mismos, por lo que es visto como un perfeccionista. Le gusta alcanzar la mejor respuesta, lo cual lo puede llevar a procesos demasiado lentos de toma de decisiones. Los signos externos de esta situación son la tensión y la vacilación.",
+    "INTENSO": "D/C INTENSO. - Actúa de manera directa y asertiva ante la oposición. Prepara su postura y va por ella. Es una persona fuerte que toma una posición y lucha por mantenerla. Está dispuesto a tomar riesgos y puede en ocasiones ignorar niveles jerárquicos para sacar adelante su punto de vista. Está convencido generalmente que su propia manera de hacer las cosas es la que debe prevalecer para él.",
+    "MEDIO": "D/C MEDIO. - Es una persona que está dispuesta a tomar decisiones de riesgo, generalmente prefiriendo su propio sentir que le que dictan las reglas, pero no de manera obsesiva, sino que también está dispuesto a ceder en algunos aspectos para que le ayuden a tomar su decisión."
+   },
+   "I/D": {
+    "ALTO": "I/D ALTO. - Tiende a orientarse hacia el trato con la gente mostrándose socialmente agresivo. Es una persona con orientación hacia metas y resultados, los cuales los obtiene a través de liderazgo con la gente e influencia sobre su grupo de trabajo. Aunque esta persona muestra orientación hacia resultados, el factor primordial siguen siendo las personas, por lo que en situaciones de presión primero son ellas y luego los resultados.",
+    "BAJO": "I/D BAJO. - Es una persona seria, reservada y cordial en su trato. Es un buen colaborador que le gusta trabajar en equipo y seguir las directrices al pie de la letra.",
+    "INTENSO": "I/D INTENSO. - Tiende a comportarse en una forma equilibrada y cordial, desplegando agresividad social en situaciones que percibe como favorables y sin amenazas. Tiende a mostrarse simpático y lucha por establecer y mantener relaciones con la gente desde el primer contacto. Esta persona se distinguirá por su tacto, amabilidad y por la venta suave de sus ideas.",
+    "MEDIO": "I/D MEDIO. - Tiende a orientarse hacia el trato interpersonal promoviendo acciones a través de gente con influencia y mostrando buena voluntad y suavidad en el trato. Para esta persona es importante el mantener relaciones con los demás, pero es importante notar que no pierde de vista su orientación hacia el logro de metas y objetivos."
+   },
+   "I/S": {
+    "ALTO": "i/S ALTO .-Es persuasivo, convincente y demostrativo. Busca a la gente con entusiasmo, logrando influenciarla y motivarla de manera positiva. Le gusta el trabajo ordenado y bien estructurado, bajo un ritmo preestablecido. Se enfocará en lo que él considera el deber ser de las cosas.",
+    "BAJO": "i/S BAJO .- Esta persona muestra una moderada preferencia por la gente, por lo que puede mostrarse objetivo, racional, lógico y discreto en su trato. Es muy dinámico y versátil, tiene una gran flexibilidad en sus enfoques y mucha movilidad para el logro de metas y objetivos.",
+    "INTENSO": "i/S INTENSO .-Se inclina a buscar a la gente con entusiasmo y chispa, siente una gran necesidad de interactuar con ella. Es una persona abierta y optimista que trata de ganarse a los demás a través de la persuasión y/o de un acercamiento emotivo. Tiene la capacidad para influenciar y motivar de una manera positiva a una variedad de personas en situaciones cambiantes.",
+    "MEDIO": "i/S MEDIO .-Tiene facilidad para el trato interpersonal, siendo alguien sociable y animado, pero al mismo tiempo equilibrado. Es flexible en sus enfoques y demuestra buen sentido de urgencia para la consecución de las metas y objetivos."
+   },
+   "I/C": {
+    "ALTO": "I/C ALTO . - Tiene inclinación por el trato interpersonal, buscando a la gente con entusiasmo y proyectando gran confianza en sí mismo. Sin embargo, no perderá de vista la importancia de mantener altos estándares de calidad y apego preciso y detallado a reglas en todas sus acciones.",
+    "BAJO": "I/C BAJO. - Es una persona con preferencia para trabajar con ideas, números y máquinas más que con gente, por lo que se muestra directo, franco y liberal en su trato, además de mostrar una forma muy personal de ser y de actuar. Es una persona independiente en su accionar y dispuesto a tomar riesgos.",
+    "INTENSO": "I/C INTENSO. - Despliega gran confianza en sí mismo en la mayoría de sus tratos con otras personas. Aunque siempre lucha por ganarse a la gente, se muestra firme, independiente y reacio a ceder en su punto de vista. Siente que sin importar la situación que se presente, siempre puede actuar de forma exitosa. Influencia y motiva de manera positiva a los demás en situaciones en que existen pocos antecedentes o reglas que sirvan de guías",
+    "MEDIO": "I/C MEDIO . -Se inclina por el trato interpersonal, buscando a la gente con entusiasmo y desplegando confianza en sí mismo. Es una persona que se muestra firme, independiente y con confianza para influenciar y motivar a la gente de una manera positiva. En situaciones difíciles no tomará riesgos y tendrá presentes las reglas, así como buscará consultar las decisiones importantes"
+   },
+   "S/D": {
+    "ALTO": "S/D ALTO. - Es una persona fuerte y determinada, disfruta de los retos y obtiene sus metas en base a la gran consistencia en su accionar. Le gusta trabajar en pocos proyectos a la vez ya que le gusta resolver los problemas uno a uno de manera directa. Le cuesta trabajo delegar, prefiriendo hacer todo personalmente. Es una persona obstinada por naturaleza y muy firme en sus puntos de vista.",
+    "BAJO": "S/D BAJO - Es una persona activa, dinámica que gusta de la variedad en el trabajo. Es cordial y normalmente está dispuesta a ayudar a los demás. Se distingue por ser un miembro activo del equipo y por sus grandes aportaciones.",
+    "IGUALDAD": "S=D Es una persona de alto empuje, competitiva y determinada en la búsqueda de resultados. Canaliza su alto empuje a través de una constancia, consistencia y enfoque a trabajar con pocas actividades, por lo que se muestra muy seguro, firme e incluso terco en sus puntos de vista.",
+    "INTENSO": "S/D INTENSO. - Es constante y consistente. Prefiere trabajar en un proyecto a la vez. Le gusta dirigir sus habilidades y experiencias hacia áreas que requieren profundización y especialización. Busca la estabilidad y la armonía, así como pocos cambios en su ambiente de trabajo, de manera que mantendrá la ecuanimidad ante presiones laborales que busquen hacerlo cambiar.",
+    "MEDIO": "S/D MEDIO. - Le gusta trabajar en ambientes bien estructurados, predecibles y con pocas actividades simultáneamente. Se caracteriza por su paciencia y predeterminación. Generalmente muestra disposición a ayudar y a trabajar en equipo. No le gustan los cambios, y menos aún si estos son inesperados o buscos, así que hará todo lo posible por mantener el status quo. Una vez que establece su ritmo de trabajo, puede continuarlo con una paciencia inagotable."
+   },
+   "S/I": {
+    "ALTO": "S/I ALTO. - Es una persona sistemática y muy consistente en su trabajo. Esta persona tiene habilidad y preferencia para trabajar con actividades que le demandan por un lado, concentración y reflexión enfocada en pocas actividades, y por otro lado habilidad para mostrarse sociable, abierto y con capacidad para influenciar de manera positiva en la gente.",
+    "BAJO": "S/I BAJO. - Es una persona versátil, dinámica y con capacidad para trabajar con varias actividades a la vez. Es analítica y fría. Muy objetiva en sus enfoques. Le gusta ser reflexivo y calculador en sus movimientos hasta donde la velocidad de la situación se lo permite.",
+    "INTENSO": "S/I INTENSO. - Es una persona controlada y paciente, que se mueve con moderación y premeditación en todo lo que hace. Le gusta trabajar con actividades que le demandan concentración sobre las cosas, ideas o números dentro de un ambiente de estabilidad y estructura. Suele reflexionar y profundizar fuertemente en cada actividad antes de tomar decisiones.",
+    "MEDIO": "S/I MEDIO. - Actúa de una manera estable, consistente y premeditada en todas sus actividades. Reflexiona y razona sus movimientos antes de actuar. Muestra preferencia por interactuar con ideas, máquinas y números más que con gente."
+   },
+   "S/C": {
+    "ALTO": "S/C ALTO. - Le gusta trabajar en pocas actividades a la vez. Es consistente en su actuar y busca concentrarse y analizar los detalles de sus acciones con el objetivo de obtener resultados apegados a los estándares establecidos. Es alguien con muy fuerte apego a las reglas y políticas establecidas, pudiendo llegar a mostrarse rígido y estricto en sus puntos de vista. No descansará hasta ver que los objetivos se cumplan al pie de la letra.",
+    "BAJO": "S/C BAJO - Es una persona dinámica y activa que buscará trabajar con diversas y muy variadas actividades a la vez. Asimismo, es una persona firme y sumamente independiente que desea libertad total de acción. Es flexible y reacciona rápido a la competencia. Busca actuar bajo su criterio y está dispuesto a tomar riesgos o ignorar niveles jerárquicos con objeto de lograr sus objetivos.",
+    "INTENSO": "S/C INTENSO. - ETiende a ser persistente y perseverante, una vez que decide algo, difícilmente se desvía de su objetivo. Es firme e independiente, le gusta trabajar con libertad de movimientos en las áreas que domina. Tiende a ser muy consistente y tenaz, se fija objetivos, establece un ritmo de trabajo y difícilmente se aparta de ellos hasta lograr sus metas. Puede mostrarse rígido y muy terco en sus ideas si se aplica fuerza para hacerlo cambiar.",
+    "MEDIO": "S/C MEDIO. - Es firme e independiente. Le gusta trabajar con libertad de movimientos y decisiones en las áreas que domina. Es decidido, consistente y persisten en el logro de sus objetivos."
+   },
+   "C/D": {
+    "ALTO": "C/D ALTO. - Tiende a actuar de una forma cuidadosa y conservadora. Busca resultados con base en el apego a normas, procedimientos o parámetros estrictos de calidad. Prefiere el manual a la improvisación. Defiende sus puntos de vista normativos con cierto empuje personal. Es muy cuidadoso de los detalles.",
+    "BAJO": "C/D BAJO. -Es una persona que está dispuesta a ceder en sus puntos de vista ante la oposición. Prefiere recibir instrucciones y tratarlas de seguir para evitarse problemas personales. Es cuidadoso con los detalles, sin caer en el perfeccionismo. Es cauteloso y conservador. Prefiere jugar a la defensiva y sobre todo con instrucciones claras y precisas. Busca la lógica, la experiencia y los antecedentes para responder a cuestionamientos.",
+    "IGUALDAD": "C=D. -  Busca la igualdad entre la fuerza para lograr resultados y la calidad de los mismos, por lo que es visto como un perfeccionista. Le gusta alcanzar la mejor respuesta, lo cual lo puede llevar a procesos demasiado lentos de toma de decisiones. Los signos externos de esta situación son la tensión y la vacilación.",
+    "INTENSO": "C/D INTENSO. -Tiende a actuar de una forma cuidadosa y conservadora. En general esta dispuesto a modificar o transigir en su posición con el objeto de lograr objetivos. Es un estricto seguidor de las políticas, instrucciones y procedimientos. Puede parecer estricto en la observancia y aplicación de reglas preestablecidas. Prefiere un ambiente libre de antagonismos y desea la armonía y la tranquilidad. Es muy cuidadoso de los detalles.",
+    "MEDIO": "C/D MEDIO. -Conservador en sus enfoques. Tiende a actuar con cautela. Busca que sus resultados se apeguen a un orden preestablecido. Se adapta a niveles jerárquicos y respeta lo establecido en normas, políticas, instrucciones y niveles. Prefiere la armonía al antagonismo."
+   },
+   "C/I": {
+    "ALTO": "C/I ALTO. - Tiende a ser un seguidor apegado del orden y de los sistemas que gusta de tomar decisiones basado en la experiencia o en la lógica. Lucha por conciliar las exigencias de calidad y apego a estándares con las necesidades de la gente que le rodea. Principalmente se orienta a la calidad en sus resultados, pero muestra sociabilidad y sensibilidad en el trato con gente.",
+    "BAJO": "C/I BAJO. -Tiende a actuar de manera firme e independiente, prefiriendo decidir conforme a sus propias ideas, manifestando poco apego a normas y procedimientos. Sin embargo, esta persona mantiene su deseo de precisión y exactitud en los resultados. Es reservada, franca y directa en su trato.",
+    "INTENSO": "C/I INTENSO. -Esta persona tiende a ser un seguidor del orden y de los sistemas. Es una persona atenta a los detalles y que busca trabajar con la precisión necesaria para asegurarse de que los estándares fijados se cumplan con precisión y sin error. Su toma de decisiones se basa en su experiencia y en la lógica, y ambas con fuerte apego a las reglas establecidas. Busca llevar una vida ordenada, estable y que tiende a seguir procedimientos tanto en su vida personal como en el trabajo",
+    "MEDIO": "C/I MEDIO. -Es una persona que tiene orientación a normas y sistemas en todas sus actividades. Asimismo, esta persona muestra interés en los aspectos de servicio y atención a la gente, pero sin descuidar la precisión y atención a detalles. Es serio, reservado y diplomático en su trato."
+   },
+   "C/S": {
+    "ALTO": "C/S ALTO. - Es una persona cuidadosa, estable y serena, de pasos sumamente calculados, por lo que buscará apegarse al máximo a reglas, procedimientos y a la experiencia. Busca sentirse totalmente segura antes de tomar una decisión.",
+    "BAJO": "C/S BAJO. - Es una persona segura e independiente que le gusta actuar con libertad de movimientos. Busca actuar bajo criterio, pero sólo en situaciones de suma importancia busca consultar sus decisiones.",
+    "INTENSO": "C/S INTENSO. - Esta persona estará muy consciente en evitar riesgos o problemas. Es una persona que muestra preocupación por las consecuencias de una acción. Busca significados ocultos y muestra una preocupación constante por la calidad de los resultados. Le gusta participar en varias actividades a la vez, lo cual aunado a su alto enfoque a la calidad puede llevarla a manejar altos niveles de tensión. En general, se sentirá intranquila mientras no tenga una confirmación absoluta de que sus decisiones han sido las correctas.",
+    "MEDIO": "C/S MEDIO. - Es una persona cuidadosa y apegada a reglas en sus acciones, sin llegar a ser demasiado estricto en la aplicación de las mismas. Es dinámica y activa, buscando actuar con cautela. Recolecta la mayor información disponible antes de decidir y procura ser lo más preciso posible hasta donde la velocidad de la situación se lo permite."
+   }
+  }
+ }
+}

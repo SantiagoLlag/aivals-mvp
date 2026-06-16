@@ -1,0 +1,278 @@
+"use client";
+import { useMemo, useState } from "react";
+import type { PublicTest } from "@/lib/human/publicTest";
+
+type DiscAns = Record<number, { mas?: number; menos?: number }>;
+
+export default function TestRunner({
+  token, candidateName, test,
+}: { token: string; candidateName: string; test: PublicTest }) {
+  const steps = ["consent", "disc", "valores", "penI", "penII", "penIII"] as const;
+  const [step, setStep] = useState(0);
+  const [discAns, setDiscAns] = useState<DiscAns>({});
+  const [valOrder, setValOrder] = useState<Record<number, string[]>>({});
+  const [penIOrder, setPenIOrder] = useState<Record<number, string[]>>({});
+  const [penII, setPenII] = useState<Record<string, number>>({});
+  const [penIII, setPenIII] = useState<Record<string, number>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // ---- completeness per step ----
+  const discComplete = test.disc.series.every((s) => {
+    const a = discAns[s.n];
+    return a && a.mas && a.menos && a.mas !== a.menos;
+  });
+  const valComplete = test.valores.series.every((s) => (valOrder[s.n]?.length ?? 0) === s.concepts.length);
+  const penIComplete = test.pensante.groupI.questions.every((_, i) => (penIOrder[i]?.length ?? 0) === 4);
+  const penIIComplete = test.pensante.groupII.items.every((it) => penII[it.id] != null);
+  const penIIIComplete = test.pensante.groupIII.items.every((it) => penIII[it.id] != null);
+
+  const canContinue = [true, discComplete, valComplete, penIComplete, penIIComplete, penIIIComplete][step];
+
+  async function submit() {
+    setSubmitting(true);
+    setError(null);
+    // construir payload con el shape que espera el motor
+    const valores: Record<string, number> = {};
+    for (const s of test.valores.series) {
+      (valOrder[s.n] ?? []).forEach((id, k) => { valores[id] = 6 - k; });
+    }
+    const pensante: Record<string, number> = { ...penII, ...penIII };
+    const penIScale = test.pensante.groupI.scale; // [5,4,2,1]
+    test.pensante.groupI.questions.forEach((_, i) => {
+      (penIOrder[i] ?? []).forEach((id, k) => { pensante[id] = penIScale[k]; });
+    });
+    try {
+      const res = await fetch(`/api/test/${token}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ disc: discAns, valores, pensante }),
+      });
+      if (!res.ok) throw new Error("No se pudo guardar. Intenta de nuevo.");
+      setDone(true);
+    } catch (e: any) {
+      setError(e.message);
+      setSubmitting(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <div className="card text-center py-12 max-w-lg mx-auto">
+        <div className="text-4xl mb-3">✓</div>
+        <h2 className="text-xl font-bold">¡Gracias, {candidateName}!</h2>
+        <p className="text-sm text-neutral-600 mt-2">
+          Tus respuestas se registraron correctamente. Ya puedes cerrar esta ventana.
+        </p>
+      </div>
+    );
+  }
+
+  const labels = ["Consentimiento", "Comportamiento", "Motivadores", "Pensamiento I", "Pensamiento II", "Pensamiento III"];
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-5">
+      <div>
+        <div className="flex items-center justify-between text-xs text-neutral-500 mb-1">
+          <span>Paso {step + 1} de {steps.length} · {labels[step]}</span>
+          <span>{Math.round(((step) / (steps.length - 1)) * 100)}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-line overflow-hidden">
+          <div className="h-full bg-accent transition-all" style={{ width: `${(step / (steps.length - 1)) * 100}%` }} />
+        </div>
+      </div>
+
+      {step === 0 && <Consent name={candidateName} />}
+      {step === 1 && <DiscStep test={test} ans={discAns} setAns={setDiscAns} />}
+      {step === 2 && <ValoresStep test={test} order={valOrder} setOrder={setValOrder} />}
+      {step === 3 && <RankPensante test={test} order={penIOrder} setOrder={setPenIOrder} />}
+      {step === 4 && <RatePensante items={test.pensante.groupII.items} title={test.pensante.groupII.title} ans={penII} setAns={setPenII} />}
+      {step === 5 && <RatePensante items={test.pensante.groupIII.items} title={test.pensante.groupIII.title} ans={penIII} setAns={setPenIII} />}
+
+      {error && <p className="text-sm text-red-600">{error}</p>}
+
+      <div className="flex items-center justify-between pt-2">
+        <button className="btn-ghost" disabled={step === 0 || submitting} onClick={() => setStep((s) => s - 1)}>← Atrás</button>
+        {step < steps.length - 1 ? (
+          <button className="btn-primary" disabled={!canContinue} onClick={() => setStep((s) => s + 1)}>
+            Continuar →
+          </button>
+        ) : (
+          <button className="btn-primary" disabled={!canContinue || submitting} onClick={submit}>
+            {submitting ? "Enviando…" : "Finalizar y enviar"}
+          </button>
+        )}
+      </div>
+      {!canContinue && step > 0 && (
+        <p className="text-xs text-amber-600 text-right">Completa todas las respuestas de este paso para continuar.</p>
+      )}
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------- subcomponentes
+function Consent({ name }: { name: string }) {
+  return (
+    <div className="card space-y-3">
+      <h2 className="text-lg font-bold">Hola, {name}</h2>
+      <p className="text-sm text-neutral-700">
+        Estás por completar la prueba <b>HUMAN</b>, que explora tu estilo de comportamiento, tus
+        motivadores y tu estilo de pensamiento. No es una prueba de inteligencia y no hay respuestas
+        buenas o malas. Toma entre 15 y 25 minutos.
+      </p>
+      <p className="text-sm text-neutral-700">
+        Tus respuestas se usarán únicamente para tu evaluación profesional y serán interpretadas por
+        un psicólogo. Al continuar, otorgas tu consentimiento informado para este tratamiento de datos.
+      </p>
+      <p className="text-xs text-neutral-500">Responde con honestidad y de forma espontánea.</p>
+    </div>
+  );
+}
+
+function DiscStep({ test, ans, setAns }: { test: PublicTest; ans: DiscAns; setAns: (f: (a: DiscAns) => DiscAns) => void }) {
+  function pick(n: number, kind: "mas" | "menos", pos: number) {
+    setAns((a) => {
+      const cur = { ...(a[n] ?? {}) };
+      cur[kind] = pos;
+      // evitar que más y menos sean la misma palabra
+      const other = kind === "mas" ? "menos" : "mas";
+      if (cur[other] === pos) cur[other] = undefined;
+      return { ...a, [n]: cur };
+    });
+  }
+  return (
+    <div className="space-y-4">
+      <Intro title="Comportamiento (DISC)"
+        text="En cada grupo de 4 palabras, elige la que MÁS te describe y la que MENOS te describe." />
+      {test.disc.series.map((s) => {
+        const a = ans[s.n] ?? {};
+        return (
+          <div key={s.n} className="card py-4">
+            <div className="text-xs text-neutral-400 mb-2">Grupo {s.n} de 24</div>
+            <div className="grid grid-cols-[1fr_auto_auto] gap-2 items-center">
+              <div className="text-xs font-semibold text-neutral-400" />
+              <div className="text-[10px] font-semibold uppercase text-S text-center w-16">Más</div>
+              <div className="text-[10px] font-semibold uppercase text-D text-center w-16">Menos</div>
+              {s.words.map((w) => (
+                <Row key={w.pos}
+                  text={w.text}
+                  mas={a.mas === w.pos}
+                  menos={a.menos === w.pos}
+                  onMas={() => pick(s.n, "mas", w.pos)}
+                  onMenos={() => pick(s.n, "menos", w.pos)} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+function Row({ text, mas, menos, onMas, onMenos }: any) {
+  return (
+    <>
+      <div className="text-sm">{text}</div>
+      <button onClick={onMas} className={`h-7 w-16 rounded-md border text-xs ${mas ? "bg-S text-white border-S" : "border-line hover:border-S"}`}>{mas ? "✓" : ""}</button>
+      <button onClick={onMenos} className={`h-7 w-16 rounded-md border text-xs ${menos ? "bg-D text-white border-D" : "border-line hover:border-D"}`}>{menos ? "✓" : ""}</button>
+    </>
+  );
+}
+
+function ValoresStep({ test, order, setOrder }: { test: PublicTest; order: Record<number, string[]>; setOrder: (f: (o: Record<number, string[]>) => Record<number, string[]>) => void }) {
+  return (
+    <div className="space-y-4">
+      <Intro title="Motivadores (Valores)"
+        text="En cada grupo, haz clic en los conceptos en orden de importancia para ti: el primer clic es el MÁS importante (6) y el último el menos (1)." />
+      {test.valores.series.map((s) => (
+        <RankGroup key={s.n}
+          label={`Grupo ${s.n} de 10`}
+          items={s.concepts}
+          sequence={[6, 5, 4, 3, 2, 1]}
+          value={order[s.n] ?? []}
+          onChange={(v) => setOrder((o) => ({ ...o, [s.n]: v }))} />
+      ))}
+    </div>
+  );
+}
+
+function RankPensante({ test, order, setOrder }: { test: PublicTest; order: Record<number, string[]>; setOrder: (f: (o: Record<number, string[]>) => Record<number, string[]>) => void }) {
+  return (
+    <div className="space-y-4">
+      <Intro title={`Pensamiento — ${test.pensante.groupI.title}`}
+        text="En cada pregunta, ordena las 4 opciones haciendo clic de la que más te gusta o describe (5) a la que menos (1)." />
+      {test.pensante.groupI.questions.map((q, i) => (
+        <RankGroup key={i}
+          label={q.title || `Pregunta ${i + 1}`}
+          items={q.options}
+          sequence={test.pensante.groupI.scale}
+          value={order[i] ?? []}
+          onChange={(v) => setOrder((o) => ({ ...o, [i]: v }))} />
+      ))}
+    </div>
+  );
+}
+
+function RankGroup({ label, items, sequence, value, onChange }: {
+  label: string; items: { id: string; text: string }[]; sequence: number[]; value: string[];
+  onChange: (v: string[]) => void;
+}) {
+  function toggle(id: string) {
+    if (value.includes(id)) onChange(value.filter((x) => x !== id));
+    else if (value.length < items.length) onChange([...value, id]);
+  }
+  return (
+    <div className="card py-4">
+      <div className="text-xs text-neutral-400 mb-2">{label}</div>
+      <div className="grid gap-1.5">
+        {items.map((it) => {
+          const idx = value.indexOf(it.id);
+          const rank = idx === -1 ? null : sequence[idx];
+          return (
+            <button key={it.id} onClick={() => toggle(it.id)}
+              className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition ${rank != null ? "border-accent bg-accentSoft" : "border-line hover:border-accent"}`}>
+              <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold ${rank != null ? "bg-accent text-white" : "bg-paper text-neutral-400 border border-line"}`}>
+                {rank ?? ""}
+              </span>
+              {it.text}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RatePensante({ items, title, ans, setAns }: {
+  items: { id: string; text: string }[]; title: string; ans: Record<string, number>;
+  setAns: (f: (a: Record<string, number>) => Record<string, number>) => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <Intro title={`Pensamiento — ${title}`}
+        text="Califica cada elemento del 1 (no me describe / me disgusta) al 5 (me describe muy bien / me gusta mucho). Puedes repetir calificaciones." />
+      {items.map((it) => (
+        <div key={it.id} className="card py-3 flex items-center justify-between gap-3">
+          <span className="text-sm">{it.text}</span>
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((v) => (
+              <button key={v} onClick={() => setAns((a) => ({ ...a, [it.id]: v }))}
+                className={`h-8 w-8 rounded-md border text-xs ${ans[it.id] === v ? "bg-accent text-white border-accent" : "border-line hover:border-accent"}`}>
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Intro({ title, text }: { title: string; text: string }) {
+  return (
+    <div>
+      <h2 className="text-lg font-bold">{title}</h2>
+      <p className="text-sm text-neutral-600 mt-1">{text}</p>
+    </div>
+  );
+}
