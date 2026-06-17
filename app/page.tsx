@@ -19,6 +19,7 @@ export default async function Dashboard() {
         </div>
         <div className="flex gap-2">
           <Link href="/tour" className="btn-ghost">🎬 Tour</Link>
+          <Link href="/comparar" className="btn-ghost">📊 Comparar candidatos</Link>
           <Link href="/proceso/new" className="btn-primary">+ Nuevo proceso</Link>
         </div>
       </div>

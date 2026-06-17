@@ -88,6 +88,11 @@ export async function createProcess(input: {
   return toProcess(data, []);
 }
 
+export async function saveReference(processId: string, reference: ReferenceProfile) {
+  const { error } = await sb().from("processes").update({ reference }).eq("id", processId);
+  if (error) throw error;
+}
+
 export async function addCandidate(processId: string, name: string): Promise<Candidate> {
   const { data, error } = await sb().from("candidates").insert({
     process_id: processId, name, token: newToken(), status: "pendiente",

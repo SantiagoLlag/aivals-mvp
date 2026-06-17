@@ -53,6 +53,14 @@ export async function createProcess(input: {
   return proc;
 }
 
+export async function saveReference(processId: string, reference: ReferenceProfile) {
+  const db = await readDB();
+  const p = db.processes.find((p) => p.id === processId);
+  if (!p) throw new Error("Proceso no encontrado");
+  p.reference = reference;
+  await writeDB(db);
+}
+
 export async function addCandidate(processId: string, name: string): Promise<Candidate> {
   const db = await readDB();
   const proc = db.processes.find((p) => p.id === processId);

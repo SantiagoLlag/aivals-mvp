@@ -16,6 +16,7 @@ export const backend: "supabase" | "file" = useSupabase ? "supabase" : "file";
 export const listProcesses = impl.listProcesses;
 export const getProcess = impl.getProcess;
 export const createProcess = impl.createProcess;
+export const saveReference = impl.saveReference;
 export const addCandidate = impl.addCandidate;
 export const getCandidateByToken = impl.getCandidateByToken;
 export const getCandidate = impl.getCandidate;

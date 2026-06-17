@@ -15,6 +15,7 @@ export interface StoreApi {
     empresaText: string;
     reference?: ReferenceProfile;
   }): Promise<Process>;
+  saveReference(processId: string, reference: ReferenceProfile): Promise<void>;
   addCandidate(processId: string, name: string): Promise<Candidate>;
   getCandidateByToken(tok: string): Promise<{ process: Process; candidate: Candidate } | undefined>;
   getCandidate(id: string): Promise<{ process: Process; candidate: Candidate } | undefined>;
