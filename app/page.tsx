@@ -17,7 +17,10 @@ export default async function Dashboard() {
             Crea un proceso, envía el test HUMAN a cada candidato y recibe el reporte interpretado.
           </p>
         </div>
-        <Link href="/proceso/new" className="btn-primary">+ Nuevo proceso</Link>
+        <div className="flex gap-2">
+          <Link href="/tour" className="btn-ghost">🎬 Tour</Link>
+          <Link href="/proceso/new" className="btn-primary">+ Nuevo proceso</Link>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
