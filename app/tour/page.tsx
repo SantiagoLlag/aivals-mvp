@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = { title: "Aivals — Conoce el proyecto" };
 
 // Enlaces de exploración (demo en vivo)
-const REPORTE_COMPLETO = "/reporte/eb668bdf-7c31-41a2-9af4-3dbdf900438f"; // Carlos Silva: HUMAN + CV + AC + voz
+const REPORTE_COMPLETO = "/reporte/eb668bdf-7c31-41a2-9af4-3dbdf900438f?tour=1"; // Carlos Silva: HUMAN + CV + AC + voz (tour guiado)
 const EXPERIENCIA_CANDIDATO = "/test/6fcfaaf49621";                       // Invitada (demo)
 const PANEL = "/";
 const NUEVO = "/proceso/new";
@@ -83,8 +83,8 @@ export default function TourPage() {
           <h2 className="text-xl font-bold anim-fadeup">Explóralo tú misma</h2>
           <p className="text-sm text-neutral-600 mt-1 anim-fadeup">Todo lo de abajo es la demo real, en vivo. Empieza por el reporte para ver el resultado final.</p>
           <div className="grid sm:grid-cols-2 gap-3 mt-4">
-            <Explore href={REPORTE_COMPLETO} emoji="📊" title="Ver un reporte completo" badge="Empieza aquí"
-              desc="Un candidato evaluado con las 4 verticales: gráficas de HUMAN, evaluación del CV, Assessment Center y el role-play por voz, con la interpretación de la IA." primary />
+            <Explore href={REPORTE_COMPLETO} emoji="📊" title="Reporte completo — tour guiado" badge="Empieza aquí"
+              desc="Un candidato evaluado con las 4 verticales. Se abre con un recorrido paso a paso que explica, sección por sección, cómo se generó cada parte y cómo la IA la analiza." primary />
             <Explore href={EXPERIENCIA_CANDIDATO} emoji="🎤" title="Vívelo como candidato"
               desc="Abre el link de un candidato y prueba las actividades (incluida la llamada por voz — necesita micrófono). Así lo experimenta el evaluado." />
             <Explore href={PANEL} emoji="🧑‍⚕️" title="El panel del psicólogo"

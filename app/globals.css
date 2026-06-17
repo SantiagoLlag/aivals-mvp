@@ -50,3 +50,10 @@ html, body {
   .anim-fadeup, .anim-pop { animation: none; opacity: 1; }
   .anim-float, .anim-pulse { animation: none; }
 }
+
+/* Resaltado de la sección activa durante el tour guiado del reporte */
+.tour-highlight {
+  box-shadow: 0 0 0 3px var(--accent), 0 16px 40px rgba(20, 24, 31, 0.12) !important;
+  scroll-margin-top: 1rem;
+  transition: box-shadow 0.3s ease;
+}

@@ -8,6 +8,7 @@ import { cvDimensionByKey } from "@/lib/cv/rubric";
 import { voiceCompetencyByKey } from "@/lib/voice/rubric";
 import ReportNarrative from "./ReportNarrative";
 import CvIntegration from "./CvIntegration";
+import ReportTour from "./ReportTour";
 
 const SEM: Record<string, string> = { verde: "bg-green-500", amarillo: "bg-amber-400", rojo: "bg-red-500" };
 
@@ -39,7 +40,7 @@ export const dynamic = "force-dynamic";
 
 const VAL_NAME: Record<string, string> = { T: "Teórico", E: "Económico", A: "Estético", S: "Social", P: "Político", R: "Regulatorio" };
 
-export default async function ReportPage({ params }: { params: { id: string } }) {
+export default async function ReportPage({ params, searchParams }: { params: { id: string }; searchParams: { tour?: string } }) {
   const found = await getCandidate(params.id);
   if (!found) notFound();
   const { process: proc, candidate } = found;
@@ -61,6 +62,8 @@ export default async function ReportPage({ params }: { params: { id: string } })
           <Chip on={!!candidate.voiceResult} label="Voz" />
         </div>
       </div>
+
+      {hasAny && <ReportTour autoStart={searchParams?.tour === "1"} />}
 
       {!hasAny && (
         <div className="card text-center py-10 text-sm text-neutral-500">
