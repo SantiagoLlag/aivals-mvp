@@ -12,12 +12,14 @@ export interface ReferenceProfile {
   estiloPensamiento?: string;
   notas?: string;
   raw?: string; // texto completo del Evaluador UNO
+  edited?: boolean; // el psicólogo ajustó el perfil a mano (source se mantiene "ai" para no romper los gates)
 }
 
 export interface DosReport {
   source: "ai" | "deterministic";
   generatedAt: string;
   markdown: string;
+  edited?: boolean; // el psicólogo editó la interpretación
 }
 
 export type CandidateStatus = "pendiente" | "completado";

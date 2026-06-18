@@ -57,3 +57,13 @@ html, body {
   scroll-margin-top: 1rem;
   transition: box-shadow 0.3s ease;
 }
+
+/* Impresión / exportar a PDF del reporte: fuera el header, los botones y la barra del tour;
+   fondo blanco; tarjetas sin sombra y sin cortarse; <details> expandidos. */
+@media print {
+  header, .no-print { display: none !important; }
+  body { background: #fff !important; }
+  .card { box-shadow: none !important; break-inside: avoid; }
+  details > *:not(summary) { display: block !important; }
+  .anim-fadeup, .anim-pop { opacity: 1 !important; animation: none !important; }
+}

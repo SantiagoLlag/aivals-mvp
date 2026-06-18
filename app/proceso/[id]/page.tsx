@@ -4,6 +4,7 @@ import { getProcess } from "@/lib/store";
 import { aiEnabled } from "@/lib/ai";
 import { voiceEnabled } from "@/lib/voice/elevenlabs";
 import ProcessClient from "./ProcessClient";
+import ReferencePanel from "./ReferencePanel";
 import AcBlueprintPanel from "./AcBlueprintPanel";
 import VoiceBlueprintPanel from "./VoiceBlueprintPanel";
 
@@ -25,21 +26,7 @@ export default async function ProcessPage({ params }: { params: { id: string } }
       </div>
 
       {ref?.source === "ai" && (
-        <div className="card">
-          <h2 className="font-semibold mb-2">Perfil de referencia (Evaluador UNO)</h2>
-          {ref.resumen && <p className="text-sm text-neutral-700">{ref.resumen}</p>}
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            {ref.discIdeal && (
-              <span className="rounded-md bg-paper border border-line px-2 py-1">
-                DISC ideal · D{ref.discIdeal.D} I{ref.discIdeal.I} S{ref.discIdeal.S} C{ref.discIdeal.C}
-              </span>
-            )}
-            {ref.valoresDeseados?.map((v) => (
-              <span key={v} className="rounded-md bg-accentSoft text-accent px-2 py-1">{v}</span>
-            ))}
-          </div>
-          {ref.estiloPensamiento && <p className="text-xs text-neutral-500 mt-2">Pensamiento: {ref.estiloPensamiento}</p>}
-        </div>
+        <ReferencePanel processId={proc.id} reference={ref} aiEnabled={aiEnabled()} />
       )}
 
       <AcBlueprintPanel processId={proc.id} blueprint={proc.acBlueprint ?? null} aiEnabled={aiEnabled()} />

@@ -9,6 +9,8 @@ import { voiceCompetencyByKey } from "@/lib/voice/rubric";
 import ReportNarrative from "./ReportNarrative";
 import CvIntegration from "./CvIntegration";
 import ReportTour from "./ReportTour";
+import CompetencyScores from "./CompetencyScores";
+import PrintButton from "./PrintButton";
 
 const SEM: Record<string, string> = { verde: "bg-green-500", amarillo: "bg-amber-400", rojo: "bg-red-500" };
 
@@ -47,19 +49,43 @@ export default async function ReportPage({ params, searchParams }: { params: { i
   const r = candidate.result;
   const hasAny = !!(r || candidate.cv || candidate.acResult || candidate.voiceResult);
 
+  // Navegación entre candidatos del mismo proceso (C16).
+  const sibs = proc.candidates;
+  const idx = sibs.findIndex((c) => c.id === candidate.id);
+  const prev = idx > 0 ? sibs[idx - 1] : null;
+  const next = idx >= 0 && idx < sibs.length - 1 ? sibs[idx + 1] : null;
+
   return (
     <div className="space-y-6">
-      <Link href={`/proceso/${proc.id}`} className="text-sm text-accent">← {proc.name}</Link>
+      <div className="flex items-center justify-between gap-2 flex-wrap no-print">
+        <Link href={`/proceso/${proc.id}`} className="text-sm text-accent">← {proc.name}</Link>
+        <div className="flex items-center gap-2">
+          {sibs.length > 1 && (
+            <>
+              {prev
+                ? <Link href={`/reporte/${prev.id}`} className="text-xs text-accent hover:underline" title={`Candidato anterior: ${prev.name}`}>← anterior</Link>
+                : <span className="text-xs text-neutral-300">← anterior</span>}
+              <span className="text-neutral-300">·</span>
+              {next
+                ? <Link href={`/reporte/${next.id}`} className="text-xs text-accent hover:underline" title={`Siguiente candidato: ${next.name}`}>siguiente →</Link>
+                : <span className="text-xs text-neutral-300">siguiente →</span>}
+              <span className="text-neutral-300">·</span>
+            </>
+          )}
+          <Link href={`/comparar/${proc.id}`} className="text-xs text-accent hover:underline">📊 Comparar</Link>
+        </div>
+      </div>
       <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{candidate.name}</h1>
           <p className="text-sm text-neutral-500 mt-1">Reporte de evaluación</p>
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <Chip on={!!r} label="HUMAN" />
           <Chip on={!!candidate.cv} label="CV" />
           <Chip on={!!candidate.acResult} label="AC" />
           <Chip on={!!candidate.voiceResult} label="Voz" />
+          {hasAny && <PrintButton />}
         </div>
       </div>
 
@@ -116,7 +142,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
       {/* Interpretación (Evaluador DOS) */}
       <section className="card space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold">Interpretación profesional</h2>
+          <h2 className="font-semibold">Interpretación profesional <span className="text-xs font-normal text-neutral-400">· Evaluador DOS — integra HUMAN</span></h2>
           {candidate.dosReport && (
             <span className="text-[11px] text-neutral-400">
               {candidate.dosReport.source === "ai" ? "generado con IA" : "interpretación del manual"}
@@ -153,32 +179,21 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             </div>
           )}
 
-          <div className="space-y-2">
-            {candidate.acResult.calificacion.porCompetencia.map((p, i) => (
-              <div key={i} className="border border-line rounded-lg px-3 py-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{competencyByKey(p.competency)?.name ?? p.competency}
-                    <span className="text-[10px] text-neutral-400 ml-1.5 uppercase">{p.exercise}</span>
-                  </span>
-                  <span className="inline-flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <span key={n} className={`h-4 w-4 rounded-sm text-[9px] grid place-items-center ${n <= p.score ? "bg-accent text-white" : "bg-paper border border-line text-neutral-300"}`}>{n}</span>
-                    ))}
-                  </span>
-                </div>
-                {p.rationale && <p className="text-xs text-neutral-600 mt-1">{p.rationale}</p>}
-                {p.evidence?.length > 0 && (
-                  <p className="text-[11px] text-neutral-400 mt-1 italic">“{p.evidence.join("” · “")}”</p>
-                )}
-              </div>
-            ))}
-          </div>
+          <CompetencyScores
+            candidateId={candidate.id}
+            target="ac"
+            rows={candidate.acResult.calificacion.porCompetencia.map((p) => ({
+              competency: p.competency,
+              name: competencyByKey(p.competency)?.name ?? p.competency,
+              score: p.score, edited: p.edited, rationale: p.rationale, evidence: p.evidence, exercise: p.exercise,
+            }))}
+          />
 
           {candidate.acResult.calificacion.resumen && (
             <p className="text-sm text-neutral-700 border-t border-line pt-3">{candidate.acResult.calificacion.resumen}</p>
           )}
           <p className="text-[11px] text-amber-600">
-            ⚠️ Calificación propuesta por IA con rúbrica en formato GENTZA (anclas provisionales). Es un insumo: revisa el verbatim y ajusta el 1–5 con tu criterio profesional.
+            ⚠️ Calificación propuesta por IA con rúbrica en formato <span title="GENTZA: método de evaluación por competencias con conductas ancla 1–5 (ORCSE: observar, clasificar y evaluar la conducta)." className="underline decoration-dotted cursor-help">GENTZA</span> (anclas provisionales). Es un insumo: revisa el verbatim y haz clic en el 1–5 para ajustarlo con tu criterio.
           </p>
         </section>
       )}
@@ -254,22 +269,15 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             </div>
           )}
 
-          <div className="space-y-2">
-            {candidate.voiceResult.calificacion.porCompetencia.map((p, i) => (
-              <div key={i} className="border border-line rounded-lg px-3 py-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{voiceCompetencyByKey(p.competency)?.name ?? p.competency}</span>
-                  <span className="inline-flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <span key={n} className={`h-4 w-4 rounded-sm text-[9px] grid place-items-center ${n <= p.score ? "bg-accent text-white" : "bg-paper border border-line text-neutral-300"}`}>{n}</span>
-                    ))}
-                  </span>
-                </div>
-                {p.rationale && <p className="text-xs text-neutral-600 mt-1">{p.rationale}</p>}
-                {p.evidence?.length > 0 && <p className="text-[11px] text-neutral-400 mt-1 italic">“{p.evidence.join("” · “")}”</p>}
-              </div>
-            ))}
-          </div>
+          <CompetencyScores
+            candidateId={candidate.id}
+            target="voz"
+            rows={candidate.voiceResult.calificacion.porCompetencia.map((p) => ({
+              competency: p.competency,
+              name: voiceCompetencyByKey(p.competency)?.name ?? p.competency,
+              score: p.score, edited: p.edited, rationale: p.rationale, evidence: p.evidence,
+            }))}
+          />
 
           {candidate.voiceResult.calificacion.resumen && (
             <p className="text-sm text-neutral-700 border-t border-line pt-3">{candidate.voiceResult.calificacion.resumen}</p>
@@ -316,9 +324,15 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             </details>
           )}
           <p className="text-[11px] text-amber-600">
-            ⚠️ Calificación propuesta por IA sobre el transcript (formato GENTZA, anclas provisionales). Es un insumo: revisa la transcripción y ajusta el 1–5 con tu criterio.
+            ⚠️ Calificación propuesta por IA sobre el transcript (formato <span title="GENTZA: método de evaluación por competencias con conductas ancla 1–5." className="underline decoration-dotted cursor-help">GENTZA</span>, anclas provisionales). Es un insumo: revisa la transcripción y haz clic en el 1–5 para ajustarlo.
           </p>
         </section>
+      )}
+
+      {hasAny && (
+        <p className="text-[11px] text-neutral-400 border-t border-line pt-3">
+          Documento generado con Aivals. La IA es un <b>insumo</b> para el psicólogo, no un veredicto: la interpretación y la decisión finales son profesionales y humanas.
+        </p>
       )}
     </div>
   );

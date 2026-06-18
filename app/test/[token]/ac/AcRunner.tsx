@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { AcBlueprint } from "@/lib/ac/types";
 
 const ACCIONES = [
@@ -21,6 +21,26 @@ export default function AcRunner({
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Persistencia local: una recarga no debe borrar el avance. Rehidrata al montar, limpia al enviar.
+  const STORAGE_KEY = `aivals:ac:${token}`;
+  const hydrated = useRef(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (s.charola) setCharola(s.charola);
+        if (s.sjt) setSjt(s.sjt);
+        if (typeof s.step === "number" && s.step >= 0 && s.step < steps.length) setStep(s.step);
+      }
+    } catch { /* sin persistencia disponible */ }
+    hydrated.current = true;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!hydrated.current) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, charola, sjt })); } catch { /* noop */ }
+  }, [step, charola, sjt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const items = blueprint.charola.items;
   const escenarios = blueprint.sjt.escenarios;
@@ -44,7 +64,11 @@ export default function AcRunner({
           sjt: escenarios.map((es) => ({ scenarioId: es.id, respuesta: sjt[es.id] ?? "" })),
         }),
       });
-      if (!res.ok) throw new Error("No se pudo guardar. Intenta de nuevo.");
+      if (!res.ok) {
+        if (res.status === 409) throw new Error("Este ejercicio ya se había enviado. Puedes cerrar la ventana.");
+        throw new Error("No se pudo guardar. Revisa tu conexión — tus respuestas siguen aquí. Intenta de nuevo.");
+      }
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setDone(true);
     } catch (e: any) { setError(e.message); setSubmitting(false); }
   }
@@ -71,7 +95,7 @@ export default function AcRunner({
           <span>Paso {step + 1} de {steps.length}</span>
         </div>
         <div className="h-1.5 rounded-full bg-line overflow-hidden">
-          <div className="h-full bg-accent transition-all" style={{ width: `${(step / (steps.length - 1)) * 100}%` }} />
+          <div className="h-full bg-accent transition-all" style={{ width: `${((step + 1) / (steps.length + 1)) * 100}%` }} />
         </div>
       </div>
 

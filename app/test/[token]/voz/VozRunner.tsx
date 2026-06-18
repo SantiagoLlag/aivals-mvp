@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { ConversationProvider, useConversation } from "@elevenlabs/react";
 
 type Props = { token: string; candidateName: string; contexto: string; instrucciones: string; colaborador: string };
-type Step = "intro" | "call" | "sending" | "done";
+type Step = "intro" | "call" | "sending" | "done" | "failed";
 
 export default function VozRunner(props: Props) {
   return (
@@ -18,19 +18,31 @@ function VozInner({ token, candidateName, contexto, instrucciones, colaborador }
   const [error, setError] = useState<string | null>(null);
   const convIdRef = useRef<string | null>(null);
   const finalizedRef = useRef(false);
+  const manualRef = useRef(false); // true solo si el candidato colgó a propósito
 
   const conversation = useConversation({
     onConnect: () => { try { convIdRef.current = conversation.getId(); } catch {} },
     onError: (e: any) => setError(typeof e === "string" ? e : e?.message ?? "Error de conexión."),
-    onDisconnect: () => { void finalize(); },
+    onDisconnect: () => {
+      // Fin normal (el candidato colgó) -> guardar. Corte inesperado -> ofrecer reintento, sin falso "¡Gracias!".
+      if (manualRef.current) void finalize();
+      else setStep("failed");
+    },
   });
 
   async function start() {
     setError(null);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-    } catch {
-      setError("Necesitamos permiso del micrófono para la llamada. Permítelo y vuelve a intentar.");
+    } catch (e: any) {
+      const name = e?.name;
+      if (name === "NotAllowedError" || name === "SecurityError") {
+        setError("Tu navegador bloqueó el micrófono. Haz clic en el candado de la barra de direcciones, actívalo y recarga la página.");
+      } else if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+        setError("No detectamos ningún micrófono. Conecta uno y vuelve a intentar.");
+      } else {
+        setError("Necesitamos permiso del micrófono para la llamada. Permítelo y vuelve a intentar.");
+      }
       return;
     }
     try {
@@ -45,8 +57,17 @@ function VozInner({ token, candidateName, contexto, instrucciones, colaborador }
   }
 
   async function hangup() {
+    manualRef.current = true;
     try { await conversation.endSession(); } catch {}
     void finalize();
+  }
+
+  function retry() {
+    manualRef.current = false;
+    finalizedRef.current = false;
+    convIdRef.current = null;
+    setError(null);
+    setStep("intro");
   }
 
   async function finalize() {
@@ -54,14 +75,21 @@ function VozInner({ token, candidateName, contexto, instrucciones, colaborador }
     finalizedRef.current = true;
     let id = convIdRef.current;
     try { id = id || conversation.getId(); } catch {}
+    // Sin id no hubo conversación que guardar: no mostramos "¡Gracias!" en falso.
+    if (!id) { finalizedRef.current = false; setError("No se registró la conversación. Intenta de nuevo."); setStep("failed"); return; }
     setStep("sending");
     try {
-      await fetch(`/api/test/${token}/voice`, {
+      const res = await fetch(`/api/test/${token}/voice`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ conversationId: id }),
       });
-    } catch {}
-    setStep("done");
+      if (!res.ok) throw new Error();
+      setStep("done");
+    } catch {
+      finalizedRef.current = false;
+      setError("No pudimos guardar tu conversación. Intenta de nuevo.");
+      setStep("failed");
+    }
   }
 
   if (step === "done") {
@@ -70,6 +98,17 @@ function VozInner({ token, candidateName, contexto, instrucciones, colaborador }
         <div className="text-4xl mb-3">🎉</div>
         <h2 className="text-xl font-bold">¡Gracias, {candidateName}!</h2>
         <p className="text-sm text-neutral-600 mt-2">Terminaste la conversación. Será revisada por un evaluador profesional. Ya puedes cerrar esta ventana.</p>
+      </div>
+    );
+  }
+
+  if (step === "failed") {
+    return (
+      <div className="card text-center py-12 max-w-lg mx-auto">
+        <div className="text-4xl mb-3">📵</div>
+        <h2 className="text-xl font-bold">La llamada se interrumpió</h2>
+        <p className="text-sm text-neutral-600 mt-2">{error || "La conexión se cortó antes de terminar. Puedes intentarlo de nuevo."}</p>
+        <button className="btn-primary mt-5" onClick={retry}>Reintentar llamada</button>
       </div>
     );
   }

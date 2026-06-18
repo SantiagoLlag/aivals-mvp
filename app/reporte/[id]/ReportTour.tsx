@@ -19,7 +19,7 @@ const STEPS: Step[] = [
   {
     title: "📥 Assessment Center",
     headings: ["Assessment Center"],
-    body: "El candidato resolvió una bandeja de entrada y situaciones calibradas a este puesto. La IA observa la conducta y la califica con el método GENTZA (ORCSE, escala 1–5), citando evidencia textual de lo que hizo.",
+    body: "El candidato resolvió una bandeja de entrada y situaciones calibradas a este puesto. La IA observa la conducta y la califica con el método GENTZA (ORCSE: observar, clasificar y evaluar la conducta; escala 1–5), citando evidencia textual de lo que hizo.",
   },
   {
     title: "📄 CV / Evidencias",
@@ -75,7 +75,7 @@ export default function ReportTour({ autoStart }: { autoStart?: boolean }) {
   if (!active) {
     if (!steps.length) return null;
     return (
-      <button onClick={() => { setI(0); setActive(true); }} className="btn-primary text-sm">
+      <button onClick={() => { setI(0); setActive(true); }} className="btn-primary text-sm no-print">
         🎬 Tour guiado de este reporte
       </button>
     );
@@ -83,7 +83,7 @@ export default function ReportTour({ autoStart }: { autoStart?: boolean }) {
 
   const s = steps[i];
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center p-3 pointer-events-none">
+    <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center p-3 pointer-events-none no-print">
       <div className="pointer-events-auto w-full max-w-xl card shadow-xl border-accent/30 anim-fadeup">
         <div className="flex items-center justify-between text-xs text-neutral-500">
           <span>Paso {i + 1} de {steps.length}</span>

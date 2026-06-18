@@ -9,12 +9,20 @@ export default function CvIntegration({
   const router = useRouter();
   const [data, setData] = useState<CvIntegratedEval | null>(initial);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function run() {
-    setBusy(true);
-    const res = await fetch(`/api/reporte/${candidateId}/cv`, { method: "POST" });
-    if (res.ok) { setData(await res.json()); router.refresh(); }
-    setBusy(false);
+    setBusy(true); setError(null);
+    try {
+      const res = await fetch(`/api/reporte/${candidateId}/cv`, { method: "POST" });
+      if (!res.ok) throw new Error();
+      setData(await res.json());
+      router.refresh();
+    } catch {
+      setError("No se pudo integrar. Suele ser temporal; intenta de nuevo.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (!canIntegrate) {
@@ -28,6 +36,7 @@ export default function CvIntegration({
           {busy ? "Integrando…" : "Evaluar CV + HUMAN en conjunto"}
         </button>
         {!aiEnabled && <p className="text-xs text-amber-600">Requiere la capa de IA.</p>}
+        {error && <p className="text-xs text-red-600">{error}</p>}
       </div>
     );
   }
@@ -58,6 +67,7 @@ export default function CvIntegration({
       {data.summary && <p className="text-sm text-neutral-700 border-t border-line pt-2">{data.summary}</p>}
 
       <button className="text-xs text-accent" disabled={busy} onClick={run}>{busy ? "Regenerando…" : "↻ Regenerar integración"}</button>
+      {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );
 }

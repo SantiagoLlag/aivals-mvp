@@ -9,18 +9,31 @@ export default function AcBlueprintPanel({
   const router = useRouter();
   const [busy, setBusy] = useState<"gen" | "approve" | null>(null);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function generate() {
-    setBusy("gen");
-    await fetch(`/api/processes/${processId}/ac`, { method: "POST" });
-    setBusy(null);
-    router.refresh();
+    setBusy("gen"); setError(null);
+    try {
+      const res = await fetch(`/api/processes/${processId}/ac`, { method: "POST" });
+      if (!res.ok) throw new Error();
+      router.refresh();
+    } catch {
+      setError("No se pudo generar el ejercicio. Suele ser temporal; intenta de nuevo.");
+    } finally {
+      setBusy(null);
+    }
   }
   async function approve() {
-    setBusy("approve");
-    await fetch(`/api/processes/${processId}/ac`, { method: "PATCH" });
-    setBusy(null);
-    router.refresh();
+    setBusy("approve"); setError(null);
+    try {
+      const res = await fetch(`/api/processes/${processId}/ac`, { method: "PATCH" });
+      if (!res.ok) throw new Error();
+      router.refresh();
+    } catch {
+      setError("No se pudo activar. Intenta de nuevo.");
+    } finally {
+      setBusy(null);
+    }
   }
 
   const hasItems = !!blueprint && blueprint.charola.items.length > 0;
@@ -49,7 +62,7 @@ export default function AcBlueprintPanel({
             <span className="rounded-md bg-paper border border-line px-2 py-1">📥 {blueprint.charola.items.length} mensajes</span>
             <span className="rounded-md bg-paper border border-line px-2 py-1">🎯 {blueprint.sjt.escenarios.length} situaciones</span>
             <span className="rounded-md bg-paper border border-line px-2 py-1">{blueprint.competencyKeys.length} competencias</span>
-            {!blueprint.gentzaFiel && <span className="rounded-md bg-amber-50 text-amber-700 px-2 py-1">rúbrica provisional (formato GENTZA)</span>}
+            {!blueprint.gentzaFiel && <span title="GENTZA: método de evaluación por competencias con conductas ancla 1–5. 'Provisional' = las anclas aún no son las del catálogo oficial GENTZA." className="rounded-md bg-amber-50 text-amber-700 px-2 py-1 cursor-help">rúbrica provisional (formato GENTZA)</span>}
           </div>
 
           <button className="text-xs text-accent" onClick={() => setOpen((o) => !o)}>
@@ -87,6 +100,11 @@ export default function AcBlueprintPanel({
           </div>
         </>
       )}
+
+      {busy === "gen" && (
+        <p className="text-xs text-neutral-500">La IA está construyendo el ejercicio; puede tardar hasta un minuto. No cierres esta pestaña.</p>
+      )}
+      {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );
 }

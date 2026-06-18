@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PublicTest } from "@/lib/human/publicTest";
 
 type DiscAns = Record<number, { mas?: number; menos?: number }>;
@@ -17,6 +17,32 @@ export default function TestRunner({
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // ---- persistencia local: una recarga o cierre accidental no debe borrar 15-25 min ----
+  // Se rehidrata en el montaje (no en el initializer: rompería el SSR) y se limpia al enviar.
+  const STORAGE_KEY = `aivals:human:${token}`;
+  const hydrated = useRef(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (s.discAns) setDiscAns(s.discAns);
+        if (s.valOrder) setValOrder(s.valOrder);
+        if (s.penIOrder) setPenIOrder(s.penIOrder);
+        if (s.penII) setPenII(s.penII);
+        if (s.penIII) setPenIII(s.penIII);
+        if (typeof s.step === "number" && s.step >= 0 && s.step < steps.length) setStep(s.step);
+      }
+    } catch { /* sin persistencia disponible */ }
+    hydrated.current = true;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!hydrated.current) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, discAns, valOrder, penIOrder, penII, penIII }));
+    } catch { /* almacenamiento lleno/bloqueado: seguimos en memoria */ }
+  }, [step, discAns, valOrder, penIOrder, penII, penIII]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---- completeness per step ----
   const discComplete = test.disc.series.every((s) => {
@@ -49,7 +75,11 @@ export default function TestRunner({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ disc: discAns, valores, pensante }),
       });
-      if (!res.ok) throw new Error("No se pudo guardar. Intenta de nuevo.");
+      if (!res.ok) {
+        if (res.status === 409) throw new Error("Esta evaluación ya se había enviado. Puedes cerrar la ventana.");
+        throw new Error("No se pudo guardar. Revisa tu conexión — tus respuestas siguen aquí. Intenta de nuevo.");
+      }
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setDone(true);
     } catch (e: any) {
       setError(e.message);
@@ -76,10 +106,11 @@ export default function TestRunner({
       <div>
         <div className="flex items-center justify-between text-xs text-neutral-500 mb-1">
           <span>Paso {step + 1} de {steps.length} · {labels[step]}</span>
-          <span>{Math.round(((step) / (steps.length - 1)) * 100)}%</span>
+          <span>{Math.round(((step + 1) / (steps.length + 1)) * 100)}%</span>
         </div>
         <div className="h-1.5 rounded-full bg-line overflow-hidden">
-          <div className="h-full bg-accent transition-all" style={{ width: `${(step / (steps.length - 1)) * 100}%` }} />
+          {/* El 100% se reserva para el envío (pantalla "done"): durante el formulario nunca llega a 100. */}
+          <div className="h-full bg-accent transition-all" style={{ width: `${((step + 1) / (steps.length + 1)) * 100}%` }} />
         </div>
       </div>
 

@@ -9,16 +9,31 @@ export default function VoiceBlueprintPanel({
   const router = useRouter();
   const [busy, setBusy] = useState<"gen" | "approve" | null>(null);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function generate() {
-    setBusy("gen");
-    await fetch(`/api/processes/${processId}/voice`, { method: "POST" });
-    setBusy(null); router.refresh();
+    setBusy("gen"); setError(null);
+    try {
+      const res = await fetch(`/api/processes/${processId}/voice`, { method: "POST" });
+      if (!res.ok) throw new Error();
+      router.refresh();
+    } catch {
+      setError("No se pudo generar el caso. Suele ser temporal; intenta de nuevo.");
+    } finally {
+      setBusy(null);
+    }
   }
   async function approve() {
-    setBusy("approve");
-    await fetch(`/api/processes/${processId}/voice`, { method: "PATCH" });
-    setBusy(null); router.refresh();
+    setBusy("approve"); setError(null);
+    try {
+      const res = await fetch(`/api/processes/${processId}/voice`, { method: "PATCH" });
+      if (!res.ok) throw new Error();
+      router.refresh();
+    } catch {
+      setError("No se pudo activar. Intenta de nuevo.");
+    } finally {
+      setBusy(null);
+    }
   }
 
   const ready = !!blueprint && blueprint.generatedBy === "ai" && !!blueprint.scenario.historial_desempeno;
@@ -69,6 +84,11 @@ export default function VoiceBlueprintPanel({
           </div>
         </>
       )}
+
+      {busy === "gen" && (
+        <p className="text-xs text-neutral-500">La IA está construyendo el caso; puede tardar hasta un minuto. No cierres esta pestaña.</p>
+      )}
+      {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );
 }

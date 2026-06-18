@@ -16,6 +16,14 @@ export default async function TestIndex({ params }: { params: { token: string } 
   const voiceAvailable = !!proc.voiceBlueprint?.approved;
   const voiceDone = !!candidate.voiceResult;
   const allDone = humanDone && cvDone && (!acAvailable || acDone) && (!voiceAvailable || voiceDone);
+  // Avance global sobre las actividades realmente activas para este candidato.
+  const activities = [
+    { done: humanDone }, { done: cvDone },
+    ...(acAvailable ? [{ done: acDone }] : []),
+    ...(voiceAvailable ? [{ done: voiceDone }] : []),
+  ];
+  const total = activities.length;
+  const completed = activities.filter((a) => a.done).length;
   const t = params.token;
 
   return (
@@ -25,6 +33,18 @@ export default async function TestIndex({ params }: { params: { token: string } 
         <p className="text-sm text-neutral-600 mt-1">
           Completa estas actividades. Puedes hacerlas en el orden que prefieras.
         </p>
+      </div>
+
+      <div className="card py-3">
+        <div className="flex items-center justify-between text-sm mb-1.5">
+          <span className="font-medium">
+            {completed === total ? "¡Completaste todo! 🎉" : `${completed} de ${total} actividades completadas`}
+          </span>
+          <span className="text-xs text-neutral-500 tabular-nums">{Math.round((completed / total) * 100)}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-line overflow-hidden">
+          <div className="h-full bg-accent transition-all" style={{ width: `${(completed / total) * 100}%` }} />
+        </div>
       </div>
 
       <PruebaCard href={`/test/${t}/human`} done={humanDone} emoji="🧠" title="Prueba HUMAN"
