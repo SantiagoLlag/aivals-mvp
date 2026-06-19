@@ -140,21 +140,25 @@ export default async function ReportPage({ params, searchParams }: { params: { i
         </div>
       </section>
 
-      {/* Interpretación (Evaluador DOS) */}
+      {/* Interpretación (Evaluador DOS) — vive en el contenedor-IA, subordinada al juicio humano */}
       <section className="card space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold">Interpretación profesional <span className="text-xs font-normal text-neutral-400">· Evaluador DOS — integra HUMAN</span></h2>
-          {candidate.dosReport && (
-            <span className="text-[11px] text-neutral-400">
-              {candidate.dosReport.source === "ai" ? "generado con IA" : "interpretación del manual"}
-            </span>
-          )}
-        </div>
-        <ReportNarrative
-          candidateId={candidate.id}
-          initialMarkdown={candidate.dosReport?.markdown ?? null}
-          aiEnabled={aiEnabled()}
-        />
+        <h2 className="font-semibold">Interpretación profesional <span className="text-xs font-normal text-neutral-400">· Evaluador DOS — integra HUMAN</span></h2>
+        {candidate.dosReport?.source === "ai" ? (
+          <div className="ai-surface">
+            <div className="ai-surface__head">
+              {candidate.dosReport.edited ? (
+                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>Interpretación · ajustada por ti</>
+              ) : (
+                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v4M12 17v4M5 12H1M23 12h-4" /><circle cx="12" cy="12" r="3.5" /></svg>IA · valida antes de decidir</>
+              )}
+            </div>
+            <div className="ai-surface__body">
+              <ReportNarrative candidateId={candidate.id} initialMarkdown={candidate.dosReport.markdown} aiEnabled={aiEnabled()} />
+            </div>
+          </div>
+        ) : (
+          <ReportNarrative candidateId={candidate.id} initialMarkdown={candidate.dosReport?.markdown ?? null} aiEnabled={aiEnabled()} />
+        )}
       </section>
       </>
       )}
@@ -204,9 +208,13 @@ export default async function ReportPage({ params, searchParams }: { params: { i
         <section className="card space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Evidencias (CV) <span className="text-xs font-normal text-neutral-400">· {candidate.cv.fileName}</span></h2>
-            <span className="text-2xl font-bold tabular-nums" style={{ color: candidate.cv.isolated.overall >= 70 ? "#2f7d52" : candidate.cv.isolated.overall >= 45 ? "#9a7b1f" : "#b4533a" }}>
-              {candidate.cv.isolated.overall}<span className="text-xs text-neutral-400 font-normal">/100</span>
-            </span>
+            <div className="text-right">
+              <div className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3 mb-0.5">Ajuste documental</div>
+              <div className="flex items-baseline gap-2 justify-end">
+                <span className="text-[34px] leading-none font-medium tabular-nums text-ink">{candidate.cv.isolated.overall}</span>
+                <span className="text-xs text-text3">de 100</span>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
