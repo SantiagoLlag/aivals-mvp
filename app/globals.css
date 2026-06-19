@@ -3,36 +3,85 @@
 @tailwind utilities;
 
 :root {
-  --paper: #f6f5f2;
-  --ink: #171a1f;
+  --paper: #f7f7f4;
+  --ink: #1a1d21;
+  --accent: #1d4e57;
+  --accent-900: #11303a;
+  --accent-500: #2b7a83;
+  --line: #e6e4dd;
+  --text-2: #5d6066;
+  --text-3: #8a8d92;
+  --success: #2f7d5b;
+  --warning: #b8862f;
+  --danger: #a8443a;
 }
 
 html, body {
   background: var(--paper);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * { box-sizing: border-box; }
 
 @layer components {
+  /* Botones: el primario carga la acción de marca; el fantasma queda subordinado.
+     Foco visible (accent-500) en ambos para accesibilidad. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition bg-accent text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition
+      bg-accent text-white hover:bg-accent900 active:bg-accent900
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent500 focus-visible:ring-offset-2 focus-visible:ring-offset-white
+      disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition border border-line bg-white hover:bg-paper disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition
+      border border-line2 bg-white text-accent hover:bg-paper
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent500 focus-visible:ring-offset-2 focus-visible:ring-offset-white
+      disabled:opacity-50 disabled:cursor-not-allowed;
   }
+  /* Superficies planas: radio 12px, sombra casi nula (sin la 0 16px 40px de antes). */
   .card {
-    @apply rounded-2xl border border-line bg-white p-6 shadow-sm;
+    @apply rounded-xl border border-line bg-white p-5 shadow-card;
   }
+  /* Overline mono: la etiqueta técnica del design language. */
   .label {
-    @apply block text-xs font-semibold uppercase tracking-wide text-neutral-500 mb-1;
+    @apply block font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-text3 mb-1;
   }
   .input {
-    @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-accent;
+    @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition
+      focus:border-accent500 focus:ring-2 focus:ring-accent500/25;
   }
   .textarea {
-    @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-accent resize-y min-h-[72px];
+    @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition resize-y min-h-[72px]
+      focus:border-accent500 focus:ring-2 focus:ring-accent500/25;
+  }
+
+  /* ---- componentes compartidos del design language ---- */
+  /* Chip de marca (seleccionado / categoría). */
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-md bg-accentSoft text-accent text-[11px] font-medium px-2 py-0.5;
+  }
+  /* Badge neutro mono (p. ej. "Provisional", overlines de estado). */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-md border border-line bg-neutral-100 text-text2 font-mono text-[11px] px-2 py-0.5;
+  }
+  /* Pista de progreso reutilizable (usa <span> hijo como relleno). */
+  .progress {
+    @apply h-1.5 rounded-full bg-line overflow-hidden;
+  }
+  .progress > span {
+    @apply block h-full rounded-full bg-accent transition-all;
+  }
+  /* Contenedor de IA: superficie hueso reconocible y subordinada al juicio humano. */
+  .ai-surface {
+    @apply rounded-xl border border-line bg-accentSoft overflow-hidden;
+  }
+  .ai-surface__head {
+    @apply flex items-center gap-2 px-4 py-2.5 border-b border-accent/15 font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-accent;
+  }
+  .ai-surface__body {
+    @apply p-4 bg-white/60;
   }
 }
 
@@ -53,7 +102,7 @@ html, body {
 
 /* Resaltado de la sección activa durante el tour guiado del reporte */
 .tour-highlight {
-  box-shadow: 0 0 0 3px var(--accent), 0 16px 40px rgba(20, 24, 31, 0.12) !important;
+  box-shadow: 0 0 0 2px var(--accent) !important;
   scroll-margin-top: 1rem;
   transition: box-shadow 0.3s ease;
 }

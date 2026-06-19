@@ -11,17 +11,20 @@ export default function SiteHeader() {
   const isCandidate = path.startsWith("/test/");
 
   const brand = (
-    <span className="flex items-center gap-2 font-semibold">
-      <span className="grid h-6 w-6 place-items-center rounded-md bg-accent text-white text-xs">A</span>
+    <span className="flex items-center gap-2 font-semibold text-accent900">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3 L20 19 H15.2 L12 11.6 L8.8 19 H4 Z" fill="#11303a" />
+        <circle cx="12" cy="15.4" r="1.5" fill="#2b7a83" />
+      </svg>
       Aivals
     </span>
   );
 
   return (
-    <header className="border-b border-line bg-white/70 backdrop-blur sticky top-0 z-10 print:hidden">
+    <header className="border-b border-line bg-white/80 backdrop-blur sticky top-0 z-10 print:hidden">
       <div className="mx-auto max-w-5xl px-5 h-14 flex items-center justify-between">
         {isCandidate ? brand : <Link href="/">{brand}</Link>}
-        <span className="text-xs text-neutral-500">
+        <span className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3">
           {isCandidate ? "Evaluación de talento" : "Panel del psicólogo"}
         </span>
       </div>

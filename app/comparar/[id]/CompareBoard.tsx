@@ -11,9 +11,14 @@ const VMETA: Record<VerticalKey, { label: string; emoji: string; short: string }
   cv: { label: "CV / Evidencias", emoji: "📄", short: "CV" },
   voz: { label: "Role-play por voz", emoji: "📞", short: "Voz" },
 };
-const SEM_BG: Record<Sem, string> = { verde: "#3f8f6b", amarillo: "#d9a441", rojo: "#c0563f", gris: "#e3e0da" };
-const SEM_TX: Record<Sem, string> = { verde: "#ffffff", amarillo: "#3a2f12", rojo: "#ffffff", gris: "#6b6862" };
-const PALETTE = ["#1f6f78", "#c0563f", "#d9a441", "#3f6fb0", "#7a5ea8", "#3f8f6b", "#b5654b", "#2f8a9b"];
+// Semáforo disciplinado (desaturado), idéntico al del reporte. Para los chips del ranking.
+const SEM_BG: Record<Sem, string> = { verde: "#2f7d5b", amarillo: "#b8862f", rojo: "#a8443a", gris: "#ece9e2" };
+const SEM_TX: Record<Sem, string> = { verde: "#ffffff", amarillo: "#ffffff", rojo: "#ffffff", gris: "#8a8d92" };
+const PALETTE = ["#1d4e57", "#9c4a39", "#b08a32", "#3f6390", "#7a5ea8", "#2f7d5b", "#b5654b", "#2b7a83"];
+
+// Rampa secuencial hueso→teal para el MAPA DE CALOR (no divergente; instrumento, no infografía).
+const HEAT_RAMP = ["#f7f7f4", "#e4ecec", "#cfe0e1", "#a9cccd", "#74aeb1", "#3f8e93"];
+const heatColor = (pct: number) => HEAT_RAMP[Math.round(Math.max(0, Math.min(1, pct / 100)) * (HEAT_RAMP.length - 1))];
 
 const sem = (p: number | null): Sem =>
   p == null || Number.isNaN(p) ? "gris" : p >= 70 ? "verde" : p >= 45 ? "amarillo" : "rojo";
@@ -322,13 +327,21 @@ export default function CompareBoard({
                 ))}
               </tbody>
             </table>
-            <p className="text-[11px] text-neutral-400 mt-2 leading-relaxed">
-              Cada celda es el encaje 0–100 de esa vertical. <b style={{ color: SEM_BG.verde }}>Verde ≥70</b> ·{" "}
-              <b style={{ color: SEM_BG.amarillo }}>amarillo 45–69</b> · <b style={{ color: SEM_BG.rojo }}>rojo &lt;45</b>.
-              {" "}<b>·</b> = hizo la actividad pero falta el perfil para medirla · <b>—</b> = no evaluado ·{" "}
-              <span style={{ boxShadow: "inset 0 0 0 2px #171a1f", padding: "0 4px", borderRadius: 3 }}>borde</span> = mejor en esa columna.
-              Clic en un nombre para ver el detalle.
-            </p>
+            <div className="font-mono text-[11px] text-neutral-400 mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+              <span className="inline-flex items-center gap-1.5">
+                ajuste
+                <span className="inline-flex h-2.5 w-24 rounded-full overflow-hidden">
+                  {HEAT_RAMP.map((c) => <span key={c} className="flex-1" style={{ background: c }} />)}
+                </span>
+                bajo→alto
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-[3px]" style={{ boxShadow: "inset 0 0 0 2px #1a1d21" }} />
+                mejor en la columna
+              </span>
+              <span>· = sin perfil para medir · — = no evaluado</span>
+              <span className="text-accent">clic en un nombre para ver el detalle</span>
+            </div>
           </div>
         </>
       )}
@@ -356,20 +369,28 @@ function Legend() {
 function Cell({
   pct, state, title, strong, best,
 }: { pct: number | null; state: CellState; title?: string; strong?: boolean; best?: boolean }) {
-  const size = strong ? "w-14 h-9 text-base font-bold" : "w-12 h-8 text-sm font-semibold";
+  const size = strong ? "w-14 h-9 text-base font-medium" : "w-12 h-8 text-sm font-medium";
   if (state === "unmeasured") {
     return (
-      <div title={title} className={`mx-auto grid place-items-center rounded-md border border-dashed border-neutral-300 text-neutral-500 ${size}`} style={{ background: "#f1eee8" }}>
+      <div title={title} className={`mx-auto grid place-items-center rounded-md border border-dashed border-line2 text-text3 ${size}`} style={{ background: "#f1eee8" }}>
         ·
       </div>
     );
   }
-  const c = sem(pct); // scored, o missing (pct null -> gris "—")
+  if (state === "missing" || pct == null) {
+    return (
+      <div title={title} className={`mx-auto grid place-items-center rounded-md tabular-nums text-text3 ${size}`} style={{ background: "#ece9e2" }}>
+        —
+      </div>
+    );
+  }
+  // Heatmap: intensidad secuencial (no semáforo). El "mejor en columna" se marca con un recuadro oscuro.
+  const fg = pct / 100 > 0.62 ? "#ffffff" : "#1a1d21";
   return (
     <div
       title={title}
       className={`mx-auto grid place-items-center rounded-md tabular-nums ${size}`}
-      style={{ background: SEM_BG[c], color: SEM_TX[c], boxShadow: best ? "0 0 0 2px #171a1f" : undefined }}
+      style={{ background: heatColor(pct), color: fg, boxShadow: best ? "inset 0 0 0 2px #1a1d21" : undefined }}
     >
       {fmt(pct)}
     </div>

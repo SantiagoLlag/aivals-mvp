@@ -12,7 +12,8 @@ import ReportTour from "./ReportTour";
 import CompetencyScores from "./CompetencyScores";
 import PrintButton from "./PrintButton";
 
-const SEM: Record<string, string> = { verde: "bg-green-500", amarillo: "bg-amber-400", rojo: "bg-red-500" };
+// Semáforo disciplinado: colores semánticos desaturados, idénticos a los del comparador.
+const SEM: Record<string, string> = { verde: "bg-success", amarillo: "bg-warning", rojo: "bg-danger" };
 
 function Chip({ on, label }: { on: boolean; label: string }) {
   return (
