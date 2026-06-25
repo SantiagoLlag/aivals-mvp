@@ -11,6 +11,12 @@ import CvIntegration from "./CvIntegration";
 import ReportTour from "./ReportTour";
 import CompetencyScores from "./CompetencyScores";
 import PrintButton from "./PrintButton";
+import { FLAGS } from "@/lib/flags";
+import EvidenciaHuman from "./EvidenciaHuman";
+import EvidenciaAc from "./EvidenciaAc";
+import EvidenciaCv from "./EvidenciaCv";
+import EvidenciaVoz from "./EvidenciaVoz";
+import { EvidenceDivider } from "./EvidenceBand";
 
 // Semáforo disciplinado: colores semánticos desaturados, idénticos a los del comparador.
 const SEM: Record<string, string> = { verde: "bg-success", amarillo: "bg-warning", rojo: "bg-danger" };
@@ -100,10 +106,11 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
       {r && (
       <>
+      {FLAGS.evidenceBand && <EvidenciaHuman candidate={candidate} />}
       {/* DISC */}
       <section className="card space-y-3">
         <h2 className="font-semibold">Comportamiento (DISC)</h2>
-        {r.disc.notInterpretable && (
+        {!FLAGS.evidenceBand && r.disc.notInterpretable && (
           <div className="text-xs rounded-lg bg-amber-50 text-amber-700 px-3 py-2">⚠️ {r.disc.notInterpretableReason}</div>
         )}
         <div className="grid sm:grid-cols-3 gap-3">
@@ -173,6 +180,13 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             </span>
           </div>
 
+          {FLAGS.evidenceBand && (
+            <>
+              <EvidenciaAc candidate={candidate} proc={proc} />
+              <EvidenceDivider />
+            </>
+          )}
+
           {candidate.acResult.calificacion.semaforo.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {candidate.acResult.calificacion.semaforo.map((s) => (
@@ -216,6 +230,13 @@ export default async function ReportPage({ params, searchParams }: { params: { i
               </div>
             </div>
           </div>
+
+          {FLAGS.evidenceBand && (
+            <>
+              <EvidenciaCv candidate={candidate} />
+              <EvidenceDivider />
+            </>
+          )}
 
           <div className="space-y-2">
             {candidate.cv.isolated.dimensions.map((d, i) => {
@@ -266,6 +287,13 @@ export default async function ReportPage({ params, searchParams }: { params: { i
               {candidate.voiceResult.calificacion.source === "ai" ? "propuesta de IA — insumo" : "pendiente"}
             </span>
           </div>
+
+          {FLAGS.evidenceBand && (
+            <>
+              <EvidenciaVoz candidate={candidate} />
+              <EvidenceDivider />
+            </>
+          )}
 
           {candidate.voiceResult.calificacion.semaforo.length > 0 && (
             <div className="flex flex-wrap gap-2">
@@ -320,7 +348,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             </div>
           )}
 
-          {candidate.voiceResult.captura.transcript.length > 0 && (
+          {!FLAGS.evidenceBand && candidate.voiceResult.captura.transcript.length > 0 && (
             <details className="border-t border-line pt-2">
               <summary className="text-xs text-accent cursor-pointer">▸ Ver transcripción</summary>
               <div className="mt-2 space-y-1.5 max-h-72 overflow-y-auto">
