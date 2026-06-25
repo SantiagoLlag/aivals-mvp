@@ -11,7 +11,8 @@ export default function TestRunner({
   const [step, setStep] = useState(0);
   const [discAns, setDiscAns] = useState<DiscAns>({});
   const [valOrder, setValOrder] = useState<Record<number, string[]>>({});
-  const [penIOrder, setPenIOrder] = useState<Record<number, string[]>>({});
+  // Grupo I del Pensante = CALIFICACIÓN LIBRE (id de opción → valor; se puede repetir), no ranking.
+  const [penI, setPenI] = useState<Record<string, number>>({});
   const [penII, setPenII] = useState<Record<string, number>>({});
   const [penIII, setPenIII] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -29,7 +30,7 @@ export default function TestRunner({
         const s = JSON.parse(raw);
         if (s.discAns) setDiscAns(s.discAns);
         if (s.valOrder) setValOrder(s.valOrder);
-        if (s.penIOrder) setPenIOrder(s.penIOrder);
+        if (s.penI) setPenI(s.penI);
         if (s.penII) setPenII(s.penII);
         if (s.penIII) setPenIII(s.penIII);
         if (typeof s.step === "number" && s.step >= 0 && s.step < steps.length) setStep(s.step);
@@ -40,9 +41,9 @@ export default function TestRunner({
   useEffect(() => {
     if (!hydrated.current) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, discAns, valOrder, penIOrder, penII, penIII }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, discAns, valOrder, penI, penII, penIII }));
     } catch { /* almacenamiento lleno/bloqueado: seguimos en memoria */ }
-  }, [step, discAns, valOrder, penIOrder, penII, penIII]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [step, discAns, valOrder, penI, penII, penIII]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---- completeness per step ----
   const discComplete = test.disc.series.every((s) => {
@@ -50,7 +51,7 @@ export default function TestRunner({
     return a && a.mas && a.menos && a.mas !== a.menos;
   });
   const valComplete = test.valores.series.every((s) => (valOrder[s.n]?.length ?? 0) === s.concepts.length);
-  const penIComplete = test.pensante.groupI.questions.every((_, i) => (penIOrder[i]?.length ?? 0) === 4);
+  const penIComplete = test.pensante.groupI.questions.every((q) => q.options.every((o) => penI[o.id] != null));
   const penIIComplete = test.pensante.groupII.items.every((it) => penII[it.id] != null);
   const penIIIComplete = test.pensante.groupIII.items.every((it) => penIII[it.id] != null);
 
@@ -64,11 +65,9 @@ export default function TestRunner({
     for (const s of test.valores.series) {
       (valOrder[s.n] ?? []).forEach((id, k) => { valores[id] = 6 - k; });
     }
-    const pensante: Record<string, number> = { ...penII, ...penIII };
-    const penIScale = test.pensante.groupI.scale; // [5,4,2,1]
-    test.pensante.groupI.questions.forEach((_, i) => {
-      (penIOrder[i] ?? []).forEach((id, k) => { pensante[id] = penIScale[k]; });
-    });
+    // Grupo I = calificación libre (cada opción ya tiene su valor en penI, se puede repetir),
+    // igual que II/III. El motor suma el valor de cada ítem.
+    const pensante: Record<string, number> = { ...penI, ...penII, ...penIII };
     try {
       const res = await fetch(`/api/test/${token}`, {
         method: "POST",
@@ -117,7 +116,7 @@ export default function TestRunner({
       {step === 0 && <Consent name={candidateName} />}
       {step === 1 && <DiscStep test={test} ans={discAns} setAns={setDiscAns} />}
       {step === 2 && <ValoresStep test={test} order={valOrder} setOrder={setValOrder} />}
-      {step === 3 && <RankPensante test={test} order={penIOrder} setOrder={setPenIOrder} />}
+      {step === 3 && <RatePensanteI test={test} ans={penI} setAns={setPenI} />}
       {step === 4 && <RatePensante items={test.pensante.groupII.items} title={test.pensante.groupII.title} ans={penII} setAns={setPenII} />}
       {step === 5 && <RatePensante items={test.pensante.groupIII.items} title={test.pensante.groupIII.title} ans={penIII} setAns={setPenIII} />}
 
@@ -227,18 +226,37 @@ function ValoresStep({ test, order, setOrder }: { test: PublicTest; order: Recor
   );
 }
 
-function RankPensante({ test, order, setOrder }: { test: PublicTest; order: Record<number, string[]>; setOrder: (f: (o: Record<number, string[]>) => Record<number, string[]>) => void }) {
+// Grupo I: CALIFICACIÓN LIBRE (no ranking). Cada opción recibe un valor de la escala del
+// instrumento {5,4,2,1} y se puede repetir entre opciones (así es el HUMAN original).
+function RatePensanteI({ test, ans, setAns }: {
+  test: PublicTest;
+  ans: Record<string, number>;
+  setAns: (f: (a: Record<string, number>) => Record<string, number>) => void;
+}) {
+  const scale = test.pensante.groupI.scale; // [5, 4, 2, 1]
   return (
     <div className="space-y-4">
       <Intro title={`Pensamiento — ${test.pensante.groupI.title}`}
-        text="En cada pregunta, ordena las 4 opciones haciendo clic de la que más te gusta o describe (5) a la que menos (1)." />
+        text="En cada pregunta, califica cada opción según cuánto te gusta o te describe: 5 = la que más, 1 = la que menos. Puedes repetir calificaciones." />
       {test.pensante.groupI.questions.map((q, i) => (
-        <RankGroup key={i}
-          label={q.title || `Pregunta ${i + 1}`}
-          items={q.options}
-          sequence={test.pensante.groupI.scale}
-          value={order[i] ?? []}
-          onChange={(v) => setOrder((o) => ({ ...o, [i]: v }))} />
+        <div key={i} className="card py-4">
+          <div className="text-xs text-neutral-400 mb-2">{q.title || `Pregunta ${i + 1}`}</div>
+          <div className="grid gap-1.5">
+            {q.options.map((o) => (
+              <div key={o.id} className="flex items-center justify-between gap-3 rounded-lg border border-line px-3 py-2">
+                <span className="text-sm">{o.text}</span>
+                <div className="flex gap-1">
+                  {scale.map((v) => (
+                    <button key={v} type="button" onClick={() => setAns((a) => ({ ...a, [o.id]: v }))}
+                      className={`h-8 w-8 rounded-md border text-xs ${ans[o.id] === v ? "bg-accent text-white border-accent" : "border-line hover:border-accent"}`}>
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   );
