@@ -20,3 +20,4 @@ Respaldo a nivel código: cada feature se entrega en su propio commit → `git r
 | Variable (Vercel) | Default | Qué controla | Apagado (`0`) = |
 |---|---|---|---|
 | `FF_EVIDENCE_BAND` | `1` (on) | En el reporte, separa cada vertical en **Evidencia (sin IA, determinista)** arriba e **Interpretación (IA)** debajo. | El reporte vuelve **exacto** al layout anterior (IA y dato mezclados como hoy). |
+| `FF_REABRIR_TEST` | `1` (on) | Botón **"Reabrir test"** por candidato en el panel del proceso: limpia la captura de la vertical elegida (HUMAN/CV/AC/Voz) para que el candidato la rehaga. | El botón desaparece; nadie puede reabrir un test desde la UI. |

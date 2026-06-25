@@ -5,12 +5,15 @@ import { useRouter } from "next/navigation";
 
 type Cand = { id: string; name: string; token: string; status: string; human: boolean; cv: boolean; ac: boolean; voice: boolean };
 
-export default function ProcessClient({ processId, candidates }: { processId: string; candidates: Cand[] }) {
+export default function ProcessClient({ processId, candidates, reabrir }: { processId: string; candidates: Cand[]; reabrir?: boolean }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reopenFor, setReopenFor] = useState<string | null>(null);
+  const [reopenSel, setReopenSel] = useState<Record<string, boolean>>({});
+  const [reopenBusy, setReopenBusy] = useState(false);
 
   async function add(e: React.FormEvent) {
     e.preventDefault();
@@ -44,6 +47,32 @@ export default function ProcessClient({ processId, candidates }: { processId: st
     }
   }
 
+  const VERTS = [
+    { key: "human" as const, label: "HUMAN", has: (c: Cand) => c.human },
+    { key: "cv" as const, label: "CV", has: (c: Cand) => c.cv },
+    { key: "ac" as const, label: "AC", has: (c: Cand) => c.ac },
+    { key: "voz" as const, label: "Voz", has: (c: Cand) => c.voice },
+  ];
+  async function doReopen(c: Cand) {
+    const verticals = VERTS.filter((v) => reopenSel[v.key] && v.has(c)).map((v) => v.key);
+    if (!verticals.length) { setError("Elige al menos una actividad para reabrir."); return; }
+    if (!window.confirm(`Vas a reabrir ${verticals.length} actividad(es) de ${c.name}. Se borrará su captura para que la rehaga. ¿Continuar?`)) return;
+    setReopenBusy(true); setError(null);
+    try {
+      const res = await fetch(`/api/candidates/${c.id}/reopen`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ verticals }),
+      });
+      if (!res.ok) throw new Error();
+      setReopenFor(null); setReopenSel({});
+      router.refresh();
+    } catch {
+      setError("No se pudo reabrir. Intenta de nuevo.");
+    } finally {
+      setReopenBusy(false);
+    }
+  }
+
   const withData = candidates.filter((c) => c.human || c.cv || c.ac || c.voice).length;
 
   return (
@@ -70,25 +99,48 @@ export default function ProcessClient({ processId, candidates }: { processId: st
           {candidates.map((c) => {
             const hasData = c.human || c.cv || c.ac || c.voice;
             return (
-              <div key={c.id} className="card flex items-center justify-between py-3 gap-3">
-                <div className="min-w-0">
-                  <div className="font-medium">{c.name}</div>
-                  <div className="flex gap-1 mt-1">
-                    <Mini on={c.human} label="HUMAN" />
-                    <Mini on={c.cv} label="CV" />
-                    <Mini on={c.ac} label="AC" />
-                    <Mini on={c.voice} label="Voz" />
+              <div key={c.id} className="card py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="font-medium">{c.name}</div>
+                    <div className="flex gap-1 mt-1">
+                      <Mini on={c.human} label="HUMAN" />
+                      <Mini on={c.cv} label="CV" />
+                      <Mini on={c.ac} label="AC" />
+                      <Mini on={c.voice} label="Voz" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                    {hasData && <Link href={`/reporte/${c.id}`} className="btn-primary text-xs">Ver reporte</Link>}
+                    <button onClick={() => copyLink(c.token)} className="btn-ghost text-xs">
+                      {copied === c.token ? "¡Copiado!" : "Copiar link"}
+                    </button>
+                    <a href={`/test/${c.token}`} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs" title="Abrir el test del candidato en otra pestaña">
+                      Abrir ↗
+                    </a>
+                    {reabrir && hasData && (
+                      <button onClick={() => { setReopenFor((f) => (f === c.id ? null : c.id)); setReopenSel({}); setError(null); }} className="btn-ghost text-xs">
+                        {reopenFor === c.id ? "Cancelar" : "Reabrir"}
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {hasData && <Link href={`/reporte/${c.id}`} className="btn-primary text-xs">Ver reporte</Link>}
-                  <button onClick={() => copyLink(c.token)} className="btn-ghost text-xs">
-                    {copied === c.token ? "¡Copiado!" : "Copiar link"}
-                  </button>
-                  <a href={`/test/${c.token}`} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs" title="Abrir el test del candidato en otra pestaña">
-                    Abrir ↗
-                  </a>
-                </div>
+                {reabrir && reopenFor === c.id && (
+                  <div className="mt-3 border-t border-line pt-3">
+                    <div className="text-xs text-neutral-600 mb-2">Reabrir actividades de <b>{c.name}</b> — se borra su captura para que la rehaga (esto no se puede deshacer):</div>
+                    <div className="flex flex-wrap gap-2">
+                      {VERTS.filter((v) => v.has(c)).map((v) => (
+                        <label key={v.key} className="inline-flex items-center gap-1.5 text-xs rounded-md border border-line px-2 py-1 cursor-pointer">
+                          <input type="checkbox" checked={!!reopenSel[v.key]} onChange={(e) => setReopenSel((s) => ({ ...s, [v.key]: e.target.checked }))} className="accent-[#1d4e57]" />
+                          {v.label}
+                        </label>
+                      ))}
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <button onClick={() => doReopen(c)} disabled={reopenBusy} className="btn-primary text-xs">{reopenBusy ? "Reabriendo…" : "Reabrir seleccionadas"}</button>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

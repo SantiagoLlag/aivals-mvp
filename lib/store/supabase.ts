@@ -4,6 +4,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { randomUUID } from "crypto";
 import type { Process, Candidate, ReferenceProfile, DosReport } from "../types";
+import type { ReopenVertical } from "./types";
 import type { HumanInput, HumanResult } from "../human/types";
 import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
@@ -90,6 +91,19 @@ export async function createProcess(input: {
 
 export async function saveReference(processId: string, reference: ReferenceProfile) {
   const { error } = await sb().from("processes").update({ reference }).eq("id", processId);
+  if (error) throw error;
+}
+
+export async function reopenCandidate(candidateId: string, verticals: ReopenVertical[]) {
+  const patch: Record<string, unknown> = {};
+  for (const v of verticals) {
+    if (v === "human") { patch.result = null; patch.input = null; patch.dos_report = null; patch.status = "pendiente"; patch.completed_at = null; }
+    else if (v === "cv") patch.cv = null;
+    else if (v === "ac") patch.ac_result = null;
+    else if (v === "voz") patch.voice_result = null;
+  }
+  if (Object.keys(patch).length === 0) return;
+  const { error } = await sb().from("candidates").update(patch).eq("id", candidateId);
   if (error) throw error;
 }
 

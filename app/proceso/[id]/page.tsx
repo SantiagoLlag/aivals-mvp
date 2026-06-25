@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getProcess } from "@/lib/store";
 import { aiEnabled } from "@/lib/ai";
 import { voiceEnabled } from "@/lib/voice/elevenlabs";
+import { FLAGS } from "@/lib/flags";
 import ProcessClient from "./ProcessClient";
 import ReferencePanel from "./ReferencePanel";
 import AcBlueprintPanel from "./AcBlueprintPanel";
@@ -35,6 +36,7 @@ export default async function ProcessPage({ params }: { params: { id: string } }
 
       <ProcessClient
         processId={proc.id}
+        reabrir={FLAGS.reabrirTest}
         candidates={proc.candidates.map((c) => ({
           id: c.id, name: c.name, token: c.token, status: c.status,
           human: !!c.result, cv: !!c.cv, ac: !!c.acResult, voice: !!c.voiceResult,

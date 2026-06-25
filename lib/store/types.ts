@@ -6,6 +6,8 @@ import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
 import type { VoiceBlueprint, VoiceResult } from "../voice/types";
 
+export type ReopenVertical = "human" | "cv" | "ac" | "voz";
+
 export interface StoreApi {
   listProcesses(): Promise<Process[]>;
   getProcess(id: string): Promise<Process | undefined>;
@@ -16,6 +18,8 @@ export interface StoreApi {
     reference?: ReferenceProfile;
   }): Promise<Process>;
   saveReference(processId: string, reference: ReferenceProfile): Promise<void>;
+  // Reabre (limpia) la captura de una o más verticales de un candidato para que las rehaga.
+  reopenCandidate(candidateId: string, verticals: ReopenVertical[]): Promise<void>;
   addCandidate(processId: string, name: string): Promise<Candidate>;
   getCandidateByToken(tok: string): Promise<{ process: Process; candidate: Candidate } | undefined>;
   getCandidate(id: string): Promise<{ process: Process; candidate: Candidate } | undefined>;

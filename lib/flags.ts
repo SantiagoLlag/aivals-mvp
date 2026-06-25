@@ -17,6 +17,9 @@ export const FLAGS = {
   // Reporte: separa cada vertical en "Evidencia (sin IA)" e "Interpretación (IA)".
   // Apagar con FF_EVIDENCE_BAND=0 → el reporte vuelve EXACTO a como estaba antes.
   evidenceBand: read("FF_EVIDENCE_BAND", true),
+  // Panel: botón "Reabrir test" por candidato (limpia la captura de una vertical para rehacerla).
+  // Apagar con FF_REABRIR_TEST=0 → desaparece el botón.
+  reabrirTest: read("FF_REABRIR_TEST", true),
 };
 
 export type FlagName = keyof typeof FLAGS;

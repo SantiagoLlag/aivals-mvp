@@ -4,6 +4,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import type { DB, Process, Candidate, ReferenceProfile, DosReport } from "../types";
+import type { ReopenVertical } from "./types";
 import type { HumanInput, HumanResult } from "../human/types";
 import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
@@ -59,6 +60,23 @@ export async function saveReference(processId: string, reference: ReferenceProfi
   if (!p) throw new Error("Proceso no encontrado");
   p.reference = reference;
   await writeDB(db);
+}
+
+export async function reopenCandidate(candidateId: string, verticals: ReopenVertical[]) {
+  const db = await readDB();
+  for (const p of db.processes) {
+    const c = p.candidates.find((c) => c.id === candidateId);
+    if (!c) continue;
+    for (const v of verticals) {
+      if (v === "human") { c.result = undefined; c.input = undefined; c.dosReport = undefined; c.status = "pendiente"; c.completedAt = undefined; }
+      else if (v === "cv") c.cv = undefined;
+      else if (v === "ac") c.acResult = undefined;
+      else if (v === "voz") c.voiceResult = undefined;
+    }
+    await writeDB(db);
+    return;
+  }
+  throw new Error("Candidato no encontrado");
 }
 
 export async function addCandidate(processId: string, name: string): Promise<Candidate> {
