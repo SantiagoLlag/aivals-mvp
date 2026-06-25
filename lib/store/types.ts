@@ -18,8 +18,11 @@ export interface StoreApi {
     reference?: ReferenceProfile;
   }): Promise<Process>;
   saveReference(processId: string, reference: ReferenceProfile): Promise<void>;
-  // Reabre (limpia) la captura de una o más verticales de un candidato para que las rehaga.
+  // Reabre la captura de una o más verticales de un candidato para que las rehaga.
+  // Guarda un snapshot de los datos previos (al menos HUMAN) para poder comparar al reenviar.
   reopenCandidate(candidateId: string, verticals: ReopenVertical[]): Promise<void>;
+  // Borra el snapshot de reapertura de una vertical (tras resolver la comparación al reenviar).
+  clearReopened(candidateId: string, vertical: ReopenVertical): Promise<void>;
   addCandidate(processId: string, name: string): Promise<Candidate>;
   getCandidateByToken(tok: string): Promise<{ process: Process; candidate: Candidate } | undefined>;
   getCandidate(id: string): Promise<{ process: Process; candidate: Candidate } | undefined>;

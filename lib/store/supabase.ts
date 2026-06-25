@@ -43,6 +43,7 @@ function toCandidate(r: any): Candidate {
     acResult: r.ac_result ?? undefined,
     cv: r.cv ?? undefined,
     voiceResult: r.voice_result ?? undefined,
+    reopened: r.reopened ?? undefined,
   };
 }
 function toProcess(r: any, candidates: Candidate[]): Process {
@@ -95,15 +96,35 @@ export async function saveReference(processId: string, reference: ReferenceProfi
 }
 
 export async function reopenCandidate(candidateId: string, verticals: ReopenVertical[]) {
+  // Leemos la fila para conservar un snapshot de HUMAN (input/result/dos) antes de limpiar,
+  // y poder comparar al reenviar. AC/CV/Voz se limpian sin snapshot (recalculan al rehacer).
+  const { data: row } = await sb().from("candidates").select("*").eq("id", candidateId).maybeSingle();
+  if (!row) throw new Error("Candidato no encontrado");
+  const reopened: Record<string, unknown> = { ...(row.reopened ?? {}) };
   const patch: Record<string, unknown> = {};
   for (const v of verticals) {
-    if (v === "human") { patch.result = null; patch.input = null; patch.dos_report = null; patch.status = "pendiente"; patch.completed_at = null; }
-    else if (v === "cv") patch.cv = null;
+    if (v === "human") {
+      if (row.input || row.result || row.dos_report) {
+        reopened.human = { input: row.input ?? null, result: row.result ?? null, dosReport: row.dos_report ?? null };
+      }
+      patch.result = null; patch.input = null; patch.dos_report = null; patch.status = "pendiente"; patch.completed_at = null;
+    } else if (v === "cv") patch.cv = null;
     else if (v === "ac") patch.ac_result = null;
     else if (v === "voz") patch.voice_result = null;
   }
   if (Object.keys(patch).length === 0) return;
+  patch.reopened = Object.keys(reopened).length ? reopened : null;
   const { error } = await sb().from("candidates").update(patch).eq("id", candidateId);
+  if (error) throw error;
+}
+
+export async function clearReopened(candidateId: string, vertical: ReopenVertical) {
+  const { data: row } = await sb().from("candidates").select("reopened").eq("id", candidateId).maybeSingle();
+  if (!row?.reopened) return;
+  const reopened: Record<string, unknown> = { ...row.reopened };
+  delete reopened[vertical];
+  const next = Object.keys(reopened).length ? reopened : null;
+  const { error } = await sb().from("candidates").update({ reopened: next }).eq("id", candidateId);
   if (error) throw error;
 }
 

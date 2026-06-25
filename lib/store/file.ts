@@ -67,16 +67,37 @@ export async function reopenCandidate(candidateId: string, verticals: ReopenVert
   for (const p of db.processes) {
     const c = p.candidates.find((c) => c.id === candidateId);
     if (!c) continue;
+    const reopened = { ...(c.reopened ?? {}) };
     for (const v of verticals) {
-      if (v === "human") { c.result = undefined; c.input = undefined; c.dosReport = undefined; c.status = "pendiente"; c.completedAt = undefined; }
+      if (v === "human") {
+        // Snapshot de HUMAN antes de limpiar, para comparar al reenviar.
+        if (c.input || c.result || c.dosReport) reopened.human = { input: c.input, result: c.result, dosReport: c.dosReport };
+        c.result = undefined; c.input = undefined; c.dosReport = undefined; c.status = "pendiente"; c.completedAt = undefined;
+      }
       else if (v === "cv") c.cv = undefined;
       else if (v === "ac") c.acResult = undefined;
       else if (v === "voz") c.voiceResult = undefined;
     }
+    c.reopened = Object.keys(reopened).length ? reopened : undefined;
     await writeDB(db);
     return;
   }
   throw new Error("Candidato no encontrado");
+}
+
+export async function clearReopened(candidateId: string, vertical: ReopenVertical) {
+  const db = await readDB();
+  for (const p of db.processes) {
+    const c = p.candidates.find((c) => c.id === candidateId);
+    if (!c) continue;
+    if (c.reopened) {
+      const next = { ...c.reopened };
+      delete (next as Record<string, unknown>)[vertical];
+      c.reopened = Object.keys(next).length ? next : undefined;
+      await writeDB(db);
+    }
+    return;
+  }
 }
 
 export async function addCandidate(processId: string, name: string): Promise<Candidate> {

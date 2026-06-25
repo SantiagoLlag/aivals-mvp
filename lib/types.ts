@@ -38,6 +38,13 @@ export interface Candidate {
   acResult?: AcResult;
   cv?: CvData;
   voiceResult?: VoiceResult;
+  // Snapshot de los datos previos cuando se reabre una vertical, para comparar al rehacer
+  // y solo recalcular lo que cambió (de momento solo HUMAN).
+  reopened?: ReopenSnapshot;
+}
+
+export interface ReopenSnapshot {
+  human?: { input?: HumanInput; result?: HumanResult; dosReport?: DosReport };
 }
 
 export interface Process {

@@ -56,7 +56,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
   async function doReopen(c: Cand) {
     const verticals = VERTS.filter((v) => reopenSel[v.key] && v.has(c)).map((v) => v.key);
     if (!verticals.length) { setError("Elige al menos una actividad para reabrir."); return; }
-    if (!window.confirm(`Vas a reabrir ${verticals.length} actividad(es) de ${c.name}. Se borrará su captura para que la rehaga. ¿Continuar?`)) return;
+    if (!window.confirm(`Vas a reabrir ${verticals.length} actividad(es) de ${c.name} para que las rehaga. Al reenviar se comparan sus respuestas y solo se recalcula lo que cambió. ¿Continuar?`)) return;
     setReopenBusy(true); setError(null);
     try {
       const res = await fetch(`/api/candidates/${c.id}/reopen`, {
@@ -127,7 +127,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
                 </div>
                 {reabrir && reopenFor === c.id && (
                   <div className="mt-3 border-t border-line pt-3">
-                    <div className="text-xs text-neutral-600 mb-2">Reabrir actividades de <b>{c.name}</b> — se borra su captura para que la rehaga (esto no se puede deshacer):</div>
+                    <div className="text-xs text-neutral-600 mb-2">Reabrir actividades de <b>{c.name}</b> — se reabre para que la rehaga; al reenviar se compara con sus respuestas previas y solo se recalcula lo que cambió:</div>
                     <div className="flex flex-wrap gap-2">
                       {VERTS.filter((v) => v.has(c)).map((v) => (
                         <label key={v.key} className="inline-flex items-center gap-1.5 text-xs rounded-md border border-line px-2 py-1 cursor-pointer">
