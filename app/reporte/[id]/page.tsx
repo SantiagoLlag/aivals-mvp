@@ -17,6 +17,7 @@ import EvidenciaAc from "./EvidenciaAc";
 import EvidenciaCv from "./EvidenciaCv";
 import EvidenciaVoz from "./EvidenciaVoz";
 import { EvidenceDivider } from "./EvidenceBand";
+import { getServerT } from "@/lib/i18n-server";
 
 // Semáforo disciplinado: colores semánticos desaturados, idénticos a los del comparador.
 const SEM: Record<string, string> = { verde: "bg-success", amarillo: "bg-warning", rojo: "bg-danger" };
@@ -50,6 +51,7 @@ export const dynamic = "force-dynamic";
 const VAL_NAME: Record<string, string> = { T: "Teórico", E: "Económico", A: "Estético", S: "Social", P: "Político", R: "Regulatorio" };
 
 export default async function ReportPage({ params, searchParams }: { params: { id: string }; searchParams: { tour?: string } }) {
+  const { t } = getServerT();
   const found = await getCandidate(params.id);
   if (!found) notFound();
   const { process: proc, candidate } = found;
@@ -70,28 +72,28 @@ export default async function ReportPage({ params, searchParams }: { params: { i
           {sibs.length > 1 && (
             <>
               {prev
-                ? <Link href={`/reporte/${prev.id}`} className="text-xs text-accent hover:underline" title={`Candidato anterior: ${prev.name}`}>← anterior</Link>
-                : <span className="text-xs text-neutral-300">← anterior</span>}
+                ? <Link href={`/reporte/${prev.id}`} className="text-xs text-accent hover:underline" title={t(`Candidato anterior: ${prev.name}`, `Previous candidate: ${prev.name}`)}>← {t("anterior", "previous")}</Link>
+                : <span className="text-xs text-neutral-300">← {t("anterior", "previous")}</span>}
               <span className="text-neutral-300">·</span>
               {next
-                ? <Link href={`/reporte/${next.id}`} className="text-xs text-accent hover:underline" title={`Siguiente candidato: ${next.name}`}>siguiente →</Link>
-                : <span className="text-xs text-neutral-300">siguiente →</span>}
+                ? <Link href={`/reporte/${next.id}`} className="text-xs text-accent hover:underline" title={t(`Siguiente candidato: ${next.name}`, `Next candidate: ${next.name}`)}>{t("siguiente", "next")} →</Link>
+                : <span className="text-xs text-neutral-300">{t("siguiente", "next")} →</span>}
               <span className="text-neutral-300">·</span>
             </>
           )}
-          <Link href={`/comparar/${proc.id}`} className="text-xs text-accent hover:underline">📊 Comparar</Link>
+          <Link href={`/comparar/${proc.id}`} className="text-xs text-accent hover:underline">📊 {t("Comparar", "Compare")}</Link>
         </div>
       </div>
       <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{candidate.name}</h1>
-          <p className="text-sm text-neutral-500 mt-1">Reporte de evaluación</p>
+          <p className="text-sm text-neutral-500 mt-1">{t("Reporte de evaluación", "Evaluation report")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <Chip on={!!r} label="HUMAN" />
           <Chip on={!!candidate.cv} label="CV" />
           <Chip on={!!candidate.acResult} label="AC" />
-          <Chip on={!!candidate.voiceResult} label="Voz" />
+          <Chip on={!!candidate.voiceResult} label={t("Voz", "Voice")} />
           {hasAny && <PrintButton />}
         </div>
       </div>
@@ -100,7 +102,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
       {!hasAny && (
         <div className="card text-center py-10 text-sm text-neutral-500">
-          Aún no hay resultados para este candidato. Comparte su link para que complete las actividades.
+          {t("Aún no hay resultados para este candidato. Comparte su link para que complete las actividades.", "There are no results for this candidate yet. Share their link so they can complete the activities.")}
         </div>
       )}
 
@@ -109,14 +111,14 @@ export default async function ReportPage({ params, searchParams }: { params: { i
       {FLAGS.evidenceBand && <EvidenciaHuman candidate={candidate} />}
       {/* DISC */}
       <section className="card space-y-3">
-        <h2 className="font-semibold">Comportamiento (DISC)</h2>
+        <h2 className="font-semibold">{t("Comportamiento (DISC)", "Behavior (DISC)")}</h2>
         {!FLAGS.evidenceBand && r.disc.notInterpretable && (
           <div className="text-xs rounded-lg bg-amber-50 text-amber-700 px-3 py-2">⚠️ {r.disc.notInterpretableReason}</div>
         )}
         <div className="grid sm:grid-cols-3 gap-3">
-          <DiscProfile title="Observado" scores={r.disc.profiles.observado} highlight={r.disc.interpretedProfile === "observado" as any} />
-          <DiscProfile title="Motivado" scores={r.disc.profiles.proyectado} highlight={r.disc.interpretedProfile === "proyectado"} />
-          <DiscProfile title="Bajo Presión" scores={r.disc.profiles.bajoPresion} highlight={r.disc.interpretedProfile === "bajoPresion"} />
+          <DiscProfile title={t("Observado", "Observed")} scores={r.disc.profiles.observado} highlight={r.disc.interpretedProfile === "observado" as any} />
+          <DiscProfile title={t("Motivado", "Motivated")} scores={r.disc.profiles.proyectado} highlight={r.disc.interpretedProfile === "proyectado"} />
+          <DiscProfile title={t("Bajo Presión", "Under Pressure")} scores={r.disc.profiles.bajoPresion} highlight={r.disc.interpretedProfile === "bajoPresion"} />
         </div>
         {r.disc.combinations.length > 0 && (
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -129,34 +131,34 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
       {/* Valores */}
       <section className="card space-y-3">
-        <h2 className="font-semibold">Motivadores (Valores de Spranger)</h2>
+        <h2 className="font-semibold">{t("Motivadores (Valores de Spranger)", "Motivators (Spranger Values)")}</h2>
         <ValoresChart scores={r.valores.scores} />
         <p className="text-sm text-neutral-600">
-          Predominantes: <b>{r.valores.predominant.map((v) => VAL_NAME[v]).join(", ") || "ninguno ALTO"}</b>
+          {t("Predominantes:", "Predominant:")} <b>{r.valores.predominant.map((v) => VAL_NAME[v]).join(", ") || t("ninguno ALTO", "none HIGH")}</b>
         </p>
       </section>
 
       {/* Proceso Pensante */}
       <section className="card space-y-3">
-        <h2 className="font-semibold">Estilo de pensamiento (Proceso Pensante)</h2>
+        <h2 className="font-semibold">{t("Estilo de pensamiento (Proceso Pensante)", "Thinking style (Thinking Process)")}</h2>
         <PensanteChart scores={r.pensante.scores} />
         <div className="flex flex-wrap gap-1.5">
           <span className="text-[11px] rounded-md bg-accentSoft text-accent px-2 py-0.5">{r.pensante.axes.conceptualVsEspecifico}</span>
           <span className="text-[11px] rounded-md bg-accentSoft text-accent px-2 py-0.5">{r.pensante.axes.izquierdoVsDerecho}</span>
-          {r.pensante.cerebroTotal && <span className="text-[11px] rounded-md bg-accent text-white px-2 py-0.5">Cerebro Total</span>}
+          {r.pensante.cerebroTotal && <span className="text-[11px] rounded-md bg-accent text-white px-2 py-0.5">{t("Cerebro Total", "Whole Brain")}</span>}
         </div>
       </section>
 
       {/* Interpretación (Evaluador DOS) — vive en el contenedor-IA, subordinada al juicio humano */}
       <section className="card space-y-3">
-        <h2 className="font-semibold">Interpretación profesional <span className="text-xs font-normal text-neutral-400">· Evaluador DOS — integra HUMAN</span></h2>
+        <h2 className="font-semibold">{t("Interpretación profesional", "Professional interpretation")} <span className="text-xs font-normal text-neutral-400">· {t("Evaluador DOS — integra HUMAN", "DOS Evaluator — integrates HUMAN")}</span></h2>
         {candidate.dosReport?.source === "ai" ? (
           <div className="ai-surface">
             <div className="ai-surface__head">
               {candidate.dosReport.edited ? (
-                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>Interpretación · ajustada por ti</>
+                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>{t("Interpretación · ajustada por ti", "Interpretation · adjusted by you")}</>
               ) : (
-                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v4M12 17v4M5 12H1M23 12h-4" /><circle cx="12" cy="12" r="3.5" /></svg>IA · valida antes de decidir</>
+                <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v4M12 17v4M5 12H1M23 12h-4" /><circle cx="12" cy="12" r="3.5" /></svg>{t("IA · valida antes de decidir", "AI · validate before deciding")}</>
               )}
             </div>
             <div className="ai-surface__body">
@@ -174,9 +176,9 @@ export default async function ReportPage({ params, searchParams }: { params: { i
       {candidate.acResult?.calificacion && (
         <section className="card space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">Assessment Center <span className="text-xs font-normal text-neutral-400">· conducta situacional</span></h2>
+            <h2 className="font-semibold">Assessment Center <span className="text-xs font-normal text-neutral-400">· {t("conducta situacional", "situational behavior")}</span></h2>
             <span className="text-[11px] text-neutral-400">
-              {candidate.acResult.calificacion.source === "ai" ? "propuesta de IA — insumo" : "pendiente de IA"}
+              {candidate.acResult.calificacion.source === "ai" ? t("propuesta de IA — insumo", "AI proposal — input") : t("pendiente de IA", "pending AI")}
             </span>
           </div>
 
@@ -212,7 +214,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
             <p className="text-sm text-neutral-700 border-t border-line pt-3">{candidate.acResult.calificacion.resumen}</p>
           )}
           <p className="text-[11px] text-amber-600">
-            ⚠️ Calificación propuesta por IA con rúbrica en formato <span title="GENTZA: método de evaluación por competencias con conductas ancla 1–5 (ORCSE: observar, clasificar y evaluar la conducta)." className="underline decoration-dotted cursor-help">GENTZA</span> (anclas provisionales). Es un insumo: revisa el verbatim y haz clic en el 1–5 para ajustarlo con tu criterio.
+            ⚠️ {t("Calificación propuesta por IA con rúbrica en formato", "Score proposed by AI with a rubric in")} <span title={t("GENTZA: método de evaluación por competencias con conductas ancla 1–5 (ORCSE: observar, clasificar y evaluar la conducta).", "GENTZA: competency-based evaluation method with anchor behaviors 1–5 (ORCSE: observe, classify and evaluate behavior).")} className="underline decoration-dotted cursor-help">GENTZA</span> {t("(anclas provisionales). Es un insumo: revisa el verbatim y haz clic en el 1–5 para ajustarlo con tu criterio.", "format (provisional anchors). It is an input: review the verbatim and click the 1–5 to adjust it with your judgment.")}
           </p>
         </section>
       )}
@@ -221,12 +223,12 @@ export default async function ReportPage({ params, searchParams }: { params: { i
       {candidate.cv?.isolated && (
         <section className="card space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">Evidencias (CV) <span className="text-xs font-normal text-neutral-400">· {candidate.cv.fileName}</span></h2>
+            <h2 className="font-semibold">{t("Evidencias (CV)", "Evidence (Résumé)")} <span className="text-xs font-normal text-neutral-400">· {candidate.cv.fileName}</span></h2>
             <div className="text-right">
-              <div className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3 mb-0.5">Ajuste documental</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3 mb-0.5">{t("Ajuste documental", "Document fit")}</div>
               <div className="flex items-baseline gap-2 justify-end">
                 <span className="text-[34px] leading-none font-medium tabular-nums text-ink">{candidate.cv.isolated.overall}</span>
-                <span className="text-xs text-text3">de 100</span>
+                <span className="text-xs text-text3">{t("de 100", "of 100")}</span>
               </div>
             </div>
           </div>
@@ -244,7 +246,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
               return (
                 <div key={i} className="border border-line rounded-lg px-3 py-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{dim?.name ?? d.key} <span className="text-[10px] text-neutral-400">peso {dim?.weight ?? 0}%</span></span>
+                    <span className="text-sm font-medium">{dim?.name ?? d.key} <span className="text-[10px] text-neutral-400">{t("peso", "weight")} {dim?.weight ?? 0}%</span></span>
                     <span className="inline-flex gap-0.5">
                       {[1, 2, 3, 4, 5].map((n) => (
                         <span key={n} className={`h-4 w-4 rounded-sm text-[9px] grid place-items-center ${n <= d.score ? "bg-accent text-white" : "bg-paper border border-line text-neutral-300"}`}>{n}</span>
@@ -259,15 +261,15 @@ export default async function ReportPage({ params, searchParams }: { params: { i
           </div>
 
           <div className="grid sm:grid-cols-3 gap-2 text-sm">
-            <CvList title="Fortalezas" color="text-S" items={candidate.cv.isolated.strengths} />
-            <CvList title="Brechas" color="text-amber-600" items={candidate.cv.isolated.gaps} />
-            <CvList title="Banderas" color="text-red-600" items={candidate.cv.isolated.flags} />
+            <CvList title={t("Fortalezas", "Strengths")} color="text-S" items={candidate.cv.isolated.strengths} />
+            <CvList title={t("Brechas", "Gaps")} color="text-amber-600" items={candidate.cv.isolated.gaps} />
+            <CvList title={t("Banderas", "Flags")} color="text-red-600" items={candidate.cv.isolated.flags} />
           </div>
           {candidate.cv.isolated.summary && <p className="text-sm text-neutral-700 border-t border-line pt-3">{candidate.cv.isolated.summary}</p>}
 
           {/* Integración con HUMAN (triangulación) */}
           <div className="border-t border-line pt-3">
-            <h3 className="text-sm font-semibold mb-2">Integración con HUMAN <span className="text-xs font-normal text-neutral-400">· triangulación</span></h3>
+            <h3 className="text-sm font-semibold mb-2">{t("Integración con HUMAN", "Integration with HUMAN")} <span className="text-xs font-normal text-neutral-400">· {t("triangulación", "triangulation")}</span></h3>
             <CvIntegration
               candidateId={candidate.id}
               initial={candidate.cv.integrated ?? null}
@@ -282,9 +284,9 @@ export default async function ReportPage({ params, searchParams }: { params: { i
       {candidate.voiceResult?.calificacion && (
         <section className="card space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">Role-play por voz <span className="text-xs font-normal text-neutral-400">· conversación de desempeño</span></h2>
+            <h2 className="font-semibold">{t("Role-play por voz", "Voice role-play")} <span className="text-xs font-normal text-neutral-400">· {t("conversación de desempeño", "performance conversation")}</span></h2>
             <span className="text-[11px] text-neutral-400">
-              {candidate.voiceResult.calificacion.source === "ai" ? "propuesta de IA — insumo" : "pendiente"}
+              {candidate.voiceResult.calificacion.source === "ai" ? t("propuesta de IA — insumo", "AI proposal — input") : t("pendiente", "pending")}
             </span>
           </div>
 
@@ -322,7 +324,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
           {candidate.voiceResult.captura.analysis && (
             <div className="border-t border-line pt-3">
-              <div className="text-xs font-semibold text-neutral-500 mb-2">Señales automáticas de la llamada <span className="font-normal text-neutral-400">· ElevenLabs (GENTZA)</span></div>
+              <div className="text-xs font-semibold text-neutral-500 mb-2">{t("Señales automáticas de la llamada", "Automatic call signals")} <span className="font-normal text-neutral-400">· ElevenLabs (GENTZA)</span></div>
               {candidate.voiceResult.captura.analysis.criteria.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {candidate.voiceResult.captura.analysis.criteria.map((c) => {
@@ -350,25 +352,25 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
           {!FLAGS.evidenceBand && candidate.voiceResult.captura.transcript.length > 0 && (
             <details className="border-t border-line pt-2">
-              <summary className="text-xs text-accent cursor-pointer">▸ Ver transcripción</summary>
+              <summary className="text-xs text-accent cursor-pointer">▸ {t("Ver transcripción", "View transcript")}</summary>
               <div className="mt-2 space-y-1.5 max-h-72 overflow-y-auto">
                 {candidate.voiceResult.captura.transcript.map((tt, i) => (
                   <p key={i} className={`text-xs ${tt.role === "user" ? "text-ink" : "text-neutral-500"}`}>
-                    <b>{tt.role === "user" ? candidate.name : "Colaborador"}:</b> {tt.text}
+                    <b>{tt.role === "user" ? candidate.name : t("Colaborador", "Team member")}:</b> {tt.text}
                   </p>
                 ))}
               </div>
             </details>
           )}
           <p className="text-[11px] text-amber-600">
-            ⚠️ Calificación propuesta por IA sobre el transcript (formato <span title="GENTZA: método de evaluación por competencias con conductas ancla 1–5." className="underline decoration-dotted cursor-help">GENTZA</span>, anclas provisionales). Es un insumo: revisa la transcripción y haz clic en el 1–5 para ajustarlo.
+            ⚠️ {t("Calificación propuesta por IA sobre el transcript (formato", "Score proposed by AI over the transcript (")}<span title={t("GENTZA: método de evaluación por competencias con conductas ancla 1–5.", "GENTZA: competency-based evaluation method with anchor behaviors 1–5.")} className="underline decoration-dotted cursor-help">GENTZA</span>{t(", anclas provisionales). Es un insumo: revisa la transcripción y haz clic en el 1–5 para ajustarlo.", " format, provisional anchors). It is an input: review the transcript and click the 1–5 to adjust it.")}
           </p>
         </section>
       )}
 
       {hasAny && (
         <p className="text-[11px] text-neutral-400 border-t border-line pt-3">
-          Documento generado con Aivals. La IA es un <b>insumo</b> para el psicólogo, no un veredicto: la interpretación y la decisión finales son profesionales y humanas.
+          {t("Documento generado con Aivals. La IA es un", "Document generated with Aivals. AI is an")} <b>{t("insumo", "input")}</b> {t("para el psicólogo, no un veredicto: la interpretación y la decisión finales son profesionales y humanas.", "for the psychologist, not a verdict: the final interpretation and decision are professional and human.")}
         </p>
       )}
     </div>

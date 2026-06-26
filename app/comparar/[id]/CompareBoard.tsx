@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { CandidateComparison, ReferenceMini, Sem, VerticalKey, CompetencyCell } from "@/lib/compare/types";
 import { globalEncaje, DEFAULT_WEIGHTS, VERTICAL_KEYS } from "@/lib/compare/score";
 import { DiscProfile, ValoresChart, PensanteChart } from "@/components/charts";
+import { useT } from "@/components/LangProvider";
 
 const VMETA: Record<VerticalKey, { label: string; emoji: string; short: string }> = {
   human: { label: "HUMAN", emoji: "🧠", short: "HUMAN" },
@@ -40,6 +41,7 @@ export default function CompareBoard({
   rows: CandidateComparison[];
   reference: ReferenceMini;
 }) {
+  const { t } = useT();
   const [weights, setWeights] = useState<Record<VerticalKey, number>>({ ...DEFAULT_WEIGHTS });
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -98,8 +100,7 @@ export default function CompareBoard({
 
       {active.length === 0 && rows.length > 0 && (
         <div className="rounded-xl border border-line bg-paper/60 text-xs text-neutral-500 px-3 py-2">
-          Todavía ningún candidato de este puesto tiene actividades evaluadas, así que aún no hay encaje que ponderar.
-          En cuanto completen el test HUMAN, el Assessment Center, el CV o la llamada por voz, aparecerán aquí.
+          {t("Todavía ningún candidato de este puesto tiene actividades evaluadas, así que aún no hay encaje que ponderar. En cuanto completen el test HUMAN, el Assessment Center, el CV o la llamada por voz, aparecerán aquí.", "No candidate for this role has evaluated activities yet, so there is no fit to weight. As soon as they complete the HUMAN test, the Assessment Center, the CV, or the voice call, they will appear here.")}
         </div>
       )}
 
@@ -107,20 +108,19 @@ export default function CompareBoard({
       {active.length > 0 && (
       <div className="card">
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <h2 className="font-semibold text-sm">Pesos del encaje</h2>
+          <h2 className="font-semibold text-sm">{t("Pesos del encaje", "Fit weights")}</h2>
           <div className="flex items-center gap-3">
             <Legend />
             <button
               onClick={() => setWeights({ ...DEFAULT_WEIGHTS })}
               className="text-xs text-accent hover:underline"
             >
-              Reiniciar
+              {t("Reiniciar", "Reset")}
             </button>
           </div>
         </div>
         <p className="text-xs text-neutral-500 mt-1">
-          Define cuánto pesa cada vertical. El ranking se reordena en vivo. Una vertical que un candidato
-          no completó no lo penaliza: su encaje se promedia solo sobre lo que sí tiene.
+          {t("Define cuánto pesa cada vertical. El ranking se reordena en vivo. Una vertical que un candidato no completó no lo penaliza: su encaje se promedia solo sobre lo que sí tiene.", "Set how much each vertical weighs. The ranking reorders live. A vertical a candidate did not complete does not penalize them: their fit is averaged only over what they do have.")}
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
           {active.map((k) => {
@@ -135,7 +135,7 @@ export default function CompareBoard({
                   type="range" min={0} max={100} step={5} value={weights[k]}
                   onChange={(e) => setWeights((w) => ({ ...w, [k]: Number(e.target.value) }))}
                   className="w-full mt-2 accent-[#1f6f78]"
-                  aria-label={`Peso de ${VMETA[k].label}`}
+                  aria-label={t(`Peso de ${VMETA[k].label}`, `Weight of ${VMETA[k].label}`)}
                 />
               </div>
             );
@@ -145,7 +145,7 @@ export default function CompareBoard({
       )}
 
       {rows.length === 0 ? (
-        <div className="card text-center py-10 text-neutral-500">Este puesto aún no tiene candidatos.</div>
+        <div className="card text-center py-10 text-neutral-500">{t("Este puesto aún no tiene candidatos.", "This role has no candidates yet.")}</div>
       ) : (
         <>
           {/* RANKING */}
@@ -169,10 +169,10 @@ export default function CompareBoard({
                         <span className="font-semibold truncate">{r.name}</span>
                         {score == null && (
                           <span className="text-[10px] uppercase tracking-wide bg-neutral-100 text-neutral-500 px-1.5 py-0.5 rounded">
-                            sin evaluaciones
+                            {t("sin evaluaciones", "no evaluations")}
                           </span>
                         )}
-                        <span className="text-[10px] text-neutral-400">{r.completeness}/{active.length} verticales</span>
+                        <span className="text-[10px] text-neutral-400">{r.completeness}/{active.length} {t("verticales", "verticals")}</span>
                       </div>
                       {/* barra de encaje + chips por vertical */}
                       <div className="flex items-center gap-3 mt-1.5">
@@ -186,7 +186,7 @@ export default function CompareBoard({
                           {active.map((k) => {
                             const v = r.verticals[k];
                             const st = cellState(v);
-                            const label = st === "scored" ? fmt(v.pct) : st === "unmeasured" ? "sin perfil para medir" : "no evaluado";
+                            const label = st === "scored" ? fmt(v.pct) : st === "unmeasured" ? t("sin perfil para medir", "no profile to measure") : t("no evaluado", "not evaluated");
                             return (
                               <span
                                 key={k}
@@ -207,22 +207,22 @@ export default function CompareBoard({
                       <div className="text-2xl font-bold tabular-nums leading-none" style={{ color: SEM_BG[sem(score)] }}>
                         {fmt(score)}
                       </div>
-                      <div className="text-[10px] text-neutral-400 mt-0.5">encaje</div>
+                      <div className="text-[10px] text-neutral-400 mt-0.5">{t("encaje", "fit")}</div>
                     </div>
                     <div className="flex flex-col items-end gap-1 pl-1">
                       <label
                         className="flex items-center gap-1 text-[11px] text-neutral-500 cursor-pointer select-none"
-                        title="Sobreponer en el radar"
+                        title={t("Sobreponer en el radar", "Overlay on the radar")}
                       >
                         <input
                           type="checkbox" checked={isSel}
                           onChange={() => setSelected((s) => toggle(s, r.id))}
                           className="accent-[#1f6f78]"
                         />
-                        <span style={selColor ? { color: selColor, fontWeight: 700 } : undefined}>radar</span>
+                        <span style={selColor ? { color: selColor, fontWeight: 700 } : undefined}>{t("radar", "radar")}</span>
                       </label>
                       <Link href={`/reporte/${r.id}`} className="text-[11px] text-accent hover:underline">
-                        reporte →
+                        {t("reporte →", "report →")}
                       </Link>
                     </div>
                   </div>
@@ -240,21 +240,20 @@ export default function CompareBoard({
           {/* RADAR (al seleccionar) */}
           <div className="card">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-sm">Radar de encaje</h2>
+              <h2 className="font-semibold text-sm">{t("Radar de encaje", "Fit radar")}</h2>
               {selected.size > 0 && (
                 <button onClick={() => setSelected(new Set())} className="text-xs text-accent hover:underline">
-                  Limpiar selección
+                  {t("Limpiar selección", "Clear selection")}
                 </button>
               )}
             </div>
             {active.length < 3 ? (
               <p className="text-xs text-neutral-500 mt-2">
-                El radar necesita al menos 3 verticales evaluadas en este puesto. Por ahora compara con el ranking y el
-                mapa de calor.
+                {t("El radar necesita al menos 3 verticales evaluadas en este puesto. Por ahora compara con el ranking y el mapa de calor.", "The radar needs at least 3 evaluated verticals in this role. For now, compare using the ranking and the heatmap.")}
               </p>
             ) : selectedRows.length === 0 ? (
               <p className="text-xs text-neutral-500 mt-2">
-                Marca la casilla <b>radar</b> de 2 o 3 candidatos en el ranking para sobreponer sus perfiles de encaje.
+                {t("Marca la casilla ", "Check the ")}<b>{t("radar", "radar")}</b>{t(" de 2 o 3 candidatos en el ranking para sobreponer sus perfiles de encaje.", " box on 2 or 3 candidates in the ranking to overlay their fit profiles.")}
               </p>
             ) : (
               <div className="mt-3">
@@ -269,15 +268,14 @@ export default function CompareBoard({
                           <span className="inline-block w-3 h-3 rounded-sm" style={{ background: PALETTE[i % PALETTE.length] }} />
                           <span className="font-medium">{x.r.name}</span>
                           <span className="text-neutral-400 tabular-nums">{fmt(x.score)}</span>
-                          <span className="text-[10px] text-neutral-400">· {ejes}/{active.length} ejes con dato</span>
+                          <span className="text-[10px] text-neutral-400">· {ejes}/{active.length} {t("ejes con dato", "axes with data")}</span>
                         </li>
                       );
                     })}
                   </ul>
                 </div>
                 <p className="text-[11px] text-neutral-400 mt-3">
-                  Cada eje es una vertical (0 al centro, 100 en el borde). Los ejes donde un candidato no tiene dato se
-                  omiten de su figura — no se dibujan como 0.
+                  {t("Cada eje es una vertical (0 al centro, 100 en el borde). Los ejes donde un candidato no tiene dato se omiten de su figura — no se dibujan como 0.", "Each axis is a vertical (0 at the center, 100 at the edge). Axes where a candidate has no data are omitted from their shape — they are not drawn as 0.")}
                 </p>
               </div>
             )}
@@ -285,12 +283,12 @@ export default function CompareBoard({
 
           {/* MAPA DE CALOR */}
           <div className="card overflow-x-auto">
-            <h2 className="font-semibold text-sm mb-3">Mapa de calor por vertical</h2>
+            <h2 className="font-semibold text-sm mb-3">{t("Mapa de calor por vertical", "Heatmap by vertical")}</h2>
             <table className="w-full border-separate" style={{ borderSpacing: "0 4px" }}>
               <thead>
                 <tr className="text-[11px] text-neutral-500">
-                  <th className="text-left font-medium px-2 pb-1">Candidato</th>
-                  <th className="text-center font-medium px-2 pb-1">Encaje</th>
+                  <th className="text-left font-medium px-2 pb-1">{t("Candidato", "Candidate")}</th>
+                  <th className="text-center font-medium px-2 pb-1">{t("Encaje", "Fit")}</th>
                   {active.map((k) => (
                     <th key={k} className="text-center font-medium px-2 pb-1 whitespace-nowrap">
                       {VMETA[k].emoji} {VMETA[k].short}
@@ -313,7 +311,7 @@ export default function CompareBoard({
                       const v = r.verticals[k];
                       const st = cellState(v);
                       const best = v.pct != null && bestByV[k] != null && Math.round(v.pct) === Math.round(bestByV[k]);
-                      const label = st === "scored" ? fmt(v.pct) : st === "unmeasured" ? "hecho, sin perfil para medir" : "no evaluado";
+                      const label = st === "scored" ? fmt(v.pct) : st === "unmeasured" ? t("hecho, sin perfil para medir", "done, no profile to measure") : t("no evaluado", "not evaluated");
                       return (
                         <td key={k} className="px-1">
                           <Cell
@@ -329,18 +327,18 @@ export default function CompareBoard({
             </table>
             <div className="font-mono text-[11px] text-neutral-400 mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5">
               <span className="inline-flex items-center gap-1.5">
-                ajuste
+                {t("ajuste", "fit")}
                 <span className="inline-flex h-2.5 w-24 rounded-full overflow-hidden">
                   {HEAT_RAMP.map((c) => <span key={c} className="flex-1" style={{ background: c }} />)}
                 </span>
-                bajo→alto
+                {t("bajo→alto", "low→high")}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-[3px]" style={{ boxShadow: "inset 0 0 0 2px #1a1d21" }} />
-                mejor en la columna
+                {t("mejor en la columna", "best in column")}
               </span>
-              <span>· = sin perfil para medir · — = no evaluado</span>
-              <span className="text-accent">clic en un nombre para ver el detalle</span>
+              <span>{t("· = sin perfil para medir · — = no evaluado", "· = no profile to measure · — = not evaluated")}</span>
+              <span className="text-accent">{t("clic en un nombre para ver el detalle", "click a name to see the detail")}</span>
             </div>
           </div>
         </>
@@ -398,31 +396,31 @@ function Cell({
 }
 
 function ReferenceBanner({ reference, humanActive }: { reference: ReferenceMini; humanActive: boolean }) {
+  const { t } = useT();
   if (!reference.hasReference) {
     if (!humanActive) return null;
     return (
       <div className="rounded-xl border border-amber-200 bg-amber-50 text-amber-800 text-xs px-3 py-2">
-        Este puesto no tiene <b>perfil de referencia</b> (Evaluador UNO), así que el encaje HUMAN no se puede medir.
-        Genéralo en el proceso para activar esa columna.
+        {t("Este puesto no tiene ", "This role has no ")}<b>{t("perfil de referencia", "reference profile")}</b>{t(" (Evaluador UNO), así que el encaje HUMAN no se puede medir. Genéralo en el proceso para activar esa columna.", " (Evaluator ONE), so the HUMAN fit cannot be measured. Generate it in the process to enable that column.")}
       </div>
     );
   }
   const d = reference.discIdeal;
   return (
     <div className="card">
-      <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Encaje medido contra el perfil ideal del puesto</div>
+      <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">{t("Encaje medido contra el perfil ideal del puesto", "Fit measured against the role's ideal profile")}</div>
       {reference.resumen && <p className="text-sm text-neutral-700 mt-1">{reference.resumen}</p>}
       <div className="mt-2 flex flex-wrap gap-2 text-xs">
         {d && (
           <span className="rounded-md bg-paper border border-line px-2 py-1">
-            DISC ideal · D{d.D} I{d.I} S{d.S} C{d.C}
+            {t("DISC ideal · ", "Ideal DISC · ")}D{d.D} I{d.I} S{d.S} C{d.C}
           </span>
         )}
         {reference.valoresDeseados?.map((v) => (
           <span key={v} className="rounded-md bg-accentSoft text-accent px-2 py-1">{v}</span>
         ))}
         {reference.estiloPensamiento && (
-          <span className="rounded-md bg-paper border border-line px-2 py-1">Pensar: {reference.estiloPensamiento}</span>
+          <span className="rounded-md bg-paper border border-line px-2 py-1">{t("Pensar: ", "Thinking: ")}{reference.estiloPensamiento}</span>
         )}
       </div>
     </div>
@@ -431,6 +429,7 @@ function ReferenceBanner({ reference, humanActive }: { reference: ReferenceMini;
 
 // ---------- Detalle expandible (nivel 2) ----------
 function Detail({ row, reference }: { row: CandidateComparison; reference: ReferenceMini }) {
+  const { t } = useT();
   return (
     <div className="grid lg:grid-cols-2 gap-4">
       {/* HUMAN */}
@@ -439,21 +438,21 @@ function Detail({ row, reference }: { row: CandidateComparison; reference: Refer
         {row.human ? (
           <div className="space-y-3">
             <DiscProfile
-              title="DISC (perfil interpretado)"
+              title={t("DISC (perfil interpretado)", "DISC (interpreted profile)")}
               scores={row.human.disc.profiles[row.human.disc.interpretedProfile]}
               highlight
             />
             {reference.discIdeal && (
               <p className="text-[11px] text-neutral-500">
-                Ideal del puesto · D{reference.discIdeal.D} I{reference.discIdeal.I} S{reference.discIdeal.S} C{reference.discIdeal.C}
+                {t("Ideal del puesto · ", "Role ideal · ")}D{reference.discIdeal.D} I{reference.discIdeal.I} S{reference.discIdeal.S} C{reference.discIdeal.C}
               </p>
             )}
             <div>
-              <div className="text-[11px] font-semibold text-neutral-500 mb-1">Valores</div>
+              <div className="text-[11px] font-semibold text-neutral-500 mb-1">{t("Valores", "Values")}</div>
               <ValoresChart scores={row.human.valores.scores} />
             </div>
             <div>
-              <div className="text-[11px] font-semibold text-neutral-500 mb-1">Estilo de pensamiento</div>
+              <div className="text-[11px] font-semibold text-neutral-500 mb-1">{t("Estilo de pensamiento", "Thinking style")}</div>
               <PensanteChart scores={row.human.pensante.scores} />
             </div>
             <CellList cells={row.verticals.human.detail} />
@@ -519,7 +518,8 @@ function Note({ text }: { text: string }) {
   return <p className="text-[11px] text-neutral-500 mt-2 border-t border-line pt-2">{text}</p>;
 }
 function Empty() {
-  return <p className="text-xs text-neutral-400 mt-2">Sin datos: el candidato no completó esta actividad.</p>;
+  const { t } = useT();
+  return <p className="text-xs text-neutral-400 mt-2">{t("Sin datos: el candidato no completó esta actividad.", "No data: the candidate did not complete this activity.")}</p>;
 }
 
 // ---------- Radar SVG puro ----------

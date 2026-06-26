@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useT } from "@/components/LangProvider";
 
 export type ScoreRow = {
   competency: string; name: string; score: number;
@@ -12,6 +13,7 @@ export type ScoreRow = {
 export default function CompetencyScores({
   candidateId, target, rows: initial,
 }: { candidateId: string; target: "ac" | "voz"; rows: ScoreRow[] }) {
+  const { t } = useT();
   const [rows, setRows] = useState(initial);
   const [saving, setSaving] = useState<string | null>(null);
 
@@ -40,9 +42,9 @@ export default function CompetencyScores({
             <span className="text-sm font-medium">
               {p.name}
               {p.exercise && <span className="text-[10px] text-neutral-400 ml-1.5 uppercase">{p.exercise}</span>}
-              {p.edited && <span className="text-[10px] text-accent ml-1.5">· ajustado por ti</span>}
+              {p.edited && <span className="text-[10px] text-accent ml-1.5">{t("· ajustado por ti", "· adjusted by you")}</span>}
             </span>
-            <span className="inline-flex gap-0.5" title="Haz clic para ajustar el puntaje 1–5">
+            <span className="inline-flex gap-0.5" title={t("Haz clic para ajustar el puntaje 1–5", "Click to adjust the score 1–5")}>
               {[1, 2, 3, 4, 5].map((n) => (
                 <button key={n} type="button" disabled={saving === p.competency}
                   onClick={() => setScore(p.competency, n)}

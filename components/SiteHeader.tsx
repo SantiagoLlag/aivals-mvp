@@ -1,14 +1,17 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useT } from "./LangProvider";
+import LanguageToggle from "./LanguageToggle";
 
 // Un solo header para toda la app que cambia de rol según la ruta:
 //  - rutas del candidato (/test/...): marca neutra, SIN enlace al dashboard y SIN "Panel del psicólogo"
 //    (el candidato no debe poder saltar al panel con la lista de todas las empresas).
 //  - resto (panel del psicólogo): logo que vuelve al panel + leyenda "Panel del psicólogo".
-export default function SiteHeader() {
+export default function SiteHeader({ i18nOn }: { i18nOn?: boolean }) {
   const path = usePathname() ?? "";
   const isCandidate = path.startsWith("/test/");
+  const { t } = useT();
 
   const brand = (
     <span className="flex items-center gap-2 font-semibold text-accent900">
@@ -24,9 +27,12 @@ export default function SiteHeader() {
     <header className="border-b border-line bg-white/80 backdrop-blur sticky top-0 z-10 print:hidden">
       <div className="mx-auto max-w-5xl px-5 h-14 flex items-center justify-between">
         {isCandidate ? brand : <Link href="/">{brand}</Link>}
-        <span className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3">
-          {isCandidate ? "Evaluación de talento" : "Panel del psicólogo"}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.04em] text-text3">
+            {isCandidate ? t("Evaluación de talento", "Talent assessment") : t("Panel del psicólogo", "Psychologist panel")}
+          </span>
+          {i18nOn && <LanguageToggle />}
+        </div>
       </div>
     </header>
   );

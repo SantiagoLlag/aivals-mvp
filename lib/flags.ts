@@ -20,6 +20,9 @@ export const FLAGS = {
   // Panel: botón "Reabrir test" por candidato (limpia la captura de una vertical para rehacerla).
   // Apagar con FF_REABRIR_TEST=0 → desaparece el botón.
   reabrirTest: read("FF_REABRIR_TEST", true),
+  // i18n: toggle ES/EN en toda la app (interfaz). Apagar con FF_I18N=0 → siempre español,
+  // sin toggle (idéntico a antes de la feature).
+  i18n: read("FF_I18N", true),
 };
 
 export type FlagName = keyof typeof FLAGS;

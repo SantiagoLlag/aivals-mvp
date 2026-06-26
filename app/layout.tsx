@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
+import { LangProvider } from "@/components/LangProvider";
+import { getLang } from "@/lib/i18n-server";
+import { FLAGS } from "@/lib/flags";
 
 // Tipografía del design language: Plex Sans (UI/datos), Plex Mono (datos de instrumento),
 // Newsreader italic (solo la cita-resumen humana). Pesos contenidos: 400 y 500/600.
@@ -15,11 +18,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = getLang();
   return (
-    <html lang="es" className={`${plexSans.variable} ${plexMono.variable} ${newsreader.variable}`}>
+    <html lang={lang} className={`${plexSans.variable} ${plexMono.variable} ${newsreader.variable}`}>
       <body className="min-h-screen font-sans antialiased">
-        <SiteHeader />
-        <main className="mx-auto max-w-5xl px-5 py-8">{children}</main>
+        <LangProvider lang={lang}>
+          <SiteHeader i18nOn={FLAGS.i18n} />
+          <main className="mx-auto max-w-5xl px-5 py-8">{children}</main>
+        </LangProvider>
       </body>
     </html>
   );

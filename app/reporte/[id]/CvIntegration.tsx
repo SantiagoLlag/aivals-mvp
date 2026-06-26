@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useT } from "@/components/LangProvider";
 import type { CvIntegratedEval } from "@/lib/cv/types";
 
 export default function CvIntegration({
   candidateId, initial, canIntegrate, aiEnabled,
 }: { candidateId: string; initial: CvIntegratedEval | null; canIntegrate: boolean; aiEnabled: boolean }) {
+  const { t } = useT();
   const router = useRouter();
   const [data, setData] = useState<CvIntegratedEval | null>(initial);
   const [busy, setBusy] = useState(false);
@@ -19,23 +21,23 @@ export default function CvIntegration({
       setData(await res.json());
       router.refresh();
     } catch {
-      setError("No se pudo integrar. Suele ser temporal; intenta de nuevo.");
+      setError(t("No se pudo integrar. Suele ser temporal; intenta de nuevo.", "Could not integrate. This is usually temporary; please try again."));
     } finally {
       setBusy(false);
     }
   }
 
   if (!canIntegrate) {
-    return <p className="text-xs text-neutral-500">La integración con HUMAN estará disponible cuando el candidato complete la prueba HUMAN.</p>;
+    return <p className="text-xs text-neutral-500">{t("La integración con HUMAN estará disponible cuando el candidato complete la prueba HUMAN.", "HUMAN integration will be available once the candidate completes the HUMAN assessment.")}</p>;
   }
   if (!data || data.source !== "ai") {
     return (
       <div className="space-y-2">
-        <p className="text-sm text-neutral-600">Cruza la evidencia del CV con los rasgos de HUMAN para detectar congruencias y discrepancias.</p>
+        <p className="text-sm text-neutral-600">{t("Cruza la evidencia del CV con los rasgos de HUMAN para detectar congruencias y discrepancias.", "Cross-reference the CV evidence with the HUMAN traits to detect congruences and discrepancies.")}</p>
         <button className="btn-primary text-sm" disabled={busy || !aiEnabled} onClick={run}>
-          {busy ? "Integrando…" : "Evaluar CV + HUMAN en conjunto"}
+          {busy ? t("Integrando…", "Integrating…") : t("Evaluar CV + HUMAN en conjunto", "Evaluate CV + HUMAN together")}
         </button>
-        {!aiEnabled && <p className="text-xs text-amber-600">Requiere la capa de IA.</p>}
+        {!aiEnabled && <p className="text-xs text-amber-600">{t("Requiere la capa de IA.", "Requires the AI layer.")}</p>}
         {error && <p className="text-xs text-red-600">{error}</p>}
       </div>
     );
@@ -46,19 +48,19 @@ export default function CvIntegration({
       <div className="flex items-center gap-3">
         <Gauge value={data.compatibilidad.score} />
         <div>
-          <div className="text-xs text-neutral-500">Compatibilidad integral (CV + HUMAN)</div>
+          <div className="text-xs text-neutral-500">{t("Compatibilidad integral (CV + HUMAN)", "Overall compatibility (CV + HUMAN)")}</div>
           <p className="text-sm text-neutral-700">{data.compatibilidad.rationale}</p>
         </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <Block title="✓ Congruencias" color="text-S" items={data.congruencias} />
-        <Block title="⚠ Discrepancias" color="text-amber-600" items={data.discrepancias} />
+        <Block title={t("✓ Congruencias", "✓ Congruences")} color="text-S" items={data.congruencias} />
+        <Block title={t("⚠ Discrepancias", "⚠ Discrepancies")} color="text-amber-600" items={data.discrepancias} />
       </div>
 
       {data.explorarEnEntrevista.length > 0 && (
         <div>
-          <div className="label">Explorar en entrevista</div>
+          <div className="label">{t("Explorar en entrevista", "Explore in the interview")}</div>
           <ul className="list-disc pl-5 text-sm text-neutral-700 space-y-0.5">
             {data.explorarEnEntrevista.map((x, i) => <li key={i}>{x}</li>)}
           </ul>
@@ -66,7 +68,7 @@ export default function CvIntegration({
       )}
       {data.summary && <p className="text-sm text-neutral-700 border-t border-line pt-2">{data.summary}</p>}
 
-      <button className="text-xs text-accent" disabled={busy} onClick={run}>{busy ? "Regenerando…" : "↻ Regenerar integración"}</button>
+      <button className="text-xs text-accent" disabled={busy} onClick={run}>{busy ? t("Regenerando…", "Regenerating…") : t("↻ Regenerar integración", "↻ Regenerate integration")}</button>
       {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );

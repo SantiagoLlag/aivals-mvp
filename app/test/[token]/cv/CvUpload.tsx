@@ -1,7 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
+import { useT } from "@/components/LangProvider";
 
 export default function CvUpload({ token, candidateName }: { token: string; candidateName: string }) {
+  const { t } = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [drag, setDrag] = useState(false);
@@ -12,8 +14,8 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
   function choose(f: File | null) {
     setError(null);
     if (!f) return;
-    if (f.type !== "application/pdf") { setError("El CV debe ser un archivo PDF."); return; }
-    if (f.size > 10 * 1024 * 1024) { setError("El archivo es muy grande (máx. 10 MB)."); return; }
+    if (f.type !== "application/pdf") { setError(t("El CV debe ser un archivo PDF.", "The CV must be a PDF file.")); return; }
+    if (f.size > 10 * 1024 * 1024) { setError(t("El archivo es muy grande (máx. 10 MB).", "The file is too large (max. 10 MB).")); return; }
     setFile(f);
   }
 
@@ -26,7 +28,7 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
       const res = await fetch(`/api/test/${token}/cv`, { method: "POST", body: fd });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        throw new Error(j.error || "No se pudo subir el CV. Intenta de nuevo.");
+        throw new Error(j.error || t("No se pudo subir el CV. Intenta de nuevo.", "We couldn't upload the CV. Please try again."));
       }
       setDone(true);
     } catch (e: any) { setError(e.message); setBusy(false); }
@@ -36,8 +38,8 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
     return (
       <div className="card text-center py-12 max-w-lg mx-auto anim-pop">
         <div className="text-4xl mb-3">✓</div>
-        <h2 className="text-xl font-bold">¡Gracias, {candidateName}!</h2>
-        <p className="text-sm text-neutral-600 mt-2">Tu CV se registró correctamente. Puedes cerrar esta ventana o continuar con las demás actividades.</p>
+        <h2 className="text-xl font-bold">{t("¡Gracias, ", "Thank you, ")}{candidateName}!</h2>
+        <p className="text-sm text-neutral-600 mt-2">{t("Tu CV se registró correctamente. Puedes cerrar esta ventana o continuar con las demás actividades.", "Your CV was registered successfully. You can close this window or continue with the other activities.")}</p>
       </div>
     );
   }
@@ -45,9 +47,9 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
   return (
     <div className="max-w-lg mx-auto space-y-5">
       <div>
-        <h2 className="text-xl font-bold">📄 Sube tu CV</h2>
+        <h2 className="text-xl font-bold">📄 {t("Sube tu CV", "Upload your CV")}</h2>
         <p className="text-sm text-neutral-600 mt-1">
-          Adjunta tu currículum en <b>PDF</b>. Lo analizaremos junto con el resto de tu evaluación. Confidencial.
+          {t("Adjunta tu currículum en", "Attach your résumé in")} <b>PDF</b>. {t("Lo analizaremos junto con el resto de tu evaluación. Confidencial.", "We will analyze it along with the rest of your assessment. Confidential.")}
         </p>
       </div>
 
@@ -63,13 +65,13 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
           <div>
             <div className="text-3xl mb-2">📄</div>
             <div className="font-medium text-sm">{file.name}</div>
-            <div className="text-xs text-neutral-500">{(file.size / 1024).toFixed(0)} KB · clic para cambiar</div>
+            <div className="text-xs text-neutral-500">{(file.size / 1024).toFixed(0)} {t("KB · clic para cambiar", "KB · click to change")}</div>
           </div>
         ) : (
           <div>
             <div className="text-3xl mb-2">⬆️</div>
-            <div className="text-sm font-medium">Arrastra tu PDF aquí o haz clic para elegirlo</div>
-            <div className="text-xs text-neutral-500 mt-1">Solo PDF · máx. 10 MB</div>
+            <div className="text-sm font-medium">{t("Arrastra tu PDF aquí o haz clic para elegirlo", "Drag your PDF here or click to choose it")}</div>
+            <div className="text-xs text-neutral-500 mt-1">{t("Solo PDF · máx. 10 MB", "PDF only · max. 10 MB")}</div>
           </div>
         )}
       </div>
@@ -77,9 +79,9 @@ export default function CvUpload({ token, candidateName }: { token: string; cand
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <button className="btn-primary w-full" disabled={!file || busy} onClick={upload}>
-        {busy ? "Subiendo y analizando…" : "Enviar CV"}
+        {busy ? t("Subiendo y analizando…", "Uploading and analyzing…") : t("Enviar CV", "Submit CV")}
       </button>
-      {busy && <p className="text-xs text-neutral-500 text-center">Esto puede tardar unos segundos mientras se procesa.</p>}
+      {busy && <p className="text-xs text-neutral-500 text-center">{t("Esto puede tardar unos segundos mientras se procesa.", "This may take a few seconds while it is processed.")}</p>}
     </div>
   );
 }

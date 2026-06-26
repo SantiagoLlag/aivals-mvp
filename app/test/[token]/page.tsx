@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCandidateByToken } from "@/lib/store";
+import { getServerT } from "@/lib/i18n-server";
 
 export const dynamic = "force-dynamic";
 
 export default async function TestIndex({ params }: { params: { token: string } }) {
+  const { t } = getServerT();
   const found = await getCandidateByToken(params.token);
   if (!found) notFound();
   const { process: proc, candidate } = found;
@@ -24,22 +26,22 @@ export default async function TestIndex({ params }: { params: { token: string } 
   ];
   const total = activities.length;
   const completed = activities.filter((a) => a.done).length;
-  const t = params.token;
+  const tk = params.token;
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-accent900">Hola, {candidate.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-accent900">{t("Hola,", "Hello,")} {candidate.name}</h1>
         <p className="text-base text-neutral-600 mt-2.5 leading-relaxed">
-          Estas actividades nos ayudan a conocerte mejor. <b className="font-medium text-ink">No es un examen</b>:
-          no hay respuestas correctas ni incorrectas, y puedes hacerlas en el orden que prefieras.
+          {t("Estas actividades nos ayudan a conocerte mejor.", "These activities help us get to know you better.")} <b className="font-medium text-ink">{t("No es un examen", "It is not an exam")}</b>:
+          {t(" no hay respuestas correctas ni incorrectas, y puedes hacerlas en el orden que prefieras.", " there are no right or wrong answers, and you can do them in whatever order you prefer.")}
         </p>
       </div>
 
       <div className="card">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">
-            {completed === total ? "¡Completaste todo!" : `${completed} de ${total} actividades completadas`}
+            {completed === total ? t("¡Completaste todo!", "You completed everything!") : t(`${completed} de ${total} actividades completadas`, `${completed} of ${total} activities completed`)}
           </span>
           <span className="font-mono text-[11px] text-neutral-500 tabular-nums">{Math.round((completed / total) * 100)}%</span>
         </div>
@@ -47,17 +49,17 @@ export default async function TestIndex({ params }: { params: { token: string } 
       </div>
 
       <div className="space-y-3">
-        <PruebaCard href={`/test/${t}/human`} done={humanDone} icon="human" title="Prueba HUMAN"
-          desc="Tu estilo de comportamiento, tus motivadores y tu forma de pensar." time="15–25 min" />
-        <PruebaCard href={`/test/${t}/cv`} done={cvDone} icon="cv" title="Sube tu CV"
-          desc="Adjunta tu currículum en PDF. Se considera junto con el resto de tu evaluación." time="1 min" />
+        <PruebaCard href={`/test/${tk}/human`} done={humanDone} icon="human" title={t("Prueba HUMAN", "HUMAN Test")}
+          desc={t("Tu estilo de comportamiento, tus motivadores y tu forma de pensar.", "Your behavioral style, your motivators and the way you think.")} time="15–25 min" />
+        <PruebaCard href={`/test/${tk}/cv`} done={cvDone} icon="cv" title={t("Sube tu CV", "Upload your résumé")}
+          desc={t("Adjunta tu currículum en PDF. Se considera junto con el resto de tu evaluación.", "Attach your résumé as a PDF. It is considered together with the rest of your assessment.")} time="1 min" />
         {acAvailable && (
-          <PruebaCard href={`/test/${t}/ac`} done={acDone} icon="ac" title="Ejercicio de simulación" badge="Assessment Center"
-            desc="Te pones en un puesto real y resuelves su bandeja de entrada y algunas situaciones." time="20–30 min" />
+          <PruebaCard href={`/test/${tk}/ac`} done={acDone} icon="ac" title={t("Ejercicio de simulación", "Simulation exercise")} badge="Assessment Center"
+            desc={t("Te pones en un puesto real y resuelves su bandeja de entrada y algunas situaciones.", "You step into a real role and work through its inbox and a few situations.")} time="20–30 min" />
         )}
         {voiceAvailable && (
-          <PruebaCard href={`/test/${t}/voz`} done={voiceDone} icon="voz" title="Conversación por voz" badge="Role-play"
-            desc="Una llamada en vivo: das retroalimentación a un colaborador. Necesitas micrófono." time="8–12 min" />
+          <PruebaCard href={`/test/${tk}/voz`} done={voiceDone} icon="voz" title={t("Conversación por voz", "Voice conversation")} badge="Role-play"
+            desc={t("Una llamada en vivo: das retroalimentación a un colaborador. Necesitas micrófono.", "A live call: you give feedback to a team member. You need a microphone.")} time="8–12 min" />
         )}
       </div>
 
@@ -66,7 +68,7 @@ export default async function TestIndex({ params }: { params: { token: string } 
           <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-accentSoft text-success">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
           </div>
-          <p className="text-sm text-neutral-700">¡Completaste todo! Gracias. Ya puedes cerrar esta ventana.</p>
+          <p className="text-sm text-neutral-700">{t("¡Completaste todo! Gracias. Ya puedes cerrar esta ventana.", "You completed everything! Thank you. You can now close this window.")}</p>
         </div>
       )}
     </div>
@@ -83,6 +85,7 @@ const ICONS = {
 function PruebaCard({ href, done, icon, title, desc, time, badge }: {
   href: string; done: boolean; icon: keyof typeof ICONS; title: string; desc: string; time: string; badge?: string;
 }) {
+  const { t } = getServerT();
   return (
     <div className={`card flex items-center gap-4 ${done ? "opacity-70" : ""}`}>
       <span className={`flex h-11 w-11 flex-none items-center justify-center rounded-lg ${done ? "bg-paper text-text3" : "bg-accentSoft text-accent"}`}>
@@ -102,10 +105,10 @@ function PruebaCard({ href, done, icon, title, desc, time, badge }: {
       {done ? (
         <span className="flex-none inline-flex items-center gap-1.5 text-sm font-medium text-success whitespace-nowrap">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-          Completada
+          {t("Completada", "Completed")}
         </span>
       ) : (
-        <Link href={href} className="btn-primary text-sm whitespace-nowrap flex-none">Comenzar →</Link>
+        <Link href={href} className="btn-primary text-sm whitespace-nowrap flex-none">{t("Comenzar →", "Start →")}</Link>
       )}
     </div>
   );

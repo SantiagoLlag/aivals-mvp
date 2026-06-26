@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getServerT } from "@/lib/i18n-server";
 
 export const metadata = { title: "Aivals — Conoce el proyecto" };
 
@@ -9,50 +10,46 @@ const PANEL = "/";
 const NUEVO = "/proceso/new";
 
 export default function TourPage() {
+  const { t } = getServerT();
   return (
     <div className="-mt-8">
       {/* HERO */}
       <section className="relative overflow-hidden text-center py-16 px-5">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-accentSoft/60 to-transparent" />
         <div className="mx-auto h-16 w-16 rounded-2xl bg-accent text-white grid place-items-center text-3xl font-bold anim-float shadow-sm">A</div>
-        <h1 className="text-4xl font-bold tracking-tight mt-5 anim-fadeup">Bienvenida a Aivals</h1>
+        <h1 className="text-4xl font-bold tracking-tight mt-5 anim-fadeup">{t("Bienvenida a Aivals", "Welcome to Aivals")}</h1>
         <p className="text-lg text-neutral-600 mt-3 max-w-xl mx-auto anim-fadeup" style={{ animationDelay: "90ms" }}>
-          Evaluación de talento <b>potenciada por IA</b>. La inteligencia artificial <b>amplifica</b> al
-          psicólogo — nunca lo reemplaza.
+          {t("Evaluación de talento", "Talent assessment")} <b>{t("potenciada por IA", "powered by AI")}</b>. {t("La inteligencia artificial", "Artificial intelligence")} <b>{t("amplifica", "amplifies")}</b> {t("al psicólogo — nunca lo reemplaza.", "the psychologist — it never replaces them.")}
         </p>
         <div className="mt-7 flex flex-wrap gap-2 justify-center anim-fadeup" style={{ animationDelay: "180ms" }}>
-          <a href="#explorar" className="btn-primary anim-pulse">Explorar la demo ↓</a>
-          <Link href={PANEL} className="btn-ghost">Ir al panel</Link>
+          <a href="#explorar" className="btn-primary anim-pulse">{t("Explorar la demo ↓", "Explore the demo ↓")}</a>
+          <Link href={PANEL} className="btn-ghost">{t("Ir al panel", "Go to dashboard")}</Link>
         </div>
       </section>
 
       <div className="max-w-3xl mx-auto px-5 pb-16 space-y-14">
         {/* QUÉ ES */}
         <section className="anim-fadeup">
-          <h2 className="text-xl font-bold">¿Qué resuelve?</h2>
+          <h2 className="text-xl font-bold">{t("¿Qué resuelve?", "What does it solve?")}</h2>
           <p className="text-sm text-neutral-700 mt-2 leading-relaxed">
-            Una evaluación de talento tradicional es <b>fragmentada, lenta e inconsistente</b> (cada prueba en
-            su plataforma, horas de integración manual, dos evaluadores con conclusiones distintas). Aivals la
-            convierte en una evaluación <b>profunda, consistente y trazable</b>: el psicólogo crea un proceso, el
-            candidato completa las actividades por un link único, y la IA interpreta todo en un reporte — que el
-            psicólogo revisa y ajusta. <b>La IA es insumo, nunca veredicto.</b>
+            {t("Una evaluación de talento tradicional es", "A traditional talent assessment is")} <b>{t("fragmentada, lenta e inconsistente", "fragmented, slow and inconsistent")}</b> {t("(cada prueba en su plataforma, horas de integración manual, dos evaluadores con conclusiones distintas). Aivals la convierte en una evaluación", "(each test on its own platform, hours of manual integration, two evaluators reaching different conclusions). Aivals turns it into an assessment that is")} <b>{t("profunda, consistente y trazable", "deep, consistent and traceable")}</b>{t(": el psicólogo crea un proceso, el candidato completa las actividades por un link único, y la IA interpreta todo en un reporte — que el psicólogo revisa y ajusta.", ": the psychologist creates a process, the candidate completes the activities through a single link, and the AI interprets everything in a report — which the psychologist reviews and adjusts.")} <b>{t("La IA es insumo, nunca veredicto.", "AI is input, never verdict.")}</b>
           </p>
         </section>
 
         {/* LAS 4 VERTICALES */}
         <section>
-          <h2 className="text-xl font-bold anim-fadeup">Cuatro formas de evaluar, en un solo lugar</h2>
+          <h2 className="text-xl font-bold anim-fadeup">{t("Cuatro formas de evaluar, en un solo lugar", "Four ways to assess, all in one place")}</h2>
           <div className="grid sm:grid-cols-2 gap-3 mt-4">
             {[
-              { e: "🧠", t: "Prueba HUMAN", d: "Test psicométrico propietario: comportamiento (DISC), motivadores (Valores) y estilo de pensamiento. Motor determinista, 100% exacto." },
-              { e: "📥", t: "Assessment Center", d: "Bandeja de entrada simulada + situaciones del puesto. Mide conducta real con el método GENTZA (ORCSE, escala 1–5)." },
-              { e: "📄", t: "CV / Evidencias", d: "Evalúa el CV contra el puesto y lo cruza con HUMAN (triangulación rasgo ↔ evidencia)." },
-              { e: "📞", t: "Role-play por voz", d: "Una llamada en vivo con un colaborador de IA; se califica la conducta conversacional. Hecho con ElevenLabs." },
+              { e: "🧠", t: "Prueba HUMAN", tEn: "HUMAN Test", d: "Test psicométrico propietario: comportamiento (DISC), motivadores (Valores) y estilo de pensamiento. Motor determinista, 100% exacto.", dEn: "Proprietary psychometric test: behavior (DISC), motivators (Values) and thinking style. Deterministic engine, 100% accurate." },
+              { e: "📥", t: "Assessment Center", tEn: "Assessment Center", d: "Bandeja de entrada simulada + situaciones del puesto. Mide conducta real con el método GENTZA (ORCSE, escala 1–5).", dEn: "Simulated inbox + role situations. Measures real behavior with the GENTZA method (ORCSE, 1–5 scale)." },
+              { e: "📄", t: "CV / Evidencias", tEn: "Résumé / Evidence", d: "Evalúa el CV contra el puesto y lo cruza con HUMAN (triangulación rasgo ↔ evidencia).", dEn: "Evaluates the résumé against the role and cross-references it with HUMAN (trait ↔ evidence triangulation)." },
+              { e: "📞", t: "Role-play por voz", tEn: "Voice role-play", d: "Una llamada en vivo con un colaborador de IA; se califica la conducta conversacional. Hecho con ElevenLabs.", dEn: "A live call with an AI team member; conversational behavior is scored. Built with ElevenLabs." },
             ].map((v, i) => (
               <div key={v.t} className="card anim-pop" style={{ animationDelay: `${i * 90}ms` }}>
                 <div className="text-3xl">{v.e}</div>
-                <div className="font-semibold mt-1">{v.t}</div>
-                <p className="text-sm text-neutral-600 mt-1 leading-relaxed">{v.d}</p>
+                <div className="font-semibold mt-1">{t(v.t, v.tEn)}</div>
+                <p className="text-sm text-neutral-600 mt-1 leading-relaxed">{t(v.d, v.dEn)}</p>
               </div>
             ))}
           </div>
@@ -60,18 +57,18 @@ export default function TourPage() {
 
         {/* CÓMO FUNCIONA */}
         <section>
-          <h2 className="text-xl font-bold anim-fadeup">Cómo funciona el flujo</h2>
+          <h2 className="text-xl font-bold anim-fadeup">{t("Cómo funciona el flujo", "How the flow works")}</h2>
           <div className="mt-4 space-y-3">
             {[
-              { n: "1", t: "El psicólogo crea un proceso", d: "Pega la descripción del puesto y la empresa. La IA (Evaluador UNO) genera el perfil de referencia ideal — el ancla de compatibilidad." },
-              { n: "2", t: "El candidato entra por un link único", d: "Da su consentimiento y completa las actividades, solo y a su ritmo, sin un evaluador presente." },
-              { n: "3", t: "La IA interpreta y triangula", d: "Calcula puntajes exactos, redacta la interpretación y cruza las fuentes. El psicólogo recibe un reporte editable y decide." },
+              { n: "1", t: "El psicólogo crea un proceso", tEn: "The psychologist creates a process", d: "Pega la descripción del puesto y la empresa. La IA (Evaluador UNO) genera el perfil de referencia ideal — el ancla de compatibilidad.", dEn: "Paste the job description and the company. The AI (Evaluator ONE) generates the ideal reference profile — the compatibility anchor." },
+              { n: "2", t: "El candidato entra por un link único", tEn: "The candidate enters through a single link", d: "Da su consentimiento y completa las actividades, solo y a su ritmo, sin un evaluador presente.", dEn: "They give their consent and complete the activities, alone and at their own pace, with no evaluator present." },
+              { n: "3", t: "La IA interpreta y triangula", tEn: "The AI interprets and triangulates", d: "Calcula puntajes exactos, redacta la interpretación y cruza las fuentes. El psicólogo recibe un reporte editable y decide.", dEn: "It computes exact scores, drafts the interpretation and cross-references the sources. The psychologist receives an editable report and decides." },
             ].map((s, i) => (
               <div key={s.n} className="flex gap-4 items-start card anim-fadeup" style={{ animationDelay: `${i * 90}ms` }}>
                 <div className="flex-none h-8 w-8 rounded-full bg-accent text-white grid place-items-center font-bold text-sm">{s.n}</div>
                 <div>
-                  <div className="font-semibold text-sm">{s.t}</div>
-                  <p className="text-sm text-neutral-600 mt-0.5 leading-relaxed">{s.d}</p>
+                  <div className="font-semibold text-sm">{t(s.t, s.tEn)}</div>
+                  <p className="text-sm text-neutral-600 mt-0.5 leading-relaxed">{t(s.d, s.dEn)}</p>
                 </div>
               </div>
             ))}
@@ -80,22 +77,22 @@ export default function TourPage() {
 
         {/* EXPLORAR */}
         <section id="explorar" className="scroll-mt-4">
-          <h2 className="text-xl font-bold anim-fadeup">Explóralo tú misma</h2>
-          <p className="text-sm text-neutral-600 mt-1 anim-fadeup">Todo lo de abajo es la demo real, en vivo. Empieza por el reporte para ver el resultado final.</p>
+          <h2 className="text-xl font-bold anim-fadeup">{t("Explóralo tú misma", "Explore it yourself")}</h2>
+          <p className="text-sm text-neutral-600 mt-1 anim-fadeup">{t("Todo lo de abajo es la demo real, en vivo. Empieza por el reporte para ver el resultado final.", "Everything below is the real, live demo. Start with the report to see the final result.")}</p>
           <div className="grid sm:grid-cols-2 gap-3 mt-4">
-            <Explore href={REPORTE_COMPLETO} emoji="📊" title="Reporte completo — tour guiado" badge="Empieza aquí"
-              desc="Un candidato evaluado con las 4 verticales. Se abre con un recorrido paso a paso que explica, sección por sección, cómo se generó cada parte y cómo la IA la analiza." primary />
-            <Explore href={EXPERIENCIA_CANDIDATO} emoji="🎤" title="Vívelo como candidato"
-              desc="Abre el link de un candidato y prueba las actividades (incluida la llamada por voz — necesita micrófono). Así lo experimenta el evaluado." />
-            <Explore href={PANEL} emoji="🧑‍⚕️" title="El panel del psicólogo"
-              desc="Donde se crean los procesos, se agregan candidatos y se generan los reportes." />
-            <Explore href={NUEVO} emoji="✨" title="Crea un proceso"
-              desc="Pega un puesto y una empresa y mira cómo la IA arma el perfil de referencia y los ejercicios." />
+            <Explore href={REPORTE_COMPLETO} emoji="📊" title={t("Reporte completo — tour guiado", "Full report — guided tour")} badge={t("Empieza aquí", "Start here")}
+              desc={t("Un candidato evaluado con las 4 verticales. Se abre con un recorrido paso a paso que explica, sección por sección, cómo se generó cada parte y cómo la IA la analiza.", "A candidate assessed with all 4 verticals. It opens with a step-by-step walkthrough that explains, section by section, how each part was generated and how the AI analyzes it.")} primary />
+            <Explore href={EXPERIENCIA_CANDIDATO} emoji="🎤" title={t("Vívelo como candidato", "Experience it as a candidate")}
+              desc={t("Abre el link de un candidato y prueba las actividades (incluida la llamada por voz — necesita micrófono). Así lo experimenta el evaluado.", "Open a candidate's link and try the activities (including the voice call — needs a microphone). This is how the assessed person experiences it.")} />
+            <Explore href={PANEL} emoji="🧑‍⚕️" title={t("El panel del psicólogo", "The psychologist's dashboard")}
+              desc={t("Donde se crean los procesos, se agregan candidatos y se generan los reportes.", "Where processes are created, candidates are added and reports are generated.")} />
+            <Explore href={NUEVO} emoji="✨" title={t("Crea un proceso", "Create a process")}
+              desc={t("Pega un puesto y una empresa y mira cómo la IA arma el perfil de referencia y los ejercicios.", "Paste a role and a company and watch the AI build the reference profile and the exercises.")} />
           </div>
         </section>
 
         <p className="text-center text-xs text-neutral-400 anim-fadeup">
-          MVP en vivo · Next.js + Supabase + Claude + ElevenLabs · evaluación human-in-the-loop
+          {t("MVP en vivo · Next.js + Supabase + Claude + ElevenLabs · evaluación human-in-the-loop", "Live MVP · Next.js + Supabase + Claude + ElevenLabs · human-in-the-loop assessment")}
         </p>
       </div>
     </div>

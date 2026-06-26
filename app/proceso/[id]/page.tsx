@@ -4,6 +4,7 @@ import { getProcess } from "@/lib/store";
 import { aiEnabled } from "@/lib/ai";
 import { voiceEnabled } from "@/lib/voice/elevenlabs";
 import { FLAGS } from "@/lib/flags";
+import { getServerT } from "@/lib/i18n-server";
 import ProcessClient from "./ProcessClient";
 import ReferencePanel from "./ReferencePanel";
 import AcBlueprintPanel from "./AcBlueprintPanel";
@@ -15,14 +16,18 @@ export default async function ProcessPage({ params }: { params: { id: string } }
   const proc = await getProcess(params.id);
   if (!proc) notFound();
   const ref = proc.reference;
+  const { t } = getServerT();
 
   return (
     <div className="space-y-6">
-      <Link href="/" className="text-sm text-accent">← Procesos</Link>
+      <Link href="/" className="text-sm text-accent">{t("← Procesos", "← Processes")}</Link>
       <div>
         <h1 className="text-2xl font-bold tracking-tight">{proc.name}</h1>
         <p className="text-sm text-neutral-500 mt-1">
-          Creado el {new Date(proc.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })}
+          {t(
+            `Creado el ${new Date(proc.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })}`,
+            `Created on ${new Date(proc.createdAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}`
+          )}
         </p>
       </div>
 
