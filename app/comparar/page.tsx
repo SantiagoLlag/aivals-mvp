@@ -4,7 +4,10 @@ import { getServerT } from "@/lib/i18n-server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Aivals — Comparar candidatos" };
+export function generateMetadata() {
+  const { t } = getServerT();
+  return { title: t("Aivals — Comparar candidatos", "Aivals — Compare candidates") };
+}
 
 export default async function CompararPicker() {
   const { t } = getServerT();

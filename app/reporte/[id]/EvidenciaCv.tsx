@@ -3,6 +3,15 @@ import { cvMetrics } from "@/lib/insights/cv";
 import type { Candidate } from "@/lib/types";
 import { getServerT } from "@/lib/i18n-server";
 
+// Etiquetas EN de las secciones del CV (la detección es sobre CVs en español; la key es estable).
+const SECTION_EN: Record<string, string> = {
+  experiencia: "Experience",
+  educacion: "Education",
+  certificaciones: "Certifications",
+  idiomas: "Languages",
+  contacto: "Contact",
+};
+
 export default function EvidenciaCv({ candidate }: { candidate: Candidate }) {
   const { t } = getServerT();
   const cv = candidate.cv;
@@ -20,8 +29,8 @@ export default function EvidenciaCv({ candidate }: { candidate: Candidate }) {
         <div className="label mb-1.5">{t("Secciones detectadas (por patrón)", "Detected sections (by pattern)")}</div>
         <div className="flex flex-wrap gap-2 text-xs">
           {m.secciones.map((s) => (
-            <span key={s.label} className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 ${s.presente ? "border-line bg-white text-ink" : "border-dashed border-line2 bg-paper text-text3"}`}>
-              {s.presente ? "✓" : "—"} {s.label}
+            <span key={s.key} className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 ${s.presente ? "border-line bg-white text-ink" : "border-dashed border-line2 bg-paper text-text3"}`}>
+              {s.presente ? "✓" : "—"} {t(s.label, SECTION_EN[s.key] ?? s.label)}
             </span>
           ))}
         </div>

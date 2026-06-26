@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getServerT } from "@/lib/i18n-server";
 
-export const metadata = { title: "Aivals — Conoce el proyecto" };
+export function generateMetadata() {
+  const { t } = getServerT();
+  return { title: t("Aivals — Conoce el proyecto", "Aivals — Discover the project") };
+}
 
 // Enlaces de exploración (demo en vivo)
 const REPORTE_COMPLETO = "/reporte/eb668bdf-7c31-41a2-9af4-3dbdf900438f?tour=1"; // Carlos Silva: HUMAN + CV + AC + voz (tour guiado)
