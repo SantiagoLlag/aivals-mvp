@@ -9,6 +9,7 @@ import type { HumanInput, HumanResult } from "../human/types";
 import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
 import type { VoiceBlueprint, VoiceResult } from "../voice/types";
+import type { BigFiveInput, BigFiveResult } from "../bigfive/types";
 
 let _sb: SupabaseClient | null = null;
 function sb(): SupabaseClient {
@@ -43,6 +44,7 @@ function toCandidate(r: any): Candidate {
     acResult: r.ac_result ?? undefined,
     cv: r.cv ?? undefined,
     voiceResult: r.voice_result ?? undefined,
+    bigFive: r.bigfive ?? undefined,
     reopened: r.reopened ?? undefined,
   };
 }
@@ -56,6 +58,7 @@ function toProcess(r: any, candidates: Candidate[]): Process {
     reference: r.reference ?? undefined,
     acBlueprint: r.ac_blueprint ?? undefined,
     voiceBlueprint: r.voice_blueprint ?? undefined,
+    tests: r.tests ?? undefined,
     candidates,
   };
 }
@@ -186,5 +189,16 @@ export async function saveVoiceBlueprint(processId: string, blueprint: VoiceBlue
 
 export async function saveVoiceResult(candidateId: string, result: VoiceResult) {
   const { error } = await sb().from("candidates").update({ voice_result: result }).eq("id", candidateId);
+  if (error) throw error;
+}
+
+export async function saveBigFive(candidateId: string, input: BigFiveInput, result: BigFiveResult) {
+  const bigfive = { input, result, completedAt: new Date().toISOString() };
+  const { error } = await sb().from("candidates").update({ bigfive }).eq("id", candidateId);
+  if (error) throw error;
+}
+
+export async function saveProcessTests(processId: string, tests: Record<string, boolean>) {
+  const { error } = await sb().from("processes").update({ tests }).eq("id", processId);
   if (error) throw error;
 }

@@ -29,3 +29,5 @@ export const saveAcResult = impl.saveAcResult;
 export const saveCv = impl.saveCv;
 export const saveVoiceBlueprint = impl.saveVoiceBlueprint;
 export const saveVoiceResult = impl.saveVoiceResult;
+export const saveBigFive = impl.saveBigFive;
+export const saveProcessTests = impl.saveProcessTests;

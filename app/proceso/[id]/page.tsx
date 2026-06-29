@@ -5,10 +5,12 @@ import { aiEnabled } from "@/lib/ai";
 import { voiceEnabled } from "@/lib/voice/elevenlabs";
 import { FLAGS } from "@/lib/flags";
 import { getServerT } from "@/lib/i18n-server";
+import { TEST_CATALOG, testSelected, testReady } from "@/lib/tests/catalog";
 import ProcessClient from "./ProcessClient";
 import ReferencePanel from "./ReferencePanel";
 import AcBlueprintPanel from "./AcBlueprintPanel";
 import VoiceBlueprintPanel from "./VoiceBlueprintPanel";
+import TestsPanel from "./TestsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +32,16 @@ export default async function ProcessPage({ params }: { params: { id: string } }
           )}
         </p>
       </div>
+
+      {FLAGS.bigFive && (
+        <TestsPanel
+          processId={proc.id}
+          tests={TEST_CATALOG.map((m) => ({
+            key: m.key, nameEs: m.nameEs, nameEn: m.nameEn, descEs: m.descEs, descEn: m.descEn,
+            selected: testSelected(proc, m.key), ready: testReady(proc, m.key), blueprint: m.blueprint, newish: m.newish,
+          }))}
+        />
+      )}
 
       {ref?.source === "ai" && (
         <ReferencePanel processId={proc.id} reference={ref} aiEnabled={aiEnabled()} />

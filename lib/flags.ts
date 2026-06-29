@@ -23,6 +23,10 @@ export const FLAGS = {
   // i18n: toggle ES/EN en toda la app (interfaz). Apagar con FF_I18N=0 → siempre español,
   // sin toggle (idéntico a antes de la feature).
   i18n: read("FF_I18N", true),
+  // Big Five (IPIP-50) + sección "Batería de tests" (el aplicador elige qué aplicar).
+  // Apagar con FF_BIG_FIVE=0 → desaparece el Big Five y el panel de batería; el hub
+  // del candidato vuelve a su lógica original.
+  bigFive: read("FF_BIG_FIVE", true),
 };
 
 export type FlagName = keyof typeof FLAGS;

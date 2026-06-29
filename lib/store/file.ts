@@ -9,6 +9,7 @@ import type { HumanInput, HumanResult } from "../human/types";
 import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
 import type { VoiceBlueprint, VoiceResult } from "../voice/types";
+import type { BigFiveInput, BigFiveResult } from "../bigfive/types";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
@@ -195,4 +196,21 @@ export async function saveVoiceResult(candidateId: string, result: VoiceResult) 
     if (c) { c.voiceResult = result; await writeDB(db); return; }
   }
   throw new Error("Candidato no encontrado");
+}
+
+export async function saveBigFive(candidateId: string, input: BigFiveInput, result: BigFiveResult) {
+  const db = await readDB();
+  for (const p of db.processes) {
+    const c = p.candidates.find((c) => c.id === candidateId);
+    if (c) { c.bigFive = { input, result, completedAt: new Date().toISOString() }; await writeDB(db); return; }
+  }
+  throw new Error("Candidato no encontrado");
+}
+
+export async function saveProcessTests(processId: string, tests: Record<string, boolean>) {
+  const db = await readDB();
+  const p = db.processes.find((p) => p.id === processId);
+  if (!p) throw new Error("Proceso no encontrado");
+  p.tests = tests;
+  await writeDB(db);
 }

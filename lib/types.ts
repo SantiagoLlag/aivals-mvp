@@ -3,6 +3,7 @@ import type { HumanInput, HumanResult, Factor } from "./human/types";
 import type { AcBlueprint, AcResult } from "./ac/types";
 import type { CvData } from "./cv/types";
 import type { VoiceBlueprint, VoiceResult } from "./voice/types";
+import type { BigFiveCapture } from "./bigfive/types";
 
 export interface ReferenceProfile {
   source: "ai" | "none";
@@ -38,6 +39,7 @@ export interface Candidate {
   acResult?: AcResult;
   cv?: CvData;
   voiceResult?: VoiceResult;
+  bigFive?: BigFiveCapture;
   // Snapshot de los datos previos cuando se reabre una vertical, para comparar al rehacer
   // y solo recalcular lo que cambió (de momento solo HUMAN).
   reopened?: ReopenSnapshot;
@@ -56,6 +58,8 @@ export interface Process {
   reference?: ReferenceProfile;
   acBlueprint?: AcBlueprint;
   voiceBlueprint?: VoiceBlueprint;
+  // Batería: qué tests aplica este proceso (key del catálogo -> on/off). Ausente = defaults.
+  tests?: Record<string, boolean>;
   candidates: Candidate[];
 }
 

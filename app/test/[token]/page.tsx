@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCandidateByToken } from "@/lib/store";
 import { getServerT } from "@/lib/i18n-server";
+import { FLAGS } from "@/lib/flags";
+import { testActive } from "@/lib/tests/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -11,21 +13,32 @@ export default async function TestIndex({ params }: { params: { token: string } 
   if (!found) notFound();
   const { process: proc, candidate } = found;
 
+  // Con la feature de batería on, la disponibilidad la decide el catálogo (lo que eligió el
+  // aplicador + readiness). Con la feature off, se preserva la lógica original (sin Big Five).
+  const ff = FLAGS.bigFive;
+  const humanOn = ff ? testActive(proc, "human") : true;
   const humanDone = !!candidate.result;
-  const acAvailable = !!proc.acBlueprint?.approved && proc.acBlueprint.charola.items.length > 0;
-  const acDone = !!candidate.acResult;
+  const bigfiveOn = ff && testActive(proc, "bigfive");
+  const bigfiveDone = !!candidate.bigFive?.result;
+  const cvOn = ff ? testActive(proc, "cv") : true;
   const cvDone = !!candidate.cv;
-  const voiceAvailable = !!proc.voiceBlueprint?.approved;
+  const acAvailable = ff ? testActive(proc, "ac") : (!!proc.acBlueprint?.approved && proc.acBlueprint.charola.items.length > 0);
+  const acDone = !!candidate.acResult;
+  const voiceAvailable = ff ? testActive(proc, "voz") : !!proc.voiceBlueprint?.approved;
   const voiceDone = !!candidate.voiceResult;
-  const allDone = humanDone && cvDone && (!acAvailable || acDone) && (!voiceAvailable || voiceDone);
+
   // Avance global sobre las actividades realmente activas para este candidato.
   const activities = [
-    { done: humanDone }, { done: cvDone },
-    ...(acAvailable ? [{ done: acDone }] : []),
-    ...(voiceAvailable ? [{ done: voiceDone }] : []),
-  ];
+    { on: humanOn, done: humanDone },
+    { on: bigfiveOn, done: bigfiveDone },
+    { on: cvOn, done: cvDone },
+    { on: acAvailable, done: acDone },
+    { on: voiceAvailable, done: voiceDone },
+  ].filter((a) => a.on);
   const total = activities.length;
   const completed = activities.filter((a) => a.done).length;
+  const allDone = total > 0 && completed === total;
+  const pct = total ? Math.round((completed / total) * 100) : 0;
   const tk = params.token;
 
   return (
@@ -43,16 +56,24 @@ export default async function TestIndex({ params }: { params: { token: string } 
           <span className="text-sm font-medium">
             {completed === total ? t("¡Completaste todo!", "You completed everything!") : t(`${completed} de ${total} actividades completadas`, `${completed} of ${total} activities completed`)}
           </span>
-          <span className="font-mono text-[11px] text-neutral-500 tabular-nums">{Math.round((completed / total) * 100)}%</span>
+          <span className="font-mono text-[11px] text-neutral-500 tabular-nums">{pct}%</span>
         </div>
-        <div className="progress"><span style={{ width: `${(completed / total) * 100}%` }} /></div>
+        <div className="progress"><span style={{ width: `${pct}%` }} /></div>
       </div>
 
       <div className="space-y-3">
-        <PruebaCard href={`/test/${tk}/human`} done={humanDone} icon="human" title={t("Prueba HUMAN", "HUMAN Test")}
-          desc={t("Tu estilo de comportamiento, tus motivadores y tu forma de pensar.", "Your behavioral style, your motivators and the way you think.")} time="15–25 min" />
-        <PruebaCard href={`/test/${tk}/cv`} done={cvDone} icon="cv" title={t("Sube tu CV", "Upload your résumé")}
-          desc={t("Adjunta tu currículum en PDF. Se considera junto con el resto de tu evaluación.", "Attach your résumé as a PDF. It is considered together with the rest of your assessment.")} time="1 min" />
+        {humanOn && (
+          <PruebaCard href={`/test/${tk}/human`} done={humanDone} icon="human" title={t("Prueba HUMAN", "HUMAN Test")}
+            desc={t("Tu estilo de comportamiento, tus motivadores y tu forma de pensar.", "Your behavioral style, your motivators and the way you think.")} time="15–25 min" />
+        )}
+        {bigfiveOn && (
+          <PruebaCard href={`/test/${tk}/bigfive`} done={bigfiveDone} icon="bigfive" title={t("Cuestionario Big Five", "Big Five questionnaire")} badge={t("Personalidad", "Personality")}
+            desc={t("50 frases sobre cómo eres. Para cada una indicas qué tan de acuerdo estás.", "50 statements about how you are. For each, you say how much you agree.")} time="5–8 min" />
+        )}
+        {cvOn && (
+          <PruebaCard href={`/test/${tk}/cv`} done={cvDone} icon="cv" title={t("Sube tu CV", "Upload your résumé")}
+            desc={t("Adjunta tu currículum en PDF. Se considera junto con el resto de tu evaluación.", "Attach your résumé as a PDF. It is considered together with the rest of your assessment.")} time="1 min" />
+        )}
         {acAvailable && (
           <PruebaCard href={`/test/${tk}/ac`} done={acDone} icon="ac" title={t("Ejercicio de simulación", "Simulation exercise")} badge="Assessment Center"
             desc={t("Te pones en un puesto real y resuelves su bandeja de entrada y algunas situaciones.", "You step into a real role and work through its inbox and a few situations.")} time="20–30 min" />
@@ -77,6 +98,7 @@ export default async function TestIndex({ params }: { params: { token: string } 
 
 const ICONS = {
   human: <><path d="M12 3v4M12 17v4M5 12H1M23 12h-4" /><circle cx="12" cy="12" r="3.5" /></>,
+  bigfive: <><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3" /><path d="M2 14h4M10 8h4M18 16h4" /></>,
   cv: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></>,
   ac: <><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.4 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.4-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.8 1.5Z" /></>,
   voz: <><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></>,

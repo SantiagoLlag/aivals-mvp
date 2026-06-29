@@ -5,6 +5,7 @@ import type { HumanInput, HumanResult } from "../human/types";
 import type { AcBlueprint, AcResult } from "../ac/types";
 import type { CvData } from "../cv/types";
 import type { VoiceBlueprint, VoiceResult } from "../voice/types";
+import type { BigFiveInput, BigFiveResult } from "../bigfive/types";
 
 export type ReopenVertical = "human" | "cv" | "ac" | "voz";
 
@@ -33,4 +34,7 @@ export interface StoreApi {
   saveCv(candidateId: string, cv: CvData): Promise<void>;
   saveVoiceBlueprint(processId: string, blueprint: VoiceBlueprint): Promise<void>;
   saveVoiceResult(candidateId: string, result: VoiceResult): Promise<void>;
+  saveBigFive(candidateId: string, input: BigFiveInput, result: BigFiveResult): Promise<void>;
+  // Guarda qué tests aplica el proceso (mapa key del catálogo -> on/off).
+  saveProcessTests(processId: string, tests: Record<string, boolean>): Promise<void>;
 }

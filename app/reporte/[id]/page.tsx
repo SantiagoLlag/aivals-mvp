@@ -18,6 +18,8 @@ import EvidenciaCv from "./EvidenciaCv";
 import EvidenciaVoz from "./EvidenciaVoz";
 import { EvidenceDivider } from "./EvidenceBand";
 import { getServerT } from "@/lib/i18n-server";
+import { BIGFIVE_FACTORS, BIGFIVE_FACTOR_LABELS } from "@/lib/bigfive/types";
+import { BIGFIVE_TOTAL_ITEMS } from "@/lib/bigfive/motor";
 
 // Semáforo disciplinado: colores semánticos desaturados, idénticos a los del comparador.
 const SEM: Record<string, string> = { verde: "bg-success", amarillo: "bg-warning", rojo: "bg-danger" };
@@ -51,12 +53,13 @@ export const dynamic = "force-dynamic";
 const VAL_NAME: Record<string, string> = { T: "Teórico", E: "Económico", A: "Estético", S: "Social", P: "Político", R: "Regulatorio" };
 
 export default async function ReportPage({ params, searchParams }: { params: { id: string }; searchParams: { tour?: string } }) {
-  const { t } = getServerT();
+  const { t, lang } = getServerT();
   const found = await getCandidate(params.id);
   if (!found) notFound();
   const { process: proc, candidate } = found;
   const r = candidate.result;
-  const hasAny = !!(r || candidate.cv || candidate.acResult || candidate.voiceResult);
+  const bigFive = FLAGS.bigFive ? candidate.bigFive : undefined;
+  const hasAny = !!(r || bigFive?.result || candidate.cv || candidate.acResult || candidate.voiceResult);
 
   // Navegación entre candidatos del mismo proceso (C16).
   const sibs = proc.candidates;
@@ -91,6 +94,7 @@ export default async function ReportPage({ params, searchParams }: { params: { i
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <Chip on={!!r} label="HUMAN" />
+          {FLAGS.bigFive && <Chip on={!!bigFive?.result} label="Big Five" />}
           <Chip on={!!candidate.cv} label="CV" />
           <Chip on={!!candidate.acResult} label="AC" />
           <Chip on={!!candidate.voiceResult} label={t("Voz", "Voice")} />
@@ -170,6 +174,31 @@ export default async function ReportPage({ params, searchParams }: { params: { i
         )}
       </section>
       </>
+      )}
+
+      {/* Personalidad — Big Five (IPIP-50). Determinista; sin interpretación de IA por ahora. */}
+      {bigFive?.result && (
+        <section className="card space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">{t("Personalidad — Big Five", "Personality — Big Five")} <span className="text-xs font-normal text-neutral-400">· IPIP-50 · {t("autorreporte", "self-report")}</span></h2>
+            <span className="text-[11px] text-neutral-400 font-mono tabular-nums">{bigFive.result.answered}/{BIGFIVE_TOTAL_ITEMS} {t("ítems", "items")}</span>
+          </div>
+          <div className="space-y-2">
+            {BIGFIVE_FACTORS.map((f) => {
+              const s = bigFive.result.scores[f];
+              return (
+                <div key={f} className="flex items-center gap-3">
+                  <span className="w-44 text-sm flex-none">{lang === "en" ? BIGFIVE_FACTOR_LABELS[f].en : BIGFIVE_FACTOR_LABELS[f].es}</span>
+                  <div className="flex-1 progress"><span style={{ width: `${s}%` }} /></div>
+                  <span className="w-10 text-right font-mono text-xs tabular-nums">{s}</span>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-[11px] text-neutral-400">
+            {t("Puntaje 0–100 por rasgo (media de 10 ítems, con reverse-key). Es un dato determinista, no un veredicto: interprétalo con tu criterio y sin baremo mexicano formal.", "0–100 score per trait (mean of 10 items, reverse-keyed). It is a deterministic datum, not a verdict: interpret it with your judgment and without a formal Mexican norm.")}
+          </p>
+        </section>
       )}
 
       {/* Assessment Center */}

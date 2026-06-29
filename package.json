@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test:motor": "tsx scripts/validate-motor.ts",
+    "test:bigfive": "tsx scripts/check-bigfive.ts",
     "migrate:supabase": "tsx scripts/migrate-to-supabase.ts",
     "backfill:refs": "tsx scripts/backfill-references.ts",
     "backfill:voice": "tsx scripts/backfill-voice.ts"
