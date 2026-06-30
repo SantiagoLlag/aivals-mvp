@@ -15,6 +15,17 @@ export interface SjtScenario {
   competencia: string;       // competency key objetivo
 }
 
+// Personalización opcional del ejercicio elegida por el psicólogo (5 opciones + nota libre).
+// Cada campo guarda el "value" de una opción del catálogo en lib/ac/customize.ts.
+export interface AcCustomization {
+  nivel?: string;
+  enfoque?: string;
+  sector?: string;
+  dificultad?: string;
+  tono?: string;
+  notas?: string; // texto libre, máx 300 caracteres
+}
+
 // Generado por la IA (Evaluador estilo UNO) y curado por el psicólogo. Vive en el proceso.
 export interface AcBlueprint {
   generatedBy: "ai" | "template";
@@ -25,6 +36,7 @@ export interface AcBlueprint {
   competencyKeys: string[];        // competencias evaluadas
   approved: boolean;               // el psicólogo lo aprobó antes de activar el link
   gentzaFiel: boolean;             // false: rúbrica en formato GENTZA, contenido provisional
+  customization?: AcCustomization; // si el psicólogo personalizó la generación
 }
 
 // ---- Captura (verbatim del candidato), SIN calificar ----

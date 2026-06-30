@@ -3,7 +3,8 @@
 import { randomUUID } from "crypto";
 import { ask, aiEnabled } from "@/lib/ai";
 import { COMPETENCIES, charolaCompetencies, sjtCompetencies, competencyByKey } from "./rubric";
-import type { AcBlueprint, AcCapture, AcScoring } from "./types";
+import { customizationToPrompt, hasCustomization } from "./customize";
+import type { AcBlueprint, AcCapture, AcScoring, AcCustomization } from "./types";
 
 function extractJson(s: string): any | null {
   const a = s.indexOf("{");
@@ -36,17 +37,19 @@ Responde SOLO con JSON válido (sin fences), con esta forma EXACTA:
 export async function generateAcBlueprint(
   puestoText: string,
   empresaText: string,
-  referenceRaw?: string
+  referenceRaw?: string,
+  customization?: AcCustomization
 ): Promise<AcBlueprint> {
   const competencyKeys = COMPETENCIES.map((c) => c.key);
   const now = new Date().toISOString();
+  const custom = hasCustomization(customization) ? customization : undefined;
   if (!aiEnabled()) {
     return {
       generatedBy: "template", generatedAt: now,
       contextoPuesto: "Asumes un rol en la organización descrita. Resuelve la bandeja y los escenarios.",
       charola: { instrucciones: "Para cada asunto, indica tu ACCIÓN y un rationale breve (2-4 líneas).", items: [] },
       sjt: { instrucciones: "Responde brevemente cada escenario.", escenarios: [] },
-      competencyKeys, approved: false, gentzaFiel: false,
+      competencyKeys, approved: false, gentzaFiel: false, customization: custom,
     };
   }
   const compList = (list = COMPETENCIES) =>
@@ -57,6 +60,7 @@ export async function generateAcBlueprint(
     referenceRaw ? `PERFIL DE REFERENCIA (Evaluador UNO):\n${referenceRaw}` : "",
     `COMPETENCIAS DE LA CHAROLA (usa estas keys):\n${compList(charolaCompetencies())}`,
     `COMPETENCIAS DEL SJT (usa estas keys):\n${compList(sjtCompetencies())}`,
+    custom ? customizationToPrompt(custom) : "",
   ].filter(Boolean).join("\n\n");
   try {
     const raw = await ask(GEN_SYSTEM, user, 8000);
@@ -79,14 +83,14 @@ export async function generateAcBlueprint(
           competencia: es.competencia ?? "",
         })),
       },
-      competencyKeys, approved: false, gentzaFiel: false,
+      competencyKeys, approved: false, gentzaFiel: false, customization: custom,
     };
   } catch (e) {
     console.error("[AC] generateAcBlueprint:", e);
     return {
       generatedBy: "template", generatedAt: now,
       contextoPuesto: "", charola: { instrucciones: "", items: [] },
-      sjt: { instrucciones: "", escenarios: [] }, competencyKeys, approved: false, gentzaFiel: false,
+      sjt: { instrucciones: "", escenarios: [] }, competencyKeys, approved: false, gentzaFiel: false, customization: custom,
     };
   }
 }

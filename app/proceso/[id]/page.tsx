@@ -47,7 +47,7 @@ export default async function ProcessPage({ params }: { params: { id: string } }
         <ReferencePanel processId={proc.id} reference={ref} aiEnabled={aiEnabled()} />
       )}
 
-      <AcBlueprintPanel processId={proc.id} blueprint={proc.acBlueprint ?? null} aiEnabled={aiEnabled()} />
+      <AcBlueprintPanel processId={proc.id} blueprint={proc.acBlueprint ?? null} aiEnabled={aiEnabled()} customize={FLAGS.acCustomize} />
 
       <VoiceBlueprintPanel processId={proc.id} blueprint={proc.voiceBlueprint ?? null} aiEnabled={aiEnabled()} voiceConfigured={voiceEnabled()} />
 

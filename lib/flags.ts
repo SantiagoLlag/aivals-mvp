@@ -27,6 +27,9 @@ export const FLAGS = {
   // Apagar con FF_BIG_FIVE=0 → desaparece el Big Five y el panel de batería; el hub
   // del candidato vuelve a su lógica original.
   bigFive: read("FF_BIG_FIVE", true),
+  // AC: opción "Personalizar" la generación (5 preguntas + nota). Apagar con FF_AC_CUSTOMIZE=0
+  // → solo queda "Generar con IA" (comportamiento original).
+  acCustomize: read("FF_AC_CUSTOMIZE", true),
 };
 
 export type FlagName = keyof typeof FLAGS;
