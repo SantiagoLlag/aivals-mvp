@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useT } from "@/components/LangProvider";
 
-type Cand = { id: string; name: string; token: string; status: string; human: boolean; cv: boolean; ac: boolean; voice: boolean };
+type Cand = { id: string; name: string; token: string; status: string; human: boolean; cv: boolean; ac: boolean; voice: boolean; bigfive: boolean };
 
-export default function ProcessClient({ processId, candidates, reabrir }: { processId: string; candidates: Cand[]; reabrir?: boolean }) {
+export default function ProcessClient({ processId, candidates, reabrir, bigfive }: { processId: string; candidates: Cand[]; reabrir?: boolean; bigfive?: boolean }) {
   const router = useRouter();
   const { t } = useT();
   const [name, setName] = useState("");
@@ -51,6 +51,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
 
   const VERTS = [
     { key: "human" as const, label: "HUMAN", has: (c: Cand) => c.human },
+    ...(bigfive ? [{ key: "bigfive" as const, label: "Big Five", has: (c: Cand) => c.bigfive }] : []),
     { key: "cv" as const, label: "CV", has: (c: Cand) => c.cv },
     { key: "ac" as const, label: "AC", has: (c: Cand) => c.ac },
     { key: "voz" as const, label: t("Voz", "Voice"), has: (c: Cand) => c.voice },
@@ -75,7 +76,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
     }
   }
 
-  const withData = candidates.filter((c) => c.human || c.cv || c.ac || c.voice).length;
+  const withData = candidates.filter((c) => c.human || c.cv || c.ac || c.voice || (!!bigfive && c.bigfive)).length;
 
   return (
     <div className="space-y-4">
@@ -99,7 +100,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
       ) : (
         <div className="grid gap-2">
           {candidates.map((c) => {
-            const hasData = c.human || c.cv || c.ac || c.voice;
+            const hasData = c.human || c.cv || c.ac || c.voice || (!!bigfive && c.bigfive);
             return (
               <div key={c.id} className="card py-3">
                 <div className="flex items-center justify-between gap-3">
@@ -107,6 +108,7 @@ export default function ProcessClient({ processId, candidates, reabrir }: { proc
                     <div className="font-medium">{c.name}</div>
                     <div className="flex gap-1 mt-1">
                       <Mini on={c.human} label="HUMAN" />
+                      {bigfive && <Mini on={c.bigfive} label="Big Five" />}
                       <Mini on={c.cv} label="CV" />
                       <Mini on={c.ac} label="AC" />
                       <Mini on={c.voice} label={t("Voz", "Voice")} />

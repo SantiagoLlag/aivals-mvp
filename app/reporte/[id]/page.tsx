@@ -16,10 +16,13 @@ import EvidenciaHuman from "./EvidenciaHuman";
 import EvidenciaAc from "./EvidenciaAc";
 import EvidenciaCv from "./EvidenciaCv";
 import EvidenciaVoz from "./EvidenciaVoz";
+import Triangulacion from "./Triangulacion";
 import { EvidenceDivider } from "./EvidenceBand";
 import { getServerT } from "@/lib/i18n-server";
 import { BIGFIVE_FACTORS, BIGFIVE_FACTOR_LABELS } from "@/lib/bigfive/types";
 import { BIGFIVE_TOTAL_ITEMS } from "@/lib/bigfive/motor";
+import ReportNav from "./ReportNav";
+import PrintCover from "./PrintCover";
 
 // Semáforo disciplinado: colores semánticos desaturados, idénticos a los del comparador.
 const SEM: Record<string, string> = { verde: "bg-success", amarillo: "bg-warning", rojo: "bg-danger" };
@@ -69,6 +72,19 @@ export default async function ReportPage({ params, searchParams }: { params: { i
 
   return (
     <div className="space-y-6">
+      {FLAGS.reportNav && (
+        <PrintCover
+          candidateName={candidate.name}
+          processName={proc.name}
+          verticals={[
+            { label: "HUMAN", on: !!r },
+            ...(FLAGS.bigFive ? [{ label: "Big Five", on: !!bigFive?.result }] : []),
+            { label: "CV", on: !!candidate.cv },
+            { label: "AC", on: !!candidate.acResult },
+            { label: t("Voz", "Voice"), on: !!candidate.voiceResult },
+          ]}
+        />
+      )}
       <div className="flex items-center justify-between gap-2 flex-wrap no-print">
         <Link href={`/proceso/${proc.id}`} className="text-sm text-accent">← {proc.name}</Link>
         <div className="flex items-center gap-2">
@@ -102,7 +118,11 @@ export default async function ReportPage({ params, searchParams }: { params: { i
         </div>
       </div>
 
+      {FLAGS.reportNav && <ReportNav />}
+
       {hasAny && <ReportTour autoStart={searchParams?.tour === "1"} />}
+
+      {FLAGS.triangulacion && <Triangulacion candidate={candidate} />}
 
       {!hasAny && (
         <div className="card text-center py-10 text-sm text-neutral-500">

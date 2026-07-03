@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { CandidateComparison, ReferenceMini, Sem, VerticalKey, CompetencyCell } from "@/lib/compare/types";
 import { globalEncaje, DEFAULT_WEIGHTS, VERTICAL_KEYS } from "@/lib/compare/score";
+import { BIGFIVE_FACTORS, BIGFIVE_FACTOR_LABELS } from "@/lib/bigfive/types";
 import { DiscProfile, ValoresChart, PensanteChart } from "@/components/charts";
 import { useT } from "@/components/LangProvider";
 
@@ -486,7 +487,41 @@ function Detail({ row, reference }: { row: CandidateComparison; reference: Refer
             </div>
           );
         })}
+
+        {/* Big Five (solo si se pobló — FLAGS.bigFive on y candidato con captura).
+            DESCRIPTIVO: no entra al encaje ni al ranking. */}
+        {row.bigFive?.scores && <BigFiveDetail scores={row.bigFive.scores} />}
       </div>
+    </div>
+  );
+}
+
+// Bloque descriptivo del Big Five (IPIP-50): 5 barras 0-100, sin efecto en el encaje.
+function BigFiveDetail({ scores }: { scores: Record<string, number> }) {
+  const { t } = useT();
+  return (
+    <div className="rounded-xl border border-line bg-white p-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">🧬 Big Five</h3>
+        <span className="badge">{t("descriptivo — no entra al encaje", "descriptive — not part of the fit")}</span>
+      </div>
+      <div className="mt-2 space-y-2">
+        {BIGFIVE_FACTORS.map((f) => {
+          const raw = scores[f];
+          if (raw == null || Number.isNaN(raw)) return null;
+          const val = Math.max(0, Math.min(100, Math.round(raw)));
+          return (
+            <div key={f} className="text-xs">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium">{t(BIGFIVE_FACTOR_LABELS[f].es, BIGFIVE_FACTOR_LABELS[f].en)}</span>
+                <span className="tabular-nums text-neutral-600">{val}/100</span>
+              </div>
+              <div className="progress mt-1"><span style={{ width: `${val}%` }} /></div>
+            </div>
+          );
+        })}
+      </div>
+      <Note text={t("Autorreporte IPIP-50 (0-100 por rasgo). Se muestra como contexto: no pondera en el encaje ni en el ranking.", "IPIP-50 self-report (0-100 per trait). Shown as context: it does not weigh into the fit or the ranking.")} />
     </div>
   );
 }

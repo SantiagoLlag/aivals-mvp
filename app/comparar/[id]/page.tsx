@@ -4,6 +4,7 @@ import { getProcess } from "@/lib/store";
 import { compareCandidates, referenceMini } from "@/lib/compare/score";
 import CompareBoard from "./CompareBoard";
 import { getServerT } from "@/lib/i18n-server";
+import { FLAGS } from "@/lib/flags";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,15 @@ export default async function CompararProceso({ params }: { params: { id: string
   const proc = await getProcess(params.id);
   if (!proc) notFound();
 
-  const rows = compareCandidates(proc);
+  const base = compareCandidates(proc);
+  // Big Five descriptivo para el detalle del tablero (NO entra al encaje ni al ranking).
+  // Con el flag apagado las filas quedan idénticas a las de antes.
+  const rows = FLAGS.bigFive
+    ? base.map((r) => {
+        const cand = proc.candidates.find((c) => c.id === r.id);
+        return { ...r, bigFive: cand?.bigFive?.result ? { scores: cand.bigFive.result.scores } : null };
+      })
+    : base;
   const ref = referenceMini(proc);
 
   return (

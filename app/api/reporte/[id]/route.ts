@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCandidate, saveDosReport, saveAcResult, saveVoiceResult } from "@/lib/store";
 import { evaluadorDos } from "@/lib/ai";
+import { FLAGS } from "@/lib/flags";
 
 export async function POST(_req: NextRequest, { params }: { params: { id: string } }) {
   const found = await getCandidate(params.id);
@@ -10,7 +11,9 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
   const report = await evaluadorDos(
     found.candidate.name,
     found.candidate.result,
-    found.process.reference
+    found.process.reference,
+    // Big Five como insumo del DOS solo con el flag prendido; apagado → prompt idéntico al anterior.
+    FLAGS.bigFive ? found.candidate.bigFive?.result : undefined
   );
   await saveDosReport(found.candidate.id, report);
   return NextResponse.json({ markdown: report.markdown, source: report.source });

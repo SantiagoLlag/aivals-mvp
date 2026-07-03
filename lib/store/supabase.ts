@@ -114,6 +114,8 @@ export async function reopenCandidate(candidateId: string, verticals: ReopenVert
     } else if (v === "cv") patch.cv = null;
     else if (v === "ac") patch.ac_result = null;
     else if (v === "voz") patch.voice_result = null;
+    // Big Five se limpia sin snapshot ni comparación (eso es exclusivo de HUMAN).
+    else if (v === "bigfive") patch.bigfive = null;
   }
   if (Object.keys(patch).length === 0) return;
   patch.reopened = Object.keys(reopened).length ? reopened : null;

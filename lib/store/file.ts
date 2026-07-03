@@ -78,6 +78,8 @@ export async function reopenCandidate(candidateId: string, verticals: ReopenVert
       else if (v === "cv") c.cv = undefined;
       else if (v === "ac") c.acResult = undefined;
       else if (v === "voz") c.voiceResult = undefined;
+      // Big Five se limpia sin snapshot ni comparación (eso es exclusivo de HUMAN).
+      else if (v === "bigfive") c.bigFive = undefined;
     }
     c.reopened = Object.keys(reopened).length ? reopened : undefined;
     await writeDB(db);

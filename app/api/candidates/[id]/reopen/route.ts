@@ -3,7 +3,8 @@ import { getCandidate, reopenCandidate } from "@/lib/store";
 import { FLAGS } from "@/lib/flags";
 import type { ReopenVertical } from "@/lib/store/types";
 
-const VALID: ReopenVertical[] = ["human", "cv", "ac", "voz"];
+// "bigfive" solo es reabrible con su flag prendido; apagado → conjunto idéntico al anterior.
+const VALID: ReopenVertical[] = ["human", "cv", "ac", "voz", ...(FLAGS.bigFive ? (["bigfive"] as ReopenVertical[]) : [])];
 
 // Reabre (limpia) la captura de las verticales elegidas de un candidato, para que las rehaga.
 export async function POST(req: Request, { params }: { params: { id: string } }) {

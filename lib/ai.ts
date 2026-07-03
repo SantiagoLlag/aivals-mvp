@@ -4,6 +4,7 @@
 // reporte determinista del manual.
 import Anthropic from "@anthropic-ai/sdk";
 import type { HumanResult } from "./human/types";
+import type { BigFiveResult } from "./bigfive/types";
 import type { ReferenceProfile, DosReport } from "./types";
 import { interpretDeterministic, factsBlock } from "./human/interpret";
 
@@ -108,7 +109,10 @@ Eres INSUMO para el psicólogo, no un veredicto: nunca recomiendas contratar o r
 export async function evaluadorDos(
   candidateName: string,
   result: HumanResult,
-  reference?: ReferenceProfile
+  reference?: ReferenceProfile,
+  // Opcional (gated por FLAGS.bigFive en el caller): puntajes Big Five como insumo
+  // adicional. Si es undefined, el prompt queda byte-idéntico al anterior.
+  bigFive?: BigFiveResult
 ): Promise<DosReport> {
   const deterministic = interpretDeterministic(result);
   if (!aiEnabled()) {
@@ -119,6 +123,9 @@ export async function evaluadorDos(
       reference && reference.source === "ai"
         ? `PERFIL DE REFERENCIA DEL PUESTO (Evaluador UNO):\n${reference.raw ?? JSON.stringify(reference)}`
         : "PERFIL DE REFERENCIA: no disponible (omite la sección 6).";
+    const bigFiveBlock = bigFive
+      ? `BIG FIVE (IPIP-50, autorreporte, 0-100 por rasgo): Extraversión ${Math.round(bigFive.scores.E)}, Amabilidad ${Math.round(bigFive.scores.A)}, Responsabilidad ${Math.round(bigFive.scores.C)}, Estabilidad emocional ${Math.round(bigFive.scores.ES)}, Apertura ${Math.round(bigFive.scores.O)}. Intégralo con los demás instrumentos SOLO donde aporte convergencia o matiz; no lo trates como veredicto ni inventes baremos.`
+      : null;
     const user = [
       `CANDIDATO: ${candidateName}`,
       "",
@@ -129,6 +136,7 @@ export async function evaluadorDos(
       deterministic,
       "",
       refBlock,
+      ...(bigFiveBlock ? ["", bigFiveBlock] : []),
     ].join("\n");
     const markdown = await ask(DOS_SYSTEM, user, 2400);
     return { source: "ai", generatedAt: new Date().toISOString(), markdown };

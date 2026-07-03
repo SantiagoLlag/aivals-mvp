@@ -30,6 +30,12 @@ export const FLAGS = {
   // AC: opción "Personalizar" la generación (5 preguntas + nota). Apagar con FF_AC_CUSTOMIZE=0
   // → solo queda "Generar con IA" (comportamiento original).
   acCustomize: read("FF_AC_CUSTOMIZE", true),
+  // Reporte: síntesis de triangulación multi-método (determinista) al inicio del reporte.
+  triangulacion: read("FF_TRIANGULACION", true),
+  // Reporte: navegación pegajosa por secciones + portada de impresión.
+  reportNav: read("FF_REPORT_NAV", true),
+  // Panel del proceso v2: candidatos primero, configuración colapsada + checklist de arranque.
+  procesoV2: read("FF_PROCESO_V2", true),
 };
 
 export type FlagName = keyof typeof FLAGS;

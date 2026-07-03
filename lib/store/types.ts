@@ -7,7 +7,7 @@ import type { CvData } from "../cv/types";
 import type { VoiceBlueprint, VoiceResult } from "../voice/types";
 import type { BigFiveInput, BigFiveResult } from "../bigfive/types";
 
-export type ReopenVertical = "human" | "cv" | "ac" | "voz";
+export type ReopenVertical = "human" | "cv" | "ac" | "voz" | "bigfive";
 
 export interface StoreApi {
   listProcesses(): Promise<Process[]>;

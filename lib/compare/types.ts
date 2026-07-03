@@ -37,6 +37,9 @@ export interface CandidateComparison {
   verticals: Record<VerticalKey, VerticalScore>;
   completeness: number;     // # de verticales con encaje medible (0-4)
   human: HumanResult | null; // crudo, para dibujar los charts HUMAN en el detalle
+  // Big Five (IPIP-50) 0-100 por rasgo. DESCRIPTIVO: se muestra en el detalle,
+  // NO entra al encaje ni al ranking. Solo se puebla con FLAGS.bigFive prendido.
+  bigFive?: { scores: Record<string, number> } | null;
 }
 
 // Resumen del perfil ideal del puesto (Evaluador UNO), para mostrar el "contra qué" se compara.
