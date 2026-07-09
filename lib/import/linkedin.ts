@@ -73,7 +73,7 @@ function safeChar(code: number): string {
 function htmlToText(html: string): string {
   const withBreaks = html
     .replace(/<\s*br\s*\/?>/gi, "\n")
-    .replace(/<\s*li[^>]*>/gi, "• ")
+    .replace(/<\s*li[^>]*>/gi, "\n• ")
     .replace(/<\s*\/\s*(p|div|li|ul|ol|h[1-6])\s*>/gi, "\n")
     .replace(/<[^>]+>/g, "");
   return decodeEntities(withBreaks)
@@ -126,14 +126,54 @@ function parseJsonLd(html: string): LinkedInJob | null {
   return null;
 }
 
-// og:title de LinkedIn suele venir como "Empresa hiring Puesto in Lugar | LinkedIn".
+// og:title de vacante viene como "Empresa hiring Puesto in Lugar | LinkedIn"; en páginas de
+// búsqueda es genérico ("+4000 empleos…"), así que SOLO lo usamos si matchea el patrón "hiring".
 function parseOgTitle(html: string): { title?: string; company?: string } {
   const m = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i);
   if (!m) return {};
   const raw = decodeEntities(m[1]).replace(/\s*\|\s*LinkedIn\s*$/i, "").trim();
-  const hm = raw.match(/^(.*?)\s+hiring\s+(.*?)(?:\s+in\s+.*)?$/i);
-  if (hm) return { company: hm[1].trim(), title: hm[2].trim() };
-  return { title: raw };
+  const hm = raw.match(/^(.*?)\s+hiring\s+(.*?)(?:\s+in\s+.+)?$/i);
+  return hm ? { company: hm[1].trim(), title: hm[2].trim() } : {};
+}
+
+// Extrae el "job card" de la vista de invitado (jobs-guest): título, empresa, ubicación y la
+// descripción SOLO del contenedor .show-more-less-html__markup (sin el chrome del muro de login).
+function extractGuest(html: string): LinkedInJob {
+  const job: LinkedInJob = {};
+  const titleM =
+    html.match(/<h2[^>]*class="[^"]*top-card-layout__title[^"]*"[^>]*>([\s\S]*?)<\/h2>/i) ||
+    html.match(/<h1[^>]*class="[^"]*(?:topcard__title|top-card-layout__title)[^"]*"[^>]*>([\s\S]*?)<\/h1>/i);
+  if (titleM) job.title = stripInline(titleM[1]);
+  const compM =
+    html.match(/<a[^>]*class="[^"]*topcard__org-name-link[^"]*"[^>]*>([\s\S]*?)<\/a>/i) ||
+    html.match(/<span[^>]*class="[^"]*topcard__flavor(?![^"]*--bullet)[^"]*"[^>]*>([\s\S]*?)<\/span>/i);
+  if (compM) job.company = stripInline(compM[1]);
+  const locM = html.match(/<span[^>]*class="[^"]*topcard__flavor--bullet[^"]*"[^>]*>([\s\S]*?)<\/span>/i);
+  if (locM) job.location = stripInline(locM[1]);
+  const descM =
+    html.match(/<div[^>]*class="[^"]*show-more-less-html__markup[^"]*"[^>]*>([\s\S]*?)<\/div>/i) ||
+    html.match(/<div[^>]*class="[^"]*description__text[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
+  if (descM) job.description = htmlToText(descM[1]);
+  return job;
+}
+
+// Red de seguridad: quita líneas típicas del muro de login/navegación que LinkedIn intercala.
+const JUNK: RegExp[] = [
+  /^inicia sesión/i, /^iniciar sesión/i, /^regístrate/i, /^email o teléfono$/i, /^contraseña$/i,
+  /olvidad.*contraseña/i, /empezando a usar linkedin/i, /^al hacer clic/i, /^mostrar$/i, /^show (more|less)$/i,
+  /^ver más$|^ver menos$/i, /^denunciar este empleo/i, /^sé de los primeros/i, /recomendaciones duplican/i,
+  /mira a quién conoces/i, /^o$/i, /descubre a quién/i, /ya no se aceptan solicitudes/i, /usa la ia para/i,
+  /consejos de la ia/i, /personaliza mi currículum/i, /^¿encajaría/i, /únete ahora/i, /condiciones de uso/i,
+  /iniciar sesión con el email/i,
+];
+function sanitizeDescription(text?: string): string | undefined {
+  if (!text) return text;
+  const lines = text.split("\n").filter((l) => {
+    const t = l.trim().replace(/^•\s*/, "");
+    if (!t) return true;
+    return !JUNK.some((re) => re.test(t));
+  });
+  return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 export async function importLinkedInJob(rawUrl: string): Promise<ImportResult> {
@@ -151,20 +191,22 @@ export async function importLinkedInJob(rawUrl: string): Promise<ImportResult> {
     return { ok: false, reason: "blocked", error: "LinkedIn bloqueó la importación automática." };
   }
 
-  const job: LinkedInJob = parseJsonLd(page.text) ?? {};
-  if (!job.title || !job.company) {
-    const og = parseOgTitle(page.text);
-    job.title = job.title || og.title;
-    job.company = job.company || og.company;
-  }
-  // Respaldo de la descripción por el endpoint público de invitado.
-  if (!job.description && jobId) {
+  // 1) JSON-LD (limpio si existe). 2) Job card de la vista de invitado. 3) og:title ("hiring").
+  const fromLd = parseJsonLd(page.text) ?? {};
+  const og = parseOgTitle(page.text);
+
+  let guestJob: LinkedInJob = {};
+  if ((!fromLd.title || !fromLd.company || !fromLd.description) && jobId) {
     const guest = await fetchText(`https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/${jobId}`);
-    if (guest && guest.status < 400) {
-      const txt = htmlToText(guest.text);
-      if (txt.length > 40) job.description = txt.slice(0, 8000);
-    }
+    if (guest && guest.status < 400) guestJob = extractGuest(guest.text);
   }
+
+  const job: LinkedInJob = {
+    title: fromLd.title || guestJob.title || og.title,
+    company: fromLd.company || guestJob.company || og.company,
+    location: fromLd.location || guestJob.location,
+    description: sanitizeDescription(fromLd.description || guestJob.description)?.slice(0, 10000),
+  };
 
   if (!job.title && !job.description) {
     return { ok: false, reason: "not_found", error: "No se encontró la vacante (puede requerir sesión)." };
