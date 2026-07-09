@@ -36,6 +36,8 @@ export const FLAGS = {
   reportNav: read("FF_REPORT_NAV", true),
   // Panel del proceso v2: candidatos primero, configuración colapsada + checklist de arranque.
   procesoV2: read("FF_PROCESO_V2", true),
+  // Nuevo proceso: importar una vacante desde un link de LinkedIn (prellena el formulario).
+  linkedinImport: read("FF_LINKEDIN_IMPORT", true),
 };
 
 export type FlagName = keyof typeof FLAGS;
